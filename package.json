@@ -1,0 +1,34 @@
+{
+  "name": "express",
+  "version": "1.0.0",
+  "description": "Express Stisla",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "db_reset": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all",
+    "db_start": "sequelize db:create && sequelize db:migrate && sequelize db:seed:all"
+  },
+  "keywords": [
+    ""
+  ],
+  "author": "CobaCobaAja",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "faker": "^4.1.0",
+    "mysql": "^2.15.0",
+    "mysql2": "^1.5.3",
+    "pg": "^7.4.3",
+    "sequelize": "5.19.8",
+    "sweetalert": "^2.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MuhammadFariMadyan/crud-express-mysql.git"
+  }
+}
