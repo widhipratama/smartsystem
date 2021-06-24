@@ -1,7 +1,7 @@
 {
-  "name": "express",
+  "name": "Smart System App",
   "version": "1.0.0",
-  "description": "Express Stisla",
+  "description": "Aplikasi Smart System",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
