@@ -153,10 +153,16 @@ io.on("connection", function (socket) {
 });
 
 const whatsappRoute = require("./routes/whatsapp");
+const custfleetRoute = require("./routes/custfleet");
+const custfirstRoute = require("./routes/custfirst");
+const nextserviceRoute = require("./routes/nextservice");
 
 // routes
 app.use("/", router);
 app.use("/whatsapp", whatsappRoute);
+app.use("/custfleet", custfleetRoute);
+app.use("/custfirst", custfirstRoute);
+app.use("/nextservice", nextserviceRoute);
 
 // Send message
 app.post(
