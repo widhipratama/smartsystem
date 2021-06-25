@@ -11,7 +11,7 @@
   "keywords": [
     ""
   ],
-  "author": "CobaCobaAja",
+  "author": "",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -29,6 +29,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MuhammadFariMadyan/crud-express-mysql.git"
+    "url": "git+https://github.com/widhipratama/smartsystem.git"
   }
 }
