@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include ../templates/header.ejs %>
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="script-stisla/assets/css/style.css" />
+    <link rel="stylesheet" href="script-stisla/assets/css/components.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="main-wrapper">
+        <%- include ../templates/navtop.ejs %> <%- include
+        ../templates/navleft.ejs %>
+        <div class="main-content">
+          <section class="section">
+            <div class="section-header">
+              <h1>Whatsapp</h1>
+              <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active">
+                  <a href="#">Dashboard</a>
+                </div>
+                <div class="breadcrumb-item">Whatsapp</div>
+              </div>
+            </div>
+
+            <div class="section-body">
+              <div class="row">
+                <div class="col-9 col-md-9 col-lg-9">
+                  <div class="card">
+                    <div class="card-header">
+                      <h4>List Chat Blasting</h4>
+                    </div>
+                    <div class="card-body">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Number</th>
+                            <th scope="col">Message</th>
+                            <th scope="col">Waktu Kirim</th>
+                            <th scope="col">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">6289669759244</th>
+                            <td>
+                              Halo, Selamata Siang ini adalah pesan yang akan
+                              diblasting
+                            </td>
+                            <td>2021-05-01 13:00</td>
+                            <td>Pending</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">6289669759244</th>
+                            <td>
+                              Halo, Selamata Siang ini adalah pesan yang akan
+                              diblasting
+                            </td>
+                            <td>2021-05-01 13:00</td>
+                            <td>Pending</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">6289669759244</th>
+                            <td>
+                              Halo, Selamata Siang ini adalah pesan yang akan
+                              diblasting
+                            </td>
+                            <td>2021-05-01 13:00</td>
+                            <td>Pending</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">6289669759244</th>
+                            <td>
+                              Halo, Selamata Siang ini adalah pesan yang akan
+                              diblasting
+                            </td>
+                            <td>2021-05-01 13:00</td>
+                            <td>Pending</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">6289669759244</th>
+                            <td>
+                              Halo, Selamata Siang ini adalah pesan yang akan
+                              diblasting
+                            </td>
+                            <td>2021-05-01 13:00</td>
+                            <td>Pending</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 col-md-3 col-lg-3">
+                  <div class="card">
+                    <div class="card-header">
+                      <h4>Status: Disconect</h4>
+                    </div>
+                    <div class="card-body">
+                      Silahkan Scan QR untuk terhubung<br />
+                      <img src="" alt="QR Code" id="qrcode" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <%- include ../templates/footer.ejs %>
+      </div>
+    </div>
+    <%- include ../templates/script.ejs %>
+  </body>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"
+    crossorigin="anonymous"
+  ></script>
+  <script>
+    $(document).ready(function () {
+      var socket = io();
+
+      socket.on("message", function (msg) {
+        $(".logs").append($("<li>").text(msg));
+      });
+
+      socket.on("qr", function (src) {
+        $("#qrcode").attr("src", src);
+        $("#qrcode").show();
+      });
+
+      socket.on("ready", function (data) {
+        $("#qrcode").hide();
+      });
+
+      socket.on("authenticated", function (data) {
+        $("#qrcode").hide();
+      });
+    });
+  </script>
+</html>
