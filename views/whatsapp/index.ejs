@@ -178,10 +178,12 @@
           var session = data[i];
 
           if (session.ready) {
+            $("#konek").hide();
             $("#qrcodebar").hide();
             $("#status").html("Connected");
             $(`.logs`).append($("<li>").text("Whatsapp is ready!"));
           } else {
+            $("#konek").show();
             $("#status").html("Disconected");
             $("#qrcodebar").show();
             $(`.logs`).append($("<li>").text("Connecting..."));
@@ -196,6 +198,7 @@
       socket.on("qr", function (data) {
         $("#status").html("Disconected");
         $("#qrcodebar").show();
+        $("#konek").show();
         $("#qrcode").attr("src", data.src);
       });
 
@@ -209,17 +212,20 @@
 
       socket.on("ready", function (data) {
         $("#qrcodebar").hide();
+        $("#konek").hide();
         $("#status").html("Connected");
       });
 
       socket.on("disconect", function (data) {
         $("#status").html("Disconected");
         $("#qrcodebar").show();
+         $("#konek").show();
       });
 
       socket.on("authenticated", function (data) {
         $("#status").html("Connected");
         $("#qrcodebar").hide();
+        $("#konek").hide();
       });
     });
   </script>

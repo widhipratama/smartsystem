@@ -201,6 +201,7 @@ io.on("connection", function (socket) {
 
   socket.on("create-session", function (data) {
     console.log("Create session: " + data.id);
+
     createSession(data.id);
   });
 });
