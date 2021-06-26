@@ -1,4 +1,5 @@
 const { Client, MessageMedia } = require("whatsapp-web.js");
+const { phoneNumberFormatter } = require("./helpers/formatter");
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 const fileUpload = require("express-fileupload");
@@ -33,12 +34,6 @@ app.use(
   })
 );
 
-const SESSION_FILE_PATH = "./whatsapp-session.json";
-let sessionCfg;
-if (fs.existsSync(SESSION_FILE_PATH)) {
-  sessionCfg = require(SESSION_FILE_PATH);
-}
-
 app.use(cookieParser("keyboard cat"));
 app.use(session({ cookie: { maxAge: 60000 } }));
 app.use(flash());
@@ -50,6 +45,7 @@ app.use(
   "/script-stisla",
   express.static(path.join(__dirname, "/admin-stisla/"))
 );
+app.use("/assets", express.static(path.join(__dirname, "/views/assets/")));
 app.use(function (req, res, next) {
   res.locals.stuff = {
     url: req.originalUrl,
@@ -57,78 +53,83 @@ app.use(function (req, res, next) {
   next();
 });
 
-//body parser
-// app.use(
-//   bodyParser.urlencoded({
-//     extended: false,
-//   })
-// );
+const sessions = [];
+const SESSIONS_FILE = "./session/whatsapp-sessions.json";
 
-const client = new Client({
-  restartOnAuthFail: true,
-  puppeteer: {
-    headless: true,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-accelerated-2d-canvas",
-      "--no-first-run",
-      "--no-zygote",
-      "--single-process", // <- this one doesn't works in Windows
-      "--disable-gpu",
-    ],
-  },
-  session: sessionCfg,
-});
-
-client.on("message", (msg) => {
-  if (msg.body == "!ping") {
-    msg.reply("pong");
-  } else if (msg.body == "good morning") {
-    msg.reply("selamat pagi");
-  } else if (msg.body == "!groups") {
-    client.getChats().then((chats) => {
-      const groups = chats.filter((chat) => chat.isGroup);
-
-      if (groups.length == 0) {
-        msg.reply("You have no group yet.");
-      } else {
-        let replyMsg = "*YOUR GROUPS*\n\n";
-        groups.forEach((group, i) => {
-          replyMsg += `ID: ${group.id._serialized}\nName: ${group.name}\n\n`;
-        });
-        replyMsg +=
-          "_You can use the group id to send a message to the group._";
-        msg.reply(replyMsg);
-      }
-    });
+const createSessionsFileIfNotExists = function () {
+  if (!fs.existsSync(SESSIONS_FILE)) {
+    try {
+      fs.writeFileSync(SESSIONS_FILE, JSON.stringify([]));
+      console.log("Sessions file created successfully.");
+    } catch (err) {
+      console.log("Failed to create sessions file: ", err);
+    }
   }
-});
+};
 
-client.initialize();
+createSessionsFileIfNotExists();
 
-// Socket IO
-io.on("connection", function (socket) {
-  socket.emit("message", "Connecting...");
+const setSessionsFile = function (sessions) {
+  fs.writeFile(SESSIONS_FILE, JSON.stringify(sessions), function (err) {
+    if (err) {
+      console.log(err);
+    }
+  });
+};
+
+const getSessionsFile = function () {
+  return JSON.parse(fs.readFileSync(SESSIONS_FILE));
+};
+
+const createSession = function (id) {
+  console.log("Creating session: " + id);
+  const SESSION_FILE_PATH = `./session/whatsapp-session-${id}.json`;
+  let sessionCfg;
+  if (fs.existsSync(SESSION_FILE_PATH)) {
+    sessionCfg = require(SESSION_FILE_PATH);
+  }
+
+  const client = new Client({
+    restartOnAuthFail: true,
+    puppeteer: {
+      headless: true,
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--single-process", // <- this one doesn't works in Windows
+        "--disable-gpu",
+      ],
+    },
+    session: sessionCfg,
+  });
+
+  client.initialize();
 
   client.on("qr", (qr) => {
     console.log("QR RECEIVED", qr);
     qrcode.toDataURL(qr, (err, url) => {
-      socket.emit("qr", url);
-      socket.emit("message", "QR Code received, scan please!");
+      io.emit("qr", { id: id, src: url });
+      io.emit("message", { id: id, text: "QR Code received, scan please!" });
     });
   });
 
   client.on("ready", () => {
-    socket.emit("ready", "Whatsapp is ready!");
-    socket.emit("message", "Whatsapp is ready!");
+    io.emit("ready", { id: id });
+    io.emit("message", { id: id, text: "Whatsapp is ready!" });
+
+    const savedSessions = getSessionsFile();
+    const sessionIndex = savedSessions.findIndex((sess) => sess.id == id);
+    savedSessions[sessionIndex].ready = true;
+    setSessionsFile(savedSessions);
   });
 
   client.on("authenticated", (session) => {
-    socket.emit("authenticated", "Whatsapp is authenticated!");
-    socket.emit("message", "Whatsapp is authenticated!");
-    console.log("AUTHENTICATED", session);
+    io.emit("authenticated", { id: id });
+    io.emit("message", { id: id, text: "Whatsapp is authenticated!" });
     sessionCfg = session;
     fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
       if (err) {
@@ -138,17 +139,69 @@ io.on("connection", function (socket) {
   });
 
   client.on("auth_failure", function (session) {
-    socket.emit("message", "Auth failure, restarting...");
+    io.emit("message", { id: id, text: "Auth failure, restarting..." });
   });
 
   client.on("disconnected", (reason) => {
-    socket.emit("message", "Whatsapp is disconnected!");
+    io.emit("message", { id: id, text: "Whatsapp is disconnected!" });
     fs.unlinkSync(SESSION_FILE_PATH, function (err) {
       if (err) return console.log(err);
       console.log("Session file deleted!");
     });
     client.destroy();
     client.initialize();
+
+    // Menghapus pada file sessions
+    const savedSessions = getSessionsFile();
+    const sessionIndex = savedSessions.findIndex((sess) => sess.id == id);
+    savedSessions.splice(sessionIndex, 1);
+    setSessionsFile(savedSessions);
+
+    io.emit("remove-session", id);
+  });
+
+  // Tambahkan client ke sessions
+  sessions.push({
+    id: id,
+    client: client,
+  });
+
+  // Menambahkan session ke file
+  const savedSessions = getSessionsFile();
+  const sessionIndex = savedSessions.findIndex((sess) => sess.id == id);
+
+  if (sessionIndex == -1) {
+    savedSessions.push({
+      id: id,
+      ready: false,
+    });
+    setSessionsFile(savedSessions);
+  }
+};
+
+const init = function (socket) {
+  const savedSessions = getSessionsFile();
+
+  if (savedSessions.length > 0) {
+    if (socket) {
+      socket.emit("init", savedSessions);
+    } else {
+      savedSessions.forEach((sess) => {
+        createSession(sess.id);
+      });
+    }
+  }
+};
+
+init();
+
+// Socket IO
+io.on("connection", function (socket) {
+  init(socket);
+
+  socket.on("create-session", function (data) {
+    console.log("Create session: " + data.id);
+    createSession(data.id);
   });
 });
 
@@ -164,50 +217,37 @@ app.use("/custfleet", custfleetRoute);
 app.use("/custfirst", custfirstRoute);
 app.use("/nextservice", nextserviceRoute);
 
-// Send message
-app.post(
-  "/send-message",
-  [body("number").notEmpty(), body("message").notEmpty()],
-  async (req, res) => {
-    const errors = validationResult(req).formatWith(({ msg }) => {
-      return msg;
-    });
+app.post("/send-message", (req, res) => {
+  const sender = "smartsystem";
+  const phone = phoneNumberFormatter(req.body.phone);
+  const message = req.body.message;
 
-    if (!errors.isEmpty()) {
-      return res.status(422).json({
+  const client = sessions.find((sess) => sess.id == sender).client;
+
+  // const isRegisteredNumber = await client.isRegisteredUser(phone);
+
+  // if (!isRegisteredNumber) {
+  //   return res.status(422).json({
+  //     status: false,
+  //     response: "The phone is not registered",
+  //   });
+  // }
+
+  client
+    .sendMessage(phone, message)
+    .then((response) => {
+      res.status(200).json({
+        status: true,
+        response: response,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
         status: false,
-        message: errors.mapped(),
+        response: err,
       });
-    }
-
-    const number = phoneNumberFormatter(req.body.number);
-    const message = req.body.message;
-
-    // const isRegisteredNumber = await checkRegisteredNumber(number);
-
-    // if (!isRegisteredNumber) {
-    //   return res.status(422).json({
-    //     status: false,
-    //     message: "The number is not registered",
-    //   });
-    // }
-
-    client
-      .sendMessage(number, message)
-      .then((response) => {
-        res.status(200).json({
-          status: true,
-          response: response,
-        });
-      })
-      .catch((err) => {
-        res.status(500).json({
-          status: false,
-          response: err,
-        });
-      });
-  }
-);
+    });
+});
 
 //app.listen(port, () => console.log(`Server starts on ${port}`));
 
