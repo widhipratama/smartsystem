@@ -210,6 +210,8 @@ const whatsappRoute = require("./routes/whatsapp");
 const custfleetRoute = require("./routes/custfleet");
 const custfirstRoute = require("./routes/custfirst");
 const nextserviceRoute = require("./routes/nextservice");
+const enewsRoute = require("./routes/enews");
+const toyotahowRoute = require("./routes/toyotahow");
 
 // routes
 app.use("/", router);
@@ -217,6 +219,8 @@ app.use("/whatsapp", whatsappRoute);
 app.use("/custfleet", custfleetRoute);
 app.use("/custfirst", custfirstRoute);
 app.use("/nextservice", nextserviceRoute);
+app.use("/enews", enewsRoute);
+app.use("/toyotahow", toyotahowRoute);
 
 app.post("/send-message", (req, res) => {
   const sender = "smartsystem";
