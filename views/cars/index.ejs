@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include ../templates/header.ejs %>
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="script-stisla/assets/css/style.css" />
+  <link rel="stylesheet" href="script-stisla/assets/css/components.css" />
+</head>
+
+<body>
+  <div id="app">
+    <div class="main-wrapper">
+      <%- include ../templates/navtop.ejs %> <%- include
+        ../templates/navleft.ejs %>
+      <div class="main-content">
+        <section class="section">
+          <div class="section-header">
+            <h1>Cars</h1>
+            <div class="section-header-breadcrumb">
+              <div class="breadcrumb-item active">
+                <a href="#">Dashboard</a>
+              </div>
+              <div class="breadcrumb-item">Cars</div>
+            </div>
+          </div>
+
+          <div class="section-body">
+            <div class="row">
+              <div class="col-12 col-md-12 col-lg-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h4>List Cars</h4>
+                    <div class="float-right">
+                      <button class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Tambah Data</button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <table class="table table-striped" id="table-1">
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 20px;">No.</th>
+                          <th scope="col">Model</th>
+                          <th scope="col">Warna</th>
+                          <th scope="col" style="width: 200px;">Image</th>
+                          <th scope="col" style="width: 150px;">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td>
+                            Raize
+                          </td>
+                          <td>Yellow Black</td>
+                          <td><img src="/assets/img/cars/raize-yellow-black.png" alt="" class="img-responsive" height="50px"></td>
+                          <td>
+                            <button class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button>
+                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2</th>
+                          <td>
+                            Innova
+                          </td>
+                          <td>Attitude Black</td>
+                          <td><img src="/assets/img/cars/innova-attitude-black_0.png" alt="" class="img-responsive" height="50px"></td>
+                          <td>
+                            <button class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button>
+                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3</th>
+                          <td>
+                            Fortuner
+                          </td>
+                          <td>Super White</td>
+                          <td><img src="/assets/img/cars/fortunerTRD2020-super-white_2.png" alt="" class="img-responsive" height="50px"></td>
+                          <td>
+                            <button class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button>
+                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <%- include ../templates/footer.ejs %>
+    </div>
+  </div>
+  <%- include ../templates/script.ejs %>
+</body>
+
+</html>

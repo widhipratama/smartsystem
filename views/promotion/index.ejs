@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include ../templates/header.ejs %>
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="script-stisla/assets/css/style.css" />
+  <link rel="stylesheet" href="script-stisla/assets/css/components.css" />
+</head>
+
+<body>
+  <div id="app">
+    <div class="main-wrapper">
+      <%- include ../templates/navtop.ejs %> <%- include
+        ../templates/navleft.ejs %>
+      <div class="main-content">
+        <section class="section">
+          <div class="section-header">
+            <h1>Promotion</h1>
+            <div class="section-header-breadcrumb">
+              <div class="breadcrumb-item active">
+                <a href="#">Dashboard</a>
+              </div>
+              <div class="breadcrumb-item">Promotion</div>
+            </div>
+          </div>
+
+          <div class="section-body">
+            <div class="row">
+              <div class="col-12 col-md-12 col-lg-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h4>List Promotion</h4>
+                    <div class="float-right">
+                      <button class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Tambah Data</button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <table class="table table-striped gallery gallery-fw" id="table-1">
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 20px;">No.</th>
+                          <th scope="col">Judul</th>
+                          <th scope="col">sub Judul</th>
+                          <th scope="col" style="width: 200px;">Image</th>
+                          <th scope="col" style="width: 80px;">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td>
+                            Heading
+                          </td>
+                          <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                          tempor incididunt ut labore et dolore magna aliqua.</td>
+                          <td>
+                            <div class="gallery-item" style="height: 80px;" data-image="/assets/img/promo/home-banner-vellfire-alphard-1920x1000.jpg" data-title="Image 1"></div>
+                          </td>
+                          <td>
+                            <button class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button>
+                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2</th>
+                          <td>
+                            Heading
+                          </td>
+                          <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                          tempor incididunt ut labore et dolore magna aliqua.</td>
+                          <td>
+                            <div class="gallery-item" style="height: 80px;" data-image="/assets/img/promo/home-banner-PPnBM-1920x1000.jpg" data-title="Image 1"></div>
+                          </td>
+                          <td>
+                            <button class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button>
+                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3</th>
+                          <td>
+                            Heading
+                          </td>
+                          <td>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                          tempor incididunt ut labore et dolore magna aliqua.
+                          </td>
+                          <td>
+                            <div class="gallery-item" style="height: 80px;" data-image="/assets/img/promo/banner-test-drive-raize-ig-challenge-1920x1000.jpeg" data-title="Image 1"></div>
+                          </td>
+                          <td>
+                            <button class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button>
+                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <%- include ../templates/footer.ejs %>
+    </div>
+  </div>
+  <%- include ../templates/script.ejs %>
+</body>
+
+</html>
