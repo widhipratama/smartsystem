@@ -74,7 +74,7 @@
             </p>
 
             <div class="row mt-sm-4">
-              <div class="col-12 col-md-12 col-lg-5">
+              <div class="col-12 col-md-12 col-lg-6">
                 <div class="card profile-widget">
                   <div class="profile-widget-header">
                     <img alt="image" src="/assets/img/avatar/avatar-1.png" class="rounded-circle profile-widget-picture">
@@ -91,43 +91,80 @@
                   </div>
                   <div class="profile-widget-description">
                     <div class="profile-widget-name">Sugiono Maman<div class="text-muted d-inline font-weight-normal"><div class="slash"></div> Cendrawasih</div></div>
+                    <div class="text-left">
+                      <button class="btn btn-success"><i class="fab fa-whatsapp"></i> Chat Me!</button>
+                      <button class="btn btn-danger"><i class="fas fa-heartbeat"></i> Emergency Call</button>
+                      <a href="/enews" class="btn btn-primary"><i class="fas fa-newspaper"></i> E-News</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card gradient-bottom">
+                    <div class="card-header">
+                      <h4>Delaer Information</h4>
+                    </div>
+                    <div class="card-body">
+                      <p>
+                        Agung Toyota Kuta<br>
+                        Jl. Sunsetroad, Seminyak Kuta Badung<br>
+                        CALL : (0361) 8947407 - 8947409<br>
+                      </p>
+                      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3943.955541462354!2d115.17393451438686!3d-8.695772090990724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd246d9e4c4ffab%3A0x5dc2279969e5621d!2sAgung%20Toyota%20Kuta!5e0!3m2!1sid!2sid!4v1624874651612!5m2!1sid!2sid" width="100%" height="150" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-12 col-md-12 col-lg-7">
+              <div class="col-12 col-md-12 col-lg-6">
                 <div class="card">
-                  <form method="post" class="needs-validation" novalidate="">
+                  <div class="card gradient-bottom">
                     <div class="card-header">
                       <h4>My Cars</h4>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" id="top-5-scroll">
                       <ul class="list-unstyled list-unstyled-border">
                         <li class="media">
-                          <img alt="image" class="mr-3 rounded" width="50" src="/assets/img/cars/raize-yellow-black.png">
+                          <img class="mr-3 rounded" width="55" src="/assets/img/cars/raize-yellow-black.png" alt="product">
                           <div class="media-body">
-                            <div class="mt-0 mb-1 font-weight-bold">DK-123-XX | Raize GR Sport 1.0 TSS</div>
-                            <div class="text-success text-small font-600-bold"><i class="fas fa-circle"></i> Last Service: 05-05-2021 &nbsp;&nbsp; <i class="fas fa-circle"></i> Next Service: 05-01-2022</div>
+                            <div class="float-right"><div class="font-weight-600 text-muted text-small"></div></div>
+                            <div class="media-title">DK-123-XX | Raize GR Sport 1.0 TSS</div>
+                            <div class="mt-1">
+                              <div class="text-success text-small font-600-bold"><i class="fas fa-circle"></i> Last Service: 05-05-2021 <br><i class="fas fa-circle"></i> Next Service: 05-01-2022</div>
+                            </div>
                           </div>
                         </li>
-                        <li class="media beep">
-                          <img alt="image" class="mr-3 rounded" width="50" src="/assets/img/cars/innova-attitude-black_0.png">
+                        <li class="media">
+                          <img class="mr-3 rounded" width="55" src="/assets/img/cars/innova-attitude-black_0.png" alt="product">
                           <div class="media-body">
-                            <div class="mt-0 mb-1 font-weight-bold">DK-2134-GWS | Innova G AT 1.5</div>
-                            <div class="text-warning text-small font-600-bold"><i class="fas fa-circle"></i> Last Service: 05-05-2021 &nbsp;&nbsp; <i class="fas fa-circle"></i> Next Service: 05-01-2022</div>
+                            <div class="float-right beep"><div class="font-weight-600 text-muted text-small"></div></div>
+                            <div class="media-title">DK-2134-GWS | Innova G AT 1.5</div>
+                            <div class="mt-1">
+                              <div class="text-warning text-small font-600-bold"><i class="fas fa-circle"></i> Last Service: 05-05-2021 <br><i class="fas fa-circle"></i> Next Service: 05-01-2022</div>
+                            </div>
                           </div>
                         </li>
-                        <li class="media beep">
-                          <img alt="image" class="mr-3 rounded" width="50" src="/assets/img/cars/fortunerTRD2020-super-white_2.png">
+                        <li class="media">
+                          <img class="mr-3 rounded" width="55" src="/assets/img/cars/fortunerTRD2020-super-white_2.png" alt="product">
                           <div class="media-body">
-                            <div class="mt-0 mb-1 font-weight-bold">DK-2134-PUP | Fortuner G AT 2.5</div>
-                            <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Last Service: 05-05-2021 &nbsp;&nbsp; <i class="fas fa-circle"></i> Next Service: 05-01-2022</div>
+                            <div class="float-right beep"><div class="font-weight-600 text-muted text-small"></div></div>
+                            <div class="media-title">DK-2134-PUP | Fortuner G AT 2.5</div>
+                            <div class="mt-1">
+                              <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Last Service: 05-05-2021 <br><i class="fas fa-circle"></i> Next Service: 05-01-2022</div>
+                            </div>
                           </div>
                         </li>
                       </ul>
                     </div>
-                    <div class="card-footer text-right">
+                    <div class="card-footer pt-3 d-flex justify-content-center">
+                      <div class="budget-price justify-content-center">
+                        <div class="budget-price-square bg-warning" data-width="20"></div>
+                        <div class="budget-price-label">Segera Booking</div>
+                      </div>
+                      <div class="budget-price justify-content-center">
+                        <div class="budget-price-square bg-danger" data-width="20"></div>
+                        <div class="budget-price-label">Sudah Jatuh Tempo</div>
+                      </div>
                     </div>
-                  </form>
+                  </div>
                 </div>
               </div>
             </div>

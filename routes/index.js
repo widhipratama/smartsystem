@@ -7,11 +7,11 @@ router.get("/", (req, res) => {
 });
 
 router.get("/dashboard", (req, res) => {
-  res.render("dashboard/index");
+  res.render("dashboard/dashboardcust");
 });
 
 router.get("/dashboarduser", (req, res) => {
-  res.render("dashboard/dashboardcust");
+  res.render("dashboard/index");
 });
 
 
