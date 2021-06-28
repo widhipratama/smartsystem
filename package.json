@@ -14,25 +14,25 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.20.0",
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.6.1",
-    "axios": "^0.20.0",
     "express": "^4.16.3",
-    "express-session": "^1.15.6",
     "express-fileupload": "^1.2.0",
+    "express-session": "^1.15.6",
     "express-validator": "^6.9.2",
-    "http": "0.0.1-security",
-    "qrcode": "^1.4.4",
-    "socket.io": "2.3.0",
-    "whatsapp-web.js": "latest",
     "faker": "^4.1.0",
+    "http": "0.0.1-security",
     "mysql": "^2.15.0",
     "mysql2": "^1.5.3",
     "pg": "^7.4.3",
+    "qrcode": "^1.4.4",
     "sequelize": "5.19.8",
-    "sweetalert": "^2.1.2"
+    "socket.io": "2.3.0",
+    "sweetalert": "^2.1.2",
+    "whatsapp-web.js": "^1.12.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"

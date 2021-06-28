@@ -26,9 +26,17 @@
             <div class="section-body">
               <div class="row">
                 <div class="col-9 col-md-9 col-lg-9">
-                  <div class="card">
+                  <div class="card card-primary">
                     <div class="card-header">
                       <h4>List Chat Blasting</h4>
+                      <div class="card-header-action">
+                        <a href="#" id="modal-5" class="btn btn-primary">
+                          Kirim Whatsapp
+                        </a>
+                        <a href="#" id="konek" class="btn btn-primary">
+                          Koneksi Whatsapp
+                        </a>
+                      </div>
                     </div>
                     <div class="card-body">
                       <table class="table">
@@ -94,11 +102,26 @@
                 <div class="col-3 col-md-3 col-lg-3">
                   <div class="card">
                     <div class="card-header">
-                      <h4>Status: Disconect</h4>
+                      <h4>Status: <span id="status">Disconected</span></h4>
+                    </div>
+                    <div id="qrcodebar" class="card-body" style="display: none">
+                      Silahkan Scan QR untuk terhubung<br />
+                      <img
+                        width="100%"
+                        src="/assets/img/loading.gif"
+                        alt="QR Code"
+                        id="qrcode"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="card card-default">
+                    <div class="card-header">
+                      <h4>Logs</h4>
+                      <!-- <h3 class="title"></h3> -->
                     </div>
                     <div class="card-body">
-                      Silahkan Scan QR untuk terhubung<br />
-                      <img src="" alt="QR Code" id="qrcode" />
+                      <ul class="logs"></ul>
                     </div>
                   </div>
                 </div>
@@ -106,38 +129,103 @@
             </div>
           </section>
         </div>
+        <form id="modal-send-wa" method="POST" action="/send-message">
+          <div class="form-group">
+            <label>Phone</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <i class="fas fa-phone"></i>
+                </div>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Phone Number"
+                name="phone"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea
+              style="height: 100px"
+              class="form-control"
+              name="message"
+              rows="3"
+            ></textarea>
+          </div>
+        </form>
         <%- include ../templates/footer.ejs %>
       </div>
     </div>
     <%- include ../templates/script.ejs %>
   </body>
-  <!-- <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-    crossorigin="anonymous"
-  ></script> -->
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"
-    crossorigin="anonymous"
-  ></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
   <script>
     $(document).ready(function () {
       var socket = io();
+
+      $("#konek").click(function () {
+        socket.emit("create-session", {
+          id: "smartsystem",
+        });
+        $("#qrcodebar").show();
+      });
+
+      socket.on("init", function (data) {
+        for (var i = 0; i < data.length; i++) {
+          var session = data[i];
+
+          if (session.ready) {
+            $("#konek").hide();
+            $("#qrcodebar").hide();
+            $("#status").html("Connected");
+            $(`.logs`).append($("<li>").text("Whatsapp is ready!"));
+          } else {
+            $("#konek").show();
+            $("#status").html("Disconected");
+            $("#qrcodebar").show();
+            $(`.logs`).append($("<li>").text("Connecting..."));
+          }
+        }
+      });
 
       socket.on("message", function (msg) {
         $(".logs").append($("<li>").text(msg));
       });
 
-      socket.on("qr", function (src) {
-        $("#qrcode").attr("src", src);
-        $("#qrcode").show();
+      socket.on("qr", function (data) {
+        $("#status").html("Disconected");
+        $("#qrcodebar").show();
+        $("#konek").show();
+        $("#qrcode").attr("src", data.src);
+      });
+
+      socket.on("message", function (data) {
+        $(`.logs`).append($("<li>").text(data.text));
+      });
+
+      socket.on("remove-session", function (id) {
+        $(`.client.${id}`).remove();
       });
 
       socket.on("ready", function (data) {
-        $("#qrcode").hide();
+        $("#qrcodebar").hide();
+        $("#konek").hide();
+        $("#status").html("Connected");
+      });
+
+      socket.on("disconect", function (data) {
+        $("#status").html("Disconected");
+        $("#qrcodebar").show();
+         $("#konek").show();
       });
 
       socket.on("authenticated", function (data) {
-        $("#qrcode").hide();
+        $("#status").html("Connected");
+        $("#qrcodebar").hide();
+        $("#konek").hide();
       });
     });
   </script>

@@ -40,6 +40,12 @@ build/Release
 node_modules/
 jspm_packages/
 
+# Wa Session
+session/
+
+# config db
+config/
+
 # TypeScript v1 declaration files
 typings/
 
