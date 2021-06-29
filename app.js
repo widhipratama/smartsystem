@@ -1,3 +1,4 @@
+require("dotenv").config(); // this loads env vars
 const { Client, MessageMedia } = require("whatsapp-web.js");
 const { phoneNumberFormatter } = require("./helpers/formatter");
 const express = require("express");
