@@ -215,6 +215,7 @@ const enewsRoute = require("./routes/enews");
 const toyotahowRoute = require("./routes/toyotahow");
 const carsRoute = require("./routes/cars");
 const promotionRoute = require("./routes/promotion");
+const customerRoute = require("./routes/customer");
 
 // routes
 app.use("/", router);
@@ -226,6 +227,7 @@ app.use("/enews", enewsRoute);
 app.use("/toyotahow", toyotahowRoute);
 app.use("/cars", carsRoute);
 app.use("/promotion", promotionRoute);
+app.use("/customer", customerRoute);
 
 app.post("/send-message", (req, res) => {
   const sender = "smartsystem";
