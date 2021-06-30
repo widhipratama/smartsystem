@@ -2,11 +2,6 @@
 <nav class="navbar navbar-expand-lg main-navbar">
   <form class="form-inline mr-auto">
     <ul class="navbar-nav mr-6">
-      <li>
-        <a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"
-          ><i class="fas fa-bars"></i
-        ></a>
-      </li>
       <img
         src="/assets/img/logoatkuta.png"
         alt=""
@@ -14,6 +9,28 @@
         width="90px"
         height="100%"
       />
+      <div class="nav-collapse">
+        <a class="sidebar-gone-show nav-collapse-toggle nav-link" href="#">
+          <i class="fas fa-bars"></i>
+        </a>
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a href="/dashboard" class="nav-link"
+              ><i class="fas fa-home"></i> Dashboard</a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="/toyotahow" class="nav-link"
+              ><i class="fas fa-book-open"></i> Toyota How</a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="/enews" class="nav-link">
+              <i class="fas fa-newspaper"></i> E-News</a
+            >
+          </li>
+        </ul>
+      </div>
       <!-- <li>
         <a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"
           ><i class="fas fa-search"></i
