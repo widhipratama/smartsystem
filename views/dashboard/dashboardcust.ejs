@@ -3,17 +3,14 @@
   <head>
     <%- include ../templates/header.ejs %>
   </head>
-  <body class="layout-3">
+  <body class="">
     <div id="app">
       <div class="main-wrapper">
-        <%- include ../templates/navtop_user.ejs %>
-        <div class="main-content container" style="padding-top: 90px">
+        <%- include ../templates/navtop.ejs %> 
+        <%- include ../templates/navleft_user.ejs %>
+        <div class="main-content">
           <section class="section">
-            <div
-              id="carouselExampleIndicators2"
-              class="carousel slide"
-              data-ride="carousel"
-            >
+            <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
               <ol class="carousel-indicators">
                 <li
                   data-target="#carouselExampleIndicators2"
@@ -129,7 +126,6 @@
                 <div class="breadcrumb-item">Default Layout</div>
               </div>
             </div>
-
             <div class="section-body">
               <h2 class="section-title">Hi, Sugiono!</h2>
               <p class="section-lead">
