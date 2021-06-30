@@ -30,7 +30,7 @@
                     <div class="card-header">
                       <h4><%= tbtitle %></h4>
                       <div class="float-right">
-                        <button class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Tambah Data</button>
+                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> Tambah Data</button>
                       </div>
                     </div>
                     <div class="card-body">
@@ -52,8 +52,8 @@
                               <td><%= h.label %></td>
                             <% }) %>
                             <td>
-                              <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-car"></i></button>
-                              <button class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button>
+                              <button class="btn btn-primary btn-sm" data-toggle="" data-target=""><i class="fas fa-car"></i></button>
+                              <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"></i></button>
                               <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                             </td>
                           </tr>
@@ -72,13 +72,33 @@
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Modal title</h5>
+                  <h5 class="modal-title">Form Data Customer</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                  <p>Modal body text goes here.</p>
+                  <form action="">
+                    <div class="form-group">
+                      <label>Nama Customer</label>
+                      <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                      <label>Telepon (62 Format)</label>
+                      <input type="text" class="form-control phone-number">
+                    </div>
+                    <div class="form-group">
+                      <label>Alamat</label>
+                      <textarea name="" id="" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label>Status</label>
+                      <select class="form-control">
+                        <option value="1">Aktif</option>
+                        <option value="0">Tidak Aktif</option>
+                      </select>
+                    </div>
+                  </form>
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
