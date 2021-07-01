@@ -5,6 +5,9 @@ let Op = require("sequelize").Op;
 exports.index = function (req, res) {
   res.render("toyotahow/index");
 };
+exports.detail = function (req, res) {
+  res.render("toyotahow/detail");
+};
 
 exports.notFound = function (req, res) {
   res.render("page/notfound");
