@@ -205,12 +205,14 @@
                       <div class="card-body" id="top-5-scroll">
                         <ul class="list-unstyled list-unstyled-border">
                           <li class="media">
-                            <img
-                              class="mr-3 rounded"
-                              width="55"
-                              src="/assets/img/cars/raize-yellow-black.png"
-                              alt="product"
-                            />
+                            <a href="#" data-toggle="modal" data-target="#exampleModal">
+                              <img
+                                class="mr-3 mt-2 rounded"
+                                width="55"
+                                src="/assets/img/cars/raize-yellow-black.png"
+                                alt="product"
+                              />
+                            </a>
                             <div class="media-body">
                               <div class="float-right">
                                 <div
@@ -218,22 +220,19 @@
                                 ></div>
                               </div>
                               <div class="media-title">
-                                DK-123-XX | Raize GR Sport 1.0 TSS
+                                <b>RAIZE</b> <small class="text-blue">DK-123-XX</small> 
                               </div>
                               <div class="mt-1">
-                                <div
-                                  class="text-success text-small font-600-bold"
-                                >
-                                  <i class="fas fa-circle"></i> Last Service:
-                                  05-05-2021 <br /><i class="fas fa-circle"></i>
-                                  Next Service: 05-01-2022
+                                <div class="text-success text-small font-600-bold">
+                                  <button class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i> Booking Now</button>
+                                  <button class="btn btn-sm btn-primary"><i class="fas fa-history"></i> Histori</button>
                                 </div>
                               </div>
                             </div>
                           </li>
                           <li class="media">
                             <img
-                              class="mr-3 rounded"
+                              class="mr-3 mt-2 rounded"
                               width="55"
                               src="/assets/img/cars/innova-attitude-black_0.png"
                               alt="product"
@@ -245,22 +244,19 @@
                                 ></div>
                               </div>
                               <div class="media-title">
-                                DK-2134-GWS | Innova G AT 1.5
+                                <b>INNOVA</b> <small class="text-blue">DK-123-XX</small> 
                               </div>
                               <div class="mt-1">
-                                <div
-                                  class="text-warning text-small font-600-bold"
-                                >
-                                  <i class="fas fa-circle"></i> Last Service:
-                                  05-05-2021 <br /><i class="fas fa-circle"></i>
-                                  Next Service: 05-01-2022
+                                <div class="text-success text-small font-600-bold">
+                                  <button class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i> Booking Now</button>
+                                  <button class="btn btn-sm btn-primary"><i class="fas fa-history"></i> Histori</button>
                                 </div>
                               </div>
                             </div>
                           </li>
                           <li class="media">
                             <img
-                              class="mr-3 rounded"
+                              class="mr-3 mt-2 rounded"
                               width="55"
                               src="/assets/img/cars/fortunerTRD2020-super-white_2.png"
                               alt="product"
@@ -272,15 +268,12 @@
                                 ></div>
                               </div>
                               <div class="media-title">
-                                DK-2134-PUP | Fortuner G AT 2.5
+                                <b>FORTUNER</b> <small class="text-blue">DK-123-XX</small> 
                               </div>
                               <div class="mt-1">
-                                <div
-                                  class="text-danger text-small font-600-bold"
-                                >
-                                  <i class="fas fa-circle"></i> Last Service:
-                                  05-05-2021 <br /><i class="fas fa-circle"></i>
-                                  Next Service: 05-01-2022
+                                <div class="text-success text-small font-600-bold">
+                                  <button class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i> Booking Now</button>
+                                  <button class="btn btn-sm btn-primary"><i class="fas fa-history"></i> Histori</button>
                                 </div>
                               </div>
                             </div>
@@ -313,6 +306,47 @@
               </div>
             </div>
           </section>
+
+          <!-- modal -->
+          <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Detail Kendaraan</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="">
+                    <div class="form-group">
+                      <label>Nama Customer</label>
+                      <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                      <label>Telepon (62 Format)</label>
+                      <input type="text" class="form-control phone-number">
+                    </div>
+                    <div class="form-group">
+                      <label>Alamat</label>
+                      <textarea name="" id="" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label>Status</label>
+                      <select class="form-control">
+                        <option value="1">Aktif</option>
+                        <option value="0">Tidak Aktif</option>
+                      </select>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <%- include ../templates/footer.ejs %>
       </div>
