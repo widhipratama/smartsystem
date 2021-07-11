@@ -24,13 +24,13 @@ module.exports = {
         type: Sequelize.STRING(20),
       },
       alamat: {
-        type: Sequelize.STRING(100),
+        type: Sequelize.STRING(200),
       },
       alamat_dati2: {
-        type: Sequelize.STRING(100),
+        type: Sequelize.STRING(200),
       },
       alamat_dati3: {
-        type: Sequelize.STRING(100),
+        type: Sequelize.STRING(200),
       },
     });
   },
