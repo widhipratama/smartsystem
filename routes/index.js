@@ -10,7 +10,7 @@ router.get("/dashboard", (req, res) => {
   res.render("dashboard/dashboardcust");
 });
 
-router.get("/dashboarduser", (req, res) => {
+router.get("/admin", (req, res) => {
   res.render("dashboard/index");
 });
 

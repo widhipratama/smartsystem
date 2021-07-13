@@ -32,6 +32,11 @@ module.exports = {
       alamat_dati3: {
         type: Sequelize.STRING(200),
       },
+      status: {
+        type: Sequelize.BOOLEAN, 
+        allowNull: false, 
+        defaultValue: false,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {

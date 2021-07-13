@@ -14,6 +14,7 @@ module.exports = (sequelize, Sequelize) => {
       alamat: Sequelize.DataTypes.STRING,
       alamat_dati2: Sequelize.DataTypes.STRING,
       alamat_dati3: Sequelize.DataTypes.STRING,
+      status: Sequelize.DataTypes.BOOLEAN,
     },
     {
       freezeTableName: true,
