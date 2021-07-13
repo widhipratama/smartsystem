@@ -6,8 +6,8 @@
   <body class="">
     <div id="app">
       <div class="main-wrapper">
-        <%- include ../templates/navtop.ejs %> 
-        <%- include ../templates/navleft_user.ejs %>
+        <%- include ../templates/navtop.ejs %> <%- include
+        ../templates/navleft_user.ejs %>
         <div class="main-content" style="padding-top: 90px">
           <section class="section">
             <div class="section-header">
@@ -18,6 +18,15 @@
                 </div>
                 <div class="breadcrumb-item">ToyotaHow</div>
               </div>
+              <% if(alert.message != '') { %>
+              <br />
+              <div
+                class="alert alert-<%= alert.status %>"
+                style="text-align: center"
+              >
+                <strong><%= alert.message %></strong>
+              </div>
+              <% } %>
             </div>
 
             <div class="section-body">
@@ -38,6 +47,7 @@
                 </div>
               </form>
               <div class="row">
+                <% for (var i = 0; i < data.length; i++) { %>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                   <article class="article">
                     <div class="article-header">
@@ -47,19 +57,20 @@
                       ></div>
                       <div class="article-title">
                         <h2>
-                          <a href="/toyotahow/detail"
-                            >Cara Mengecat Mobil</a
-                          >
+                          <a href="/toyotahow/detail"><%= data[i].judul %></a>
                         </h2>
                       </div>
                     </div>
                     <div class="article-details">
                       <div class="article-cta">
-                        <a href="/toyotahow/detail" class="btn btn-primary">Yuk Pelajari</a>
+                        <a href="/toyotahow/detail" class="btn btn-primary"
+                          >Yuk Pelajari</a
+                        >
                       </div>
                     </div>
                   </article>
                 </div>
+                <% } %>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                   <article class="article">
                     <div class="article-header">
@@ -69,9 +80,7 @@
                       ></div>
                       <div class="article-title">
                         <h2>
-                          <a href="#"
-                            >Cara Memoles Mobil</a
-                          >
+                          <a href="#">Cara Memoles Mobil</a>
                         </h2>
                       </div>
                     </div>
@@ -91,9 +100,7 @@
                       ></div>
                       <div class="article-title">
                         <h2>
-                          <a href="#"
-                            >Cara Berciuman di dalam Mobil</a
-                          >
+                          <a href="#">Cara Berciuman di dalam Mobil</a>
                         </h2>
                       </div>
                     </div>
@@ -113,9 +120,7 @@
                       ></div>
                       <div class="article-title">
                         <h2>
-                          <a href="#"
-                            >Cara Menyalakan Lampu Depan Mobil</a
-                          >
+                          <a href="#">Cara Menyalakan Lampu Depan Mobil</a>
                         </h2>
                       </div>
                     </div>
