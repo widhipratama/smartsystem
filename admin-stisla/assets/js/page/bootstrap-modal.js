@@ -83,9 +83,7 @@ $("#modal-5").fireModal({
     });
     e.preventDefault();
   },
-  shown: function (modal, form) {
-    console.log(form);
-  },
+  shown: function (modal, form) {},
   buttons: [
     {
       text: "Kirim",

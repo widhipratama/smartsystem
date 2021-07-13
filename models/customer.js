@@ -5,6 +5,7 @@ module.exports = (sequelize, Sequelize) => {
       id_customer: {
         type: Sequelize.DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
       },
       nama: Sequelize.DataTypes.STRING,
       no_telp: Sequelize.DataTypes.STRING,
