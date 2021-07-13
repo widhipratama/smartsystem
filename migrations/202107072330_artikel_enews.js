@@ -20,6 +20,9 @@ module.exports = {
       status: {
         type: Sequelize.STRING(20),
       },
+      type: {
+        type: Sequelize.STRING(20),
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
