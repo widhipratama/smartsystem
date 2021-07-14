@@ -158,8 +158,9 @@ exports.loginUser = (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.status(422).json({ errors: errors.array() });
-      return;
+      req.flash("login_validation_message", { errors: errors.array() });
+      req.flash("login_validation_status", "422");
+      res.redirect(process.env.URL + "/auth/login-user");
     }
 
     user
@@ -170,7 +171,9 @@ exports.loginUser = (req, res) => {
       })
       .then((user) => {
         if (!user) {
-          return res.status(404).send({ message: "User Not found." });
+          req.flash("login_message", "User tidak terdaftar");
+          req.flash("login_status", "401");
+          res.redirect(process.env.URL + "/auth/login-user");
         }
 
         var passwordIsValid = bcrypt.compareSync(
@@ -179,10 +182,9 @@ exports.loginUser = (req, res) => {
         );
 
         if (!passwordIsValid) {
-          return res.status(401).send({
-            accessToken: null,
-            message: "Invalid Password!",
-          });
+          req.flash("login_message", "Password salah");
+          req.flash("login_status", "401");
+          res.redirect(process.env.URL + "/auth/login-user");
         }
 
         var token = jwt.sign(
@@ -202,10 +204,14 @@ exports.loginUser = (req, res) => {
         res.redirect(process.env.URL + "/dashboard");
       })
       .catch((err) => {
-        res.status(500).send({ message: err.message });
+        req.flash("login_message", "Server Error");
+        req.flash("login_status", "500");
+        res.redirect(process.env.URL + "/auth/login-user");
       });
   } catch (err) {
-    res.status(500).send({ message: err.message });
+    req.flash("login_message", "Server Error");
+    req.flash("login_status", "500");
+    res.redirect(process.env.URL + "/auth/login-user");
   }
 };
 
@@ -292,7 +298,13 @@ exports.loginAdmin = (req, res) => {
 };
 
 exports.loginUserView = function (req, res) {
-  res.render("login/user-index");
+  const loginMessage = req.flash("login_message");
+  const loginStatus = req.flash("login_status");
+  const alert = { message: loginMessage, status: loginStatus };
+
+  res.render("login/user-index", {
+    alert: alert,
+  });
 };
 
 exports.loginAdminView = function (req, res) {

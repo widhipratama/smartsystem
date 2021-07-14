@@ -10,7 +10,7 @@ router.use(function (req, res, next) {
 });
 
 router.get("/", (req, res) => {
-  res.render("login/user-index");
+  res.redirect(process.env.URL + "/dashboard");
 });
 
 router.get("/dashboard", [authJwt.verifyToken], (req, res) => {
@@ -19,7 +19,7 @@ router.get("/dashboard", [authJwt.verifyToken], (req, res) => {
 
 router.get(
   "/admin/dashboard",
-  [authJwt.verifyToken, authJwt.isStaff],
+  [authJwt.verifyToken, authJwt.isStaffAdmin],
   (req, res) => {
     res.render("dashboard/admin");
   }

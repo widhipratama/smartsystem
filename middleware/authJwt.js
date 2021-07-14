@@ -11,12 +11,19 @@ verifyToken = async (req, res, next) => {
     const decode = jwt.verify(token, config.secret);
     const akun = await user.findOne({ id_account: decode.loginId });
     if (!akun) {
+      req.flash(
+        "login_message",
+        "Akses login kadaluarsa, silahkan login kembali"
+      );
+      req.flash("login_status", "401");
       res.redirect(process.env.URL + "/auth/login-user");
     }
     req.token = token;
     req.user = akun;
     next();
   } catch (err) {
+    req.flash("login_message", "Silahkan login terlebih dahulu");
+    req.flash("login_status", "401");
     res.redirect(process.env.URL + "/auth/login-user");
   }
 };
@@ -67,7 +74,7 @@ isAdmin = (req, res, next) => {
   });
 };
 
-isStaff = (req, res, next) => {
+isStaffAdmin = (req, res, next) => {
   admin.findByPk(req.loginId).then((access) => {
     if (access.level === "staff" || access.level === "admin") {
       next();
@@ -84,7 +91,7 @@ isStaff = (req, res, next) => {
 const authJwt = {
   verifyToken: verifyToken,
   isAdmin: isAdmin,
-  isStaff: isStaff,
+  isStaffAdmin: isStaffAdmin,
   isActivatedUser: isActivatedUser,
 };
 module.exports = authJwt;

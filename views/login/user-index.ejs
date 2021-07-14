@@ -30,6 +30,12 @@
                 Before you get started, you must login or register if you don't
                 already have an account.
               </p>
+              <% if(alert.status == '401') { %>
+              <div class="alert alert-danger">
+                <div class="alert-title"><%= alert.status %></div>
+                <%= alert.message %>
+              </div>
+              <% } %>
               <form
                 method="POST"
                 action="<%= process.env.URL %>/auth/login-user"
