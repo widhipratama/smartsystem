@@ -14,8 +14,8 @@ router.get("/", (req, res) => {
 });
 
 router.get("/dashboard", [authJwt.verifyToken], (req, res) => {
-  res.render("dashboard/user");
-});
+  res.render("dashboard/index");
+ });
 
 router.get(
   "/admin/dashboard",

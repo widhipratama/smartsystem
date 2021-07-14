@@ -45,16 +45,23 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <% for (var i = 0; i < 5; i++) { %>
+                          <% for (var i = 0; i < datarow.length; i++) { %>
                           <tr>
                             <th scope="row"><%= i+1 %></th>
-                            <% htitle.forEach(function(h) { %>
-                              <td><%= h.label %></td>
-                            <% }) %>
+                              <td><%= datarow[i].nama %></td>
+                              <td><%= datarow[i].no_telp %></td>
+                              <td><%= datarow[i].alamat %></td>
+                              <td>
+                                <% 
+                                  status = (datarow[i].status!='1' ? 'Tidak Aktif' : 'Aktif' ) 
+                                  badge = (datarow[i].status!='1' ? 'badge badge-danger' : 'badge badge-success' ) 
+                                %>
+                                <span class="<%= badge %>"><%= status %></span>
+                              </td>
                             <td>
                               <button class="btn btn-primary btn-sm" data-toggle="" data-target=""><i class="fas fa-car"></i></button>
                               <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"></i></button>
-                              <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                              <button class="btn btn-danger btn-sm" onclick="delFunction(<%= datarow[i].id %>)" data-id="<%= datarow[i].id %>"><i class="fas fa-trash"></i></button>
                             </td>
                           </tr>
                           <% } %>
@@ -112,5 +119,22 @@
       </div>
     </div>
     <%- include ../templates/script.ejs %>
+    <script type="text/javascript">
+      function delFunction(id) {
+        let idData = id;
+        swal({
+          title: "Yakin Ingin Menghapus Data Customer ini?",
+          text: "Data yang dihapus, tidak bisa kembali lagi.",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+          .then((willDelete) => {
+            if (willDelete) {
+              window.location.assign(`/customer/delete/${idData}`);
+            }
+          });
+      };
+    </script>
   </body>
 </html>
