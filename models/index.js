@@ -25,5 +25,9 @@ db.sequelize = sequelize;
 
 db.customer = require("./customer")(sequelize, Sequelize);
 db.artikel_enews = require("./artikel_enews")(sequelize, Sequelize);
+db.user = require("./user")(sequelize, Sequelize);
+db.admin = require("./admin")(sequelize, Sequelize);
+
+db.user.hasOne(db.customer, { foreignKey: "customer_id" });
 
 module.exports = db;

@@ -2,7 +2,7 @@ require("dotenv").config(); // this loads env vars
 const { Client, MessageMedia } = require("whatsapp-web.js");
 const { phoneNumberFormatter } = require("./helpers/formatter");
 const express = require("express");
-const { body, validationResult } = require("express-validator");
+const expressValidator = require("express-validator");
 const fileUpload = require("express-fileupload");
 const socketIO = require("socket.io");
 const qrcode = require("qrcode");
@@ -34,7 +34,7 @@ app.use(
     debug: true,
   })
 );
-
+app.use(expressValidator());
 app.use(cookieParser("keyboard cat"));
 app.use(session({ cookie: { maxAge: 60000 } }));
 app.use(flash());
@@ -207,6 +207,7 @@ io.on("connection", function (socket) {
   });
 });
 
+const authRoute = require("./routes/auth");
 const whatsappRoute = require("./routes/whatsapp");
 const custfleetRoute = require("./routes/custfleet");
 const custfirstRoute = require("./routes/custfirst");
@@ -219,6 +220,7 @@ const customerRoute = require("./routes/customer");
 
 // routes
 app.use("/", router);
+app.use("/auth", authRoute);
 app.use("/whatsapp", whatsappRoute);
 app.use("/custfleet", custfleetRoute);
 app.use("/custfirst", custfirstRoute);
