@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.js");
 const db = require("../models");
+const customer = db.customer;
 const user = db.user;
 const admin = db.admin;
 
@@ -9,7 +10,10 @@ verifyToken = async (req, res, next) => {
     let token = req.cookies["x-access-token"];
 
     const decode = jwt.verify(token, config.secret);
-    const akun = await user.findOne({ id_account: decode.loginId });
+    const akun = await user.findOne({
+      where: { id_account: decode.loginId },
+      include: [customer],
+    });
     if (!akun) {
       req.flash(
         "login_message",
