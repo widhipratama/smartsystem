@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include ../../../views/templates/header.ejs %>
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="script-stisla/assets/css/style.css" />
+    <link rel="stylesheet" href="script-stisla/assets/css/components.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="main-wrapper">
+        <%- include ../../../views/templates/navtop.ejs %> 
+        <%- include ../../../views/templates/navleft.ejs %>
+        <div class="main-content">
+          <section class="section">
+            <div class="section-header">
+              <h1><%= title %></h1>
+              <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active">
+                  <a href="#">Dashboard</a>
+                </div>
+                <div class="breadcrumb-item"><%= title %></div>
+              </div>
+            </div>
+
+            <div class="section-body">
+              <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h4><%= tbtitle %></h4>
+                      <div class="float-right">
+                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> Tambah Data</button>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <table class="table table-striped" id="table-1" style="width:100%">
+                        <thead>
+                          <tr>
+                            <th scope="col" width="5%">No.</th>
+                            <% htitle.forEach(function(h) { %>
+                              <th><%= h.label %></th>
+                            <% }) %>
+                            <th scope="col" width="15%">Status</th>
+                            <th scope="col" width="15%">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% for (var i = 0; i < datarow.length; i++) { %>
+                          <tr>
+                            <th scope="row"><%= i+1 %></th>
+                              <% for (var h = 0; h < htitle.length; h++){ %>
+                                <td><%= datarow[i][htitle[h].id] %></td>
+                              <% } 
+                                status = (datarow[i].status!='1' ? 'Tidak Aktif' : 'Aktif' ) 
+                                badge = (datarow[i].status!='1' ? 'badge badge-danger' : 'badge badge-success' ) 
+                              %>
+                              <td>
+                                <span class="<%= badge %>"><%= status %></span>
+                              </td>
+                              <td>
+                                <button class="btn btn-primary btn-sm" data-toggle="" data-target=""><i class="fas fa-car"></i></button>
+                                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"></i></button>
+                                <button class="btn btn-danger btn-sm" onclick="delFunction(<%= datarow[i].id %>)" data-id="<%= datarow[i].id %>"><i class="fas fa-trash"></i></button>
+                              </td>
+                          </tr>
+                          <% } %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- modal -->
+          <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Form Data Customer</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="">
+                    <div class="form-group">
+                      <label>Nama Customer</label>
+                      <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                      <label>Telepon (62 Format)</label>
+                      <input type="text" class="form-control phone-number">
+                    </div>
+                    <div class="form-group">
+                      <label>Alamat</label>
+                      <textarea name="" id="" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label>Status</label>
+                      <select class="form-control">
+                        <option value="1">Aktif</option>
+                        <option value="0">Tidak Aktif</option>
+                      </select>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%- include ../../../views/templates/footer.ejs %>
+      </div>
+    </div>
+    <%- include ../../../views/templates/script.ejs %>
+    <script type="text/javascript">
+      function delFunction(id) {
+        let idData = id;
+        swal({
+          title: "Yakin Ingin Menghapus Data Customer ini?",
+          text: "Data yang dihapus, tidak bisa kembali lagi.",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+          .then((willDelete) => {
+            if (willDelete) {
+              window.location.assign(`/customer/delete/${idData}`);
+            }
+          });
+      };
+    </script>
+  </body>
+</html>

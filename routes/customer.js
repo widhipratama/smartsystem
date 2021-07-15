@@ -1,5 +1,5 @@
 const router = require("express").Router();
-var customerController = require("../controllers/customerController.js");
+var customerController = require("../modules/customer/controllers/customerController.js");
 
 router.get("/", customerController.index);
 router.get("*", customerController.notFound);

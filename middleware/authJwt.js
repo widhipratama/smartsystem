@@ -22,8 +22,8 @@ verifyToken = async (req, res, next) => {
     req.user = akun;
     next();
   } catch (err) {
-    req.flash("login_message", "Silahkan login terlebih dahulu");
-    req.flash("login_status", "401");
+    // req.flash("login_message", "Silahkan login terlebih dahulu");
+    // req.flash("login_status", "401");
     res.redirect(process.env.URL + "/auth/login-user");
   }
 };
