@@ -42,6 +42,8 @@ router.get("/daftar-user", authController.daftarUserView);
 router.get("/daftar-admin", authController.daftarAdminView);
 router.get("/login-user", authController.loginUserView);
 router.get("/login-admin", authController.loginAdminView);
+router.get("/register", authController.registerView);
+router.get("/onetaps", authController.onetapView);
 
 router.get("/logout", (req, res, next) => {
   if (req.session) {

@@ -372,3 +372,11 @@ exports.loginUserToken = (req, res) => {
     res.redirect(process.env.URL + "/auth/login-user");
   }
 };
+
+exports.registerView = function (req, res) {
+  res.render("login/register-index");
+};
+
+exports.onetapView = function (req, res) {
+  res.render("login/onetap-index");
+};
