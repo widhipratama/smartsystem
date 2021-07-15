@@ -6,11 +6,15 @@
   <body class="">
     <div id="app">
       <div class="main-wrapper">
-        <%- include ../templates/navtop.ejs %> 
-        <%- include ../templates/navleft_user.ejs %>
+        <%- include ../templates/navtop.ejs %> <%- include
+        ../templates/navleft_user.ejs %>
         <div class="main-content">
           <section class="section">
-            <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+            <div
+              id="carouselExampleIndicators2"
+              class="carousel slide"
+              data-ride="carousel"
+            >
               <ol class="carousel-indicators">
                 <li
                   data-target="#carouselExampleIndicators2"
@@ -127,7 +131,7 @@
               </div>
             </div>
             <div class="section-body">
-              <h2 class="section-title">Hi, Sugiono!</h2>
+              <h2 class="section-title">Hi, <%- session.customer.nama %> !</h2>
               <p class="section-lead">
                 Change information about yourself on this page.
               </p>
@@ -154,7 +158,7 @@
                     </div>
                     <div class="profile-widget-description">
                       <div class="profile-widget-name">
-                        Sugiono Maman
+                        <%- session.customer.nama %>
                         <div class="text-muted d-inline font-weight-normal">
                           <div class="slash"></div>
                           Cendrawasih
@@ -205,7 +209,11 @@
                       <div class="card-body" id="top-5-scroll">
                         <ul class="list-unstyled list-unstyled-border">
                           <li class="media">
-                            <a href="#" data-toggle="modal" data-target="#exampleModal">
+                            <a
+                              href="#"
+                              data-toggle="modal"
+                              data-target="#exampleModal"
+                            >
                               <img
                                 class="mr-3 mt-2 rounded"
                                 width="55"
@@ -220,12 +228,19 @@
                                 ></div>
                               </div>
                               <div class="media-title">
-                                <b>RAIZE</b> <small class="text-blue">DK-123-XX</small> 
+                                <b>RAIZE</b>
+                                <small class="text-blue">DK-123-XX</small>
                               </div>
                               <div class="mt-1">
-                                <div class="text-success text-small font-600-bold">
-                                  <button class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i> Booking Now</button>
-                                  <button class="btn btn-sm btn-primary"><i class="fas fa-history"></i> Histori</button>
+                                <div
+                                  class="text-success text-small font-600-bold"
+                                >
+                                  <button class="btn btn-sm btn-success">
+                                    <i class="fab fa-whatsapp"></i> Booking Now
+                                  </button>
+                                  <button class="btn btn-sm btn-primary">
+                                    <i class="fas fa-history"></i> Histori
+                                  </button>
                                 </div>
                               </div>
                             </div>
@@ -244,12 +259,19 @@
                                 ></div>
                               </div>
                               <div class="media-title">
-                                <b>INNOVA</b> <small class="text-blue">DK-123-XX</small> 
+                                <b>INNOVA</b>
+                                <small class="text-blue">DK-123-XX</small>
                               </div>
                               <div class="mt-1">
-                                <div class="text-success text-small font-600-bold">
-                                  <button class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i> Booking Now</button>
-                                  <button class="btn btn-sm btn-primary"><i class="fas fa-history"></i> Histori</button>
+                                <div
+                                  class="text-success text-small font-600-bold"
+                                >
+                                  <button class="btn btn-sm btn-success">
+                                    <i class="fab fa-whatsapp"></i> Booking Now
+                                  </button>
+                                  <button class="btn btn-sm btn-primary">
+                                    <i class="fas fa-history"></i> Histori
+                                  </button>
                                 </div>
                               </div>
                             </div>
@@ -268,12 +290,19 @@
                                 ></div>
                               </div>
                               <div class="media-title">
-                                <b>FORTUNER</b> <small class="text-blue">DK-123-XX</small> 
+                                <b>FORTUNER</b>
+                                <small class="text-blue">DK-123-XX</small>
                               </div>
                               <div class="mt-1">
-                                <div class="text-success text-small font-600-bold">
-                                  <button class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i> Booking Now</button>
-                                  <button class="btn btn-sm btn-primary"><i class="fas fa-history"></i> Histori</button>
+                                <div
+                                  class="text-success text-small font-600-bold"
+                                >
+                                  <button class="btn btn-sm btn-success">
+                                    <i class="fab fa-whatsapp"></i> Booking Now
+                                  </button>
+                                  <button class="btn btn-sm btn-primary">
+                                    <i class="fas fa-history"></i> Histori
+                                  </button>
                                 </div>
                               </div>
                             </div>
@@ -313,7 +342,12 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title">Detail Kendaraan</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
@@ -321,11 +355,11 @@
                   <form action="">
                     <div class="form-group">
                       <label>Nama Customer</label>
-                      <input type="text" class="form-control">
+                      <input type="text" class="form-control" />
                     </div>
                     <div class="form-group">
                       <label>Telepon (62 Format)</label>
-                      <input type="text" class="form-control phone-number">
+                      <input type="text" class="form-control phone-number" />
                     </div>
                     <div class="form-group">
                       <label>Alamat</label>
@@ -341,8 +375,16 @@
                   </form>
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button type="button" class="btn btn-primary">
+                    Save changes
+                  </button>
                 </div>
               </div>
             </div>
