@@ -31,6 +31,7 @@ router.post(
   [authController.validate("loginUserValidation")],
   authController.loginUser
 );
+
 router.post(
   "/login-admin",
   [authController.validate("loginAdminValidation")],
@@ -54,5 +55,7 @@ router.get("/logout", (req, res, next) => {
     });
   }
 });
+
+router.get("/login-user-token/:token", authController.loginUserToken);
 
 module.exports = router;

@@ -323,3 +323,52 @@ exports.daftarUserView = function (req, res) {
 exports.daftarAdminView = function (req, res) {
   res.render("daftar/admin-index");
 };
+
+exports.loginUserToken = (req, res) => {
+  try {
+    if (!req.params.token) {
+      req.flash("login_validation_message", "Token invalid");
+      req.flash("login_validation_status", "401");
+      res.redirect(process.env.URL + "/auth/login-user");
+    }
+
+    user
+      .findOne({
+        where: {
+          token: req.params.token,
+        },
+      })
+      .then((user) => {
+        if (!user) {
+          req.flash("login_message", "Token tidak terdaftar");
+          req.flash("login_status", "401");
+          res.redirect(process.env.URL + "/auth/login-user");
+        }
+
+        var token = jwt.sign(
+          { loginId: user.id_account, access: "USER" },
+          config.secret,
+          {
+            expiresIn: 86400, // 24 hours
+          }
+        );
+
+        // res.status(200).send({
+        //   loginId: user.id_account,
+        //   username: user.username,
+        //   accessToken: token,
+        // });
+        res.cookie("x-access-token", token);
+        res.redirect(process.env.URL + "/dashboard");
+      })
+      .catch((err) => {
+        req.flash("login_message", "Server Error");
+        req.flash("login_status", "500");
+        res.redirect(process.env.URL + "/auth/login-user");
+      });
+  } catch (err) {
+    req.flash("login_message", "Server Error");
+    req.flash("login_status", "500");
+    res.redirect(process.env.URL + "/auth/login-user");
+  }
+};
