@@ -33,8 +33,8 @@ module.exports = {
         type: Sequelize.STRING(200),
       },
       status: {
-        type: Sequelize.BOOLEAN, 
-        allowNull: false, 
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
         defaultValue: false,
       },
     });

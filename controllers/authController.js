@@ -1,6 +1,7 @@
 const db = require("../models");
 const config = require("../config/auth");
 const { body, validationResult } = require("express-validator/check");
+const { randomString } = require("../helpers/randomString");
 const admin = db.admin;
 const user = db.user;
 const customer = db.customer;
@@ -137,6 +138,7 @@ exports.daftarUser = (req, res) => {
             username: username,
             password: bcrypt.hashSync(password, 8),
             id_customer: q.id_customer,
+            token: randomString(60),
           })
           .then(() => {
             res.send({ message: "User was registered successfully!" });
@@ -283,11 +285,14 @@ exports.loginAdmin = (req, res) => {
           }
         );
 
-        res.status(200).send({
-          loginId: admin.id_account,
-          username: admin.username,
-          accessToken: token,
-        });
+        // res.status(200).send({
+        //   loginId: admin.id_account,
+        //   username: admin.username,
+        //   accessToken: token,
+        // });
+
+        res.cookie("x-access-token", token);
+        res.redirect(process.env.URL + "/admin/dashboard");
       })
       .catch((err) => {
         res.status(500).send({ message: err.message });

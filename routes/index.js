@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { authJwt } = require("../middleware");
+const dashboardController = require("../controllers/dashboardController");
 
 router.use(function (req, res, next) {
   res.header(
@@ -13,9 +14,7 @@ router.get("/", (req, res) => {
   res.redirect(process.env.URL + "/dashboard");
 });
 
-router.get("/dashboard", [authJwt.verifyToken], (req, res) => {
-  res.render("dashboard/user");
-});
+router.get("/dashboard", [authJwt.verifyToken], dashboardController.user);
 
 router.get(
   "/admin/dashboard",

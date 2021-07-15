@@ -15,7 +15,14 @@ module.exports = {
         type: Sequelize.STRING(100),
       },
       id_customer: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.INTEGER,
+        references: {
+          model: "customer",
+          key: "id_customer",
+        },
+      },
+      token: {
+        type: Sequelize.STRING(60),
       },
       last_login: {
         allowNull: true,
