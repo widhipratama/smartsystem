@@ -283,11 +283,14 @@ exports.loginAdmin = (req, res) => {
           }
         );
 
-        res.status(200).send({
-          loginId: admin.id_account,
-          username: admin.username,
-          accessToken: token,
-        });
+        // res.status(200).send({
+        //   loginId: admin.id_account,
+        //   username: admin.username,
+        //   accessToken: token,
+        // });
+
+        res.cookie("x-access-token", token);
+        res.redirect(process.env.URL + "/admin/dashboard");
       })
       .catch((err) => {
         res.status(500).send({ message: err.message });
