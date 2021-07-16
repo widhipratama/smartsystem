@@ -11,6 +11,7 @@ module.exports = (sequelize, Sequelize) => {
       id_customer: Sequelize.DataTypes.INTEGER,
       last_login: Sequelize.DataTypes.STRING,
       token: Sequelize.DataTypes.STRING,
+      refresh_token: Sequelize.DataTypes.STRING,
     },
     {
       freezeTableName: true,

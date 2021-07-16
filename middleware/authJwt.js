@@ -7,14 +7,32 @@ const admin = db.admin;
 
 verifyToken = async (req, res, next) => {
   try {
-    let token = req.cookies["x-access-token"];
+    let accessToken = req.cookies.jwt;
 
-    const decode = jwt.verify(token, config.secret);
-    const akun = await user.findOne({
-      where: { id_account: decode.loginId },
+    if (!accessToken) {
+      req.flash("login_message", "Forbidden Access");
+      req.flash("login_status", "403");
+    }
+
+    let payload;
+    try {
+      payload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (e) {
+      req.flash(
+        "login_message",
+        "Akses login kadaluarsa, silahkan login kembali"
+      );
+      req.flash("login_status", "401");
+    }
+
+    const dataUser = await user.findOne({
+      where: { username: payload.username },
       include: [customer],
     });
-    if (!akun) {
+
+    try {
+      jwt.verify(dataUser.refresh_token, process.env.REFRESH_TOKEN_SECRET);
+    } catch (e) {
       req.flash(
         "login_message",
         "Akses login kadaluarsa, silahkan login kembali"
@@ -22,10 +40,23 @@ verifyToken = async (req, res, next) => {
       req.flash("login_status", "401");
       res.redirect(process.env.URL + "/auth/login-user");
     }
-    req.token = token;
-    req.user = akun;
+
+    let newToken = jwt.sign(
+      {
+        loginId: dataUser.id_account,
+        username: dataUser.username,
+        access: "USER",
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: process.env.ACCESS_TOKEN_LIFE,
+      }
+    );
+
+    res.cookie("jwt", newToken, { secure: true, httpOnly: true });
     next();
   } catch (err) {
+    console.log(err);
     // req.flash("login_message", "Silahkan login terlebih dahulu");
     // req.flash("login_status", "401");
     res.redirect(process.env.URL + "/auth/login-user");

@@ -171,17 +171,14 @@ exports.loginUser = (req, res) => {
           username: req.body.username,
         },
       })
-      .then((user) => {
-        if (!user) {
+      .then((q) => {
+        if (!q) {
           req.flash("login_message", "User tidak terdaftar");
           req.flash("login_status", "401");
           res.redirect(process.env.URL + "/auth/login-user");
         }
 
-        var passwordIsValid = bcrypt.compareSync(
-          req.body.password,
-          user.password
-        );
+        var passwordIsValid = bcrypt.compareSync(req.body.password, q.password);
 
         if (!passwordIsValid) {
           req.flash("login_message", "Password salah");
@@ -189,12 +186,22 @@ exports.loginUser = (req, res) => {
           res.redirect(process.env.URL + "/auth/login-user");
         }
 
-        var token = jwt.sign(
-          { loginId: user.id_account, access: "USER" },
-          config.secret,
+        let accessToken = jwt.sign(
+          { loginId: q.id_account, username: q.username, access: "USER" },
+          process.env.ACCESS_TOKEN_SECRET,
           {
-            expiresIn: 86400, // 24 hours
+            expiresIn: process.env.ACCESS_TOKEN_LIFE,
           }
+        );
+
+        let refreshToken = jwt.sign(
+          { loginId: q.id_account, username: q.username, access: "USER" },
+          process.env.REFRESH_TOKEN_SECRET
+        );
+
+        user.update(
+          { refresh_token: refreshToken },
+          { where: { id: q.id_account } }
         );
 
         // res.status(200).send({
@@ -202,7 +209,7 @@ exports.loginUser = (req, res) => {
         //   username: user.username,
         //   accessToken: token,
         // });
-        res.cookie("x-access-token", token);
+        res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
         res.redirect(process.env.URL + "/dashboard");
       })
       .catch((err) => {

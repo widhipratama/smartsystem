@@ -14,6 +14,7 @@ const router = require("./routes/index");
 const flash = require("connect-flash");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 var path = require("path");
 
@@ -205,6 +206,38 @@ io.on("connection", function (socket) {
 
     createSession(data.id);
   });
+});
+
+app.all("*", function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
+
+  let accessToken = req.cookies.jwt;
+  if (!accessToken) {
+    req.flash("login_message", "Forbidden Access");
+    req.flash("login_status", "403");
+  }
+
+  let payload;
+  try {
+    payload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    app.locals = {
+      auth: {
+        username: payload.username,
+        nama: "USER",
+      },
+    };
+  } catch (e) {
+    app.locals = {
+      auth: {
+        username: "USER",
+        nama: "USER",
+      },
+    };
+  }
+
+  next();
 });
 
 const authRoute = require("./routes/auth");
