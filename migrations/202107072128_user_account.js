@@ -24,6 +24,9 @@ module.exports = {
       token: {
         type: Sequelize.STRING(60),
       },
+      refresh_token: {
+        type: Sequelize.STRING(255),
+      },
       last_login: {
         allowNull: true,
         type: Sequelize.DATE,
