@@ -53,7 +53,7 @@ verifyToken = async (req, res, next) => {
       }
     );
 
-    res.cookie("jwt", newToken, { secure: true, httpOnly: true });
+    res.cookie("jwt", newToken, { secure: true });
     next();
   } catch (err) {
     console.log(err);
