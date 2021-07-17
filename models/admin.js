@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const user = sequelize.define(
+  const admin = sequelize.define(
     "admin_account",
     {
       id_account: {
@@ -20,5 +20,5 @@ module.exports = (sequelize, Sequelize) => {
     }
   );
 
-  return user;
+  return admin;
 };

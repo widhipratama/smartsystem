@@ -1,9 +1,6 @@
 "use strict";
-
-const fs = require("fs");
 const path = require("path");
 const Sequelize = require("sequelize");
-const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.json")[env];
 
@@ -30,6 +27,7 @@ db.customer = require("../modules/customer/models/customer")(
 db.artikel_enews = require("./artikel_enews")(sequelize, Sequelize);
 db.user = require("./user")(sequelize, Sequelize);
 db.admin = require("./admin")(sequelize, Sequelize);
+db.jobHistory = require("./jobHistory")(sequelize, Sequelize);
 
 db.user.hasOne(db.customer, { foreignKey: "id_customer" });
 
