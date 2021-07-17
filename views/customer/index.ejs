@@ -9,8 +9,8 @@
   <body>
     <div id="app">
       <div class="main-wrapper">
-        <%- include ../templates/navtop.ejs %> 
-        <%- include ../templates/navleft.ejs %>
+        <%- include ../templates/navtop.ejs %> <%- include
+        ../templates/navleft.ejs %>
         <div class="main-content">
           <section class="section">
             <div class="section-header">
@@ -30,16 +30,26 @@
                     <div class="card-header">
                       <h4><%= tbtitle %></h4>
                       <div class="float-right">
-                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> Tambah Data</button>
+                        <button
+                          class="btn btn-success btn-sm"
+                          data-toggle="modal"
+                          data-target="#exampleModal"
+                        >
+                          <i class="fas fa-plus"></i> Tambah Data
+                        </button>
                       </div>
                     </div>
                     <div class="card-body">
-                      <table class="table table-striped" id="table-1" style="width:100%">
+                      <table
+                        class="table table-striped"
+                        id="table-1"
+                        style="width: 100%"
+                      >
                         <thead>
                           <tr>
                             <th scope="col" width="5%">No.</th>
                             <% htitle.forEach(function(h) { %>
-                              <th><%= h.label %></th>
+                            <th><%= h.label %></th>
                             <% }) %>
                             <th scope="col" width="15%">Action</th>
                           </tr>
@@ -48,20 +58,38 @@
                           <% for (var i = 0; i < datarow.length; i++) { %>
                           <tr>
                             <th scope="row"><%= i+1 %></th>
-                              <td><%= datarow[i].nama %></td>
-                              <td><%= datarow[i].no_telp %></td>
-                              <td><%= datarow[i].alamat %></td>
-                              <td>
-                                <% 
-                                  status = (datarow[i].status!='1' ? 'Tidak Aktif' : 'Aktif' ) 
-                                  badge = (datarow[i].status!='1' ? 'badge badge-danger' : 'badge badge-success' ) 
-                                %>
-                                <span class="<%= badge %>"><%= status %></span>
-                              </td>
+                            <td><%= datarow[i].nama %></td>
+                            <td><%= datarow[i].no_telp %></td>
+                            <td><%= datarow[i].alamat %></td>
                             <td>
-                              <button class="btn btn-primary btn-sm" data-toggle="" data-target=""><i class="fas fa-car"></i></button>
-                              <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"></i></button>
-                              <button class="btn btn-danger btn-sm" onclick="delFunction(<%= datarow[i].id %>)" data-id="<%= datarow[i].id %>"><i class="fas fa-trash"></i></button>
+                              <% status = (datarow[i].status!='1' ? 'Tidak
+                              Aktif' : 'Aktif' ) badge = (datarow[i].status!='1'
+                              ? 'badge badge-danger' : 'badge badge-success' )
+                              %>
+                              <span class="<%= badge %>"><%= status %></span>
+                            </td>
+                            <td>
+                              <button
+                                class="btn btn-primary btn-sm"
+                                data-toggle=""
+                                data-target=""
+                              >
+                                <i class="fas fa-car"></i>
+                              </button>
+                              <button
+                                class="btn btn-warning btn-sm"
+                                data-toggle="modal"
+                                data-target="#exampleModal"
+                              >
+                                <i class="fas fa-pen"></i>
+                              </button>
+                              <button
+                                class="btn btn-danger btn-sm"
+                                onclick="delFunction(<%= datarow[i].id %>)"
+                                data-id="<%= datarow[i].id %>"
+                              >
+                                <i class="fas fa-trash"></i>
+                              </button>
                             </td>
                           </tr>
                           <% } %>
@@ -80,7 +108,12 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title">Form Data Customer</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
@@ -88,11 +121,11 @@
                   <form action="">
                     <div class="form-group">
                       <label>Nama Customer</label>
-                      <input type="text" class="form-control">
+                      <input type="text" class="form-control" />
                     </div>
                     <div class="form-group">
                       <label>Telepon (62 Format)</label>
-                      <input type="text" class="form-control phone-number">
+                      <input type="text" class="form-control phone-number" />
                     </div>
                     <div class="form-group">
                       <label>Alamat</label>
@@ -108,8 +141,16 @@
                   </form>
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button type="button" class="btn btn-primary">
+                    Save changes
+                  </button>
                 </div>
               </div>
             </div>
@@ -128,13 +169,12 @@
           icon: "warning",
           buttons: true,
           dangerMode: true,
-        })
-          .then((willDelete) => {
-            if (willDelete) {
-              window.location.assign(`/customer/delete/${idData}`);
-            }
-          });
-      };
+        }).then((willDelete) => {
+          if (willDelete) {
+            window.location.assign(`/customer/delete/${idData}`);
+          }
+        });
+      }
     </script>
   </body>
 </html>
