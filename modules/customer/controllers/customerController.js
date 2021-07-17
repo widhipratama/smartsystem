@@ -53,6 +53,22 @@ exports.createCustomer = function (req, res) {
         res.redirect('/customer');
     });
 }
+exports.hapusCustomer = function (req, res) {
+    let id = req.params.id;
+    let customerFound;
+    models.customer.findOne({ where: { id_customer: { [Op.eq]: id } } }).then((customer) => {
+        customerFound = customer;
+        return customer.destroy().then(() => {
+            req.flash('alertMessage', `Sukses Menghapus Data Customer dengan nama : ${customerFound.nama}`);
+            req.flash('alertStatus', 'success');
+            res.redirect('/customer');
+        })
+    }).catch((err) => {
+        req.flash('alertMessage', err.message);
+        req.flash('alertStatus', 'danger');
+        res.redirect('/customer');
+    });
+}
 
 exports.notFound = function (req, res) {
   res.render("page/notfound");
