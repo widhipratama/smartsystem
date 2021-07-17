@@ -201,7 +201,7 @@ exports.loginUser = (req, res) => {
 
         user.update(
           { refresh_token: refreshToken },
-          { where: { id: q.id_account } }
+          { where: { id_account: q.id_account } }
         );
 
         // res.status(200).send({

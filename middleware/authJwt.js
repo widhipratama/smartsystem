@@ -56,7 +56,6 @@ verifyToken = async (req, res, next) => {
     res.cookie("jwt", newToken, { secure: true, httpOnly: true });
     next();
   } catch (err) {
-    console.log(err);
     // req.flash("login_message", "Silahkan login terlebih dahulu");
     // req.flash("login_status", "401");
     res.redirect(process.env.URL + "/auth/login-user");
