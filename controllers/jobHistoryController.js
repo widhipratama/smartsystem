@@ -21,10 +21,11 @@ exports.upload = async (req, res) => {
       res.redirect(process.env.URL + "/job-history/import");
     }
 
+    let dataExcel = [];
+
     let path = __basedir + "/uploads/" + req.file.filename;
     xlsxFile(path).then((rows) => {
       rows.shift();
-      let dataExcel = [];
 
       rows.forEach((row) => {
         let data = {
@@ -67,23 +68,19 @@ exports.upload = async (req, res) => {
           no_bp: row[37],
           dealer: row[38],
         };
-
         dataExcel.push(data);
-      });
-
-      jobHistory
-        .bulkCreate(dataExcel, { individualHooks: true })
-        .then(() => {
-          req.flash("import_message", "Data berhasil diimport");
-          req.flash("import_status", "200");
-          res.redirect(process.env.URL + "/job-history/import");
-        })
-        .catch((error) => {
-          req.flash("import_message", error);
-          req.flash("import_status", "500");
-          res.redirect(process.env.URL + "/job-history/import");
+        jobHistory.count({ where: { no_order: row[14] } }).then((count) => {
+          if (count < 1) {
+            jobHistory.create(data);
+          }
         });
+      });
     });
+
+    req.flash("import_message", "Data berhasil diimport");
+    req.flash("import_status", "200");
+    fs.unlink(path, () => {});
+    res.redirect(process.env.URL + "/job-history/import");
   } catch (error) {
     req.flash("import_message", error);
     req.flash("import_status", "500");
