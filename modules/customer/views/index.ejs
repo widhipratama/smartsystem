@@ -66,7 +66,7 @@
                               </td>
                               <td>
                                 <button class="btn btn-primary btn-sm" data-toggle="" data-target=""><i class="fas fa-car"></i></button>
-                                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"></i></button>
+                                <button class="btn btn-warning btn-sm" onclick="editFunction('<%= datarow[i].id_customer %>')" data-id="<%= datarow[i].id %>" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"></i></button>
                                 <button class="btn btn-danger btn-sm" onclick="delFunction('<%= datarow[i].id_customer %>')" data-id="<%= datarow[i].id %>"><i class="fas fa-trash"></i></button>
                               </td>
                           </tr>
@@ -191,10 +191,31 @@
           .then((willDelete) => {
             if (willDelete) {
               window.location.assign(`/customer/delete/${idData}`);
-        console.log(idData);
             }
           });
       };
+      function editFunction(id) {
+      let idData = id;
+      let url = '<%= process.env.URL %>/customer/edit/'+idData;
+          console.log(url);
+      $.ajax({
+        type: 'GET',
+        url: url,
+        dataType: 'json',
+        success: function(res) {
+          console.log(res.data)
+          document.getElementById("nama").value = res.data.nama;
+          document.getElementById("no_telp").value = res.data.no_telp;
+          document.getElementById("wa").value = res.data.wa;
+          document.getElementById("facebook").value = res.data.facebook;
+          document.getElementById("ig").value = res.data.ig;
+          document.getElementById("alamat").value = res.data.alamat;
+          document.getElementById("alamat_dati2").value = res.data.alamat_dati2;
+          document.getElementById("alamat_dati3").value = res.data.alamat_dati3;
+          document.getElementById("status").value = res.data.status;
+        }
+      });
+    };
     </script>
   </body>
 </html>

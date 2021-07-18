@@ -69,7 +69,21 @@ exports.hapusCustomer = function (req, res) {
         res.redirect('/customer');
     });
 }
+exports.editCustomer = function (req, res) {
+    const alertMessage = req.flash('alertMessage');
+    const alertStatus = req.flash('alertStatus');
+    const alert = { message: alertMessage, status: alertStatus };
+
+    const id = req.params.id;
+    models.customer.findOne({ where: { id_customer: { [Op.eq]: id } } }).then((customer) => {
+        res.send({ 
+            success: true, 
+            message: 'Berhasil ambil data!',
+            data: customer
+        });
+    });
+}
 
 exports.notFound = function (req, res) {
-  res.render("page/notfound");
+    res.render("page/notfound");
 };
