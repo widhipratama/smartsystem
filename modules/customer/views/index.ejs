@@ -32,7 +32,7 @@
                   <div class="card-header">
                     <h4><%= tbtitle %></h4>
                     <div class="float-right">
-                      <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal"><i
+                      <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal" onclick="createFunction();"><i
                           class="fas fa-plus"></i> Tambah Data</button>
                     </div>
                   </div>
@@ -216,7 +216,6 @@
         dataType: 'json',
         success: function (res) {
           $('#formData').attr('action', '<%= process.env.URL %>/customer/edit/save/'+idData);
-          console.log(res.data)
           document.getElementById("nama").value = res.data.nama;
           document.getElementById("no_telp").value = res.data.no_telp;
           document.getElementById("wa").value = res.data.wa;
@@ -228,6 +227,18 @@
           document.getElementById("option"+res.data.status).selected = true;
         }
       });
+    };
+    function createFunction(){
+      $('#formData').attr('action', '<%= process.env.URL %>/customer/addcustomer');
+      document.getElementById("nama").value = '';
+      document.getElementById("no_telp").value = '';
+      document.getElementById("wa").value = '';
+      document.getElementById("facebook").value = '';
+      document.getElementById("ig").value = '';
+      document.getElementById("alamat").value = '';
+      document.getElementById("alamat_dati2").value = '';
+      document.getElementById("alamat_dati3").value = '';
+      document.getElementById("optionfalse").selected = true;
     };
   </script>
 </body>
