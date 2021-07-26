@@ -18,10 +18,7 @@ verifyToken = async (req, res, next) => {
     try {
       payload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
     } catch (e) {
-      req.flash(
-        "login_message",
-        "Akses login kadaluarsa, silahkan login kembali"
-      );
+      req.flash("login_message", "Akses login kadaluarsa, silahkan login kembali");
       req.flash("login_status", "401");
     }
 
@@ -33,10 +30,7 @@ verifyToken = async (req, res, next) => {
     try {
       jwt.verify(dataUser.refresh_token, process.env.REFRESH_TOKEN_SECRET);
     } catch (e) {
-      req.flash(
-        "login_message",
-        "Akses login kadaluarsa, silahkan login kembali"
-      );
+      req.flash("login_message", "Akses login kadaluarsa, silahkan login kembali");
       req.flash("login_status", "401");
       res.redirect(process.env.URL + "/auth/login-user");
     }
