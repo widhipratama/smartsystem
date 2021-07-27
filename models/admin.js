@@ -10,6 +10,8 @@ module.exports = (sequelize, Sequelize) => {
       password: Sequelize.DataTypes.STRING,
       level: Sequelize.DataTypes.STRING,
       last_login: Sequelize.DataTypes.STRING,
+      token: Sequelize.DataTypes.STRING,
+      refresh_token: Sequelize.DataTypes.STRING,
     },
     {
       freezeTableName: true,

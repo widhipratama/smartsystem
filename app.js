@@ -219,7 +219,8 @@ app.all("*", function (req, res, next) {
     app.locals = {
       auth: {
         username: payload.username,
-        nama: "USER",
+        nama: payload.nama,
+        level: payload.level ? payload.level : "USER",
       },
     };
   } catch (e) {
@@ -227,6 +228,7 @@ app.all("*", function (req, res, next) {
       auth: {
         username: "USER",
         nama: "USER",
+        level: "USER",
       },
     };
   }
