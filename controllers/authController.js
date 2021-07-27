@@ -22,10 +22,7 @@ exports.validate = (method) => {
       ];
     }
     case "loginUserValidation": {
-      return [
-        body("username", "username tidak boleh kosong").exists(),
-        body("password", "password tidak boleh kosong").exists(),
-      ];
+      return [body("username", "username tidak boleh kosong").exists(), body("password", "password tidak boleh kosong").exists()];
     }
     case "daftarAdminValidation": {
       return [
@@ -35,10 +32,7 @@ exports.validate = (method) => {
       ];
     }
     case "loginAdminValidation": {
-      return [
-        body("username", "username tidak boleh kosong").exists(),
-        body("password", "password tidak boleh kosong").exists(),
-      ];
+      return [body("username", "username tidak boleh kosong").exists(), body("password", "password tidak boleh kosong").exists()];
     }
   }
 };
@@ -52,17 +46,7 @@ exports.daftarUser = (req, res) => {
       return;
     }
 
-    const {
-      username,
-      nama,
-      no_telp,
-      ig,
-      facebook,
-      wa,
-      alamat,
-      alamat_dati2,
-      alamat_dati3,
-    } = req.body;
+    const { username, nama, no_telp, ig, facebook, wa, alamat, alamat_dati2, alamat_dati3 } = req.body;
 
     customer
       .create({
@@ -107,18 +91,7 @@ exports.daftarUser = (req, res) => {
       return;
     }
 
-    const {
-      nama,
-      no_telp,
-      ig,
-      facebook,
-      wa,
-      alamat,
-      alamat_dati2,
-      alamat_dati3,
-      username,
-      password,
-    } = req.body;
+    const { nama, no_telp, ig, facebook, wa, alamat, alamat_dati2, alamat_dati3, username, password } = req.body;
 
     customer
       .create({
@@ -186,23 +159,13 @@ exports.loginUser = (req, res) => {
           res.redirect(process.env.URL + "/auth/login-user");
         }
 
-        let accessToken = jwt.sign(
-          { loginId: q.id_account, username: q.username, access: "USER" },
-          process.env.ACCESS_TOKEN_SECRET,
-          {
-            expiresIn: process.env.ACCESS_TOKEN_LIFE,
-          }
-        );
+        let accessToken = jwt.sign({ loginId: q.id_account, username: q.username, level: "USER" }, process.env.ACCESS_TOKEN_SECRET, {
+          expiresIn: process.env.ACCESS_TOKEN_LIFE,
+        });
 
-        let refreshToken = jwt.sign(
-          { loginId: q.id_account, username: q.username, access: "USER" },
-          process.env.REFRESH_TOKEN_SECRET
-        );
+        let refreshToken = jwt.sign({ loginId: q.id_account, username: q.username, level: "USER" }, process.env.REFRESH_TOKEN_SECRET);
 
-        user.update(
-          { refresh_token: refreshToken },
-          { where: { id_account : q.id_account } }
-        );
+        user.update({ refresh_token: refreshToken }, { where: { id_account: q.id_account } });
 
         // res.status(200).send({
         //   loginId: user.id_account,
@@ -240,6 +203,7 @@ exports.daftarAdmin = (req, res) => {
         username: username,
         password: bcrypt.hashSync(password, 8),
         level: level,
+        token: randomString(60),
       })
       .then(() => {
         res.send({ message: "Admin was registered successfully!" });
@@ -257,8 +221,9 @@ exports.loginAdmin = (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.status(422).json({ errors: errors.array() });
-      return;
+      req.flash("login_validation_message", { errors: errors.array() });
+      req.flash("login_validation_status", "422");
+      res.redirect(process.env.URL + "/auth/login-admin");
     }
 
     admin
@@ -267,45 +232,46 @@ exports.loginAdmin = (req, res) => {
           username: req.body.username,
         },
       })
-      .then((admin) => {
-        if (!admin) {
-          return res.status(404).send({ message: "Admin Not found." });
+      .then((q) => {
+        if (!q) {
+          req.flash("login_message", "Admin tidak terdaftar");
+          req.flash("login_status", "401");
+          res.redirect(process.env.URL + "/auth/login-admin");
         }
 
-        var passwordIsValid = bcrypt.compareSync(
-          req.body.password,
-          admin.password
-        );
+        var passwordIsValid = bcrypt.compareSync(req.body.password, q.password);
 
         if (!passwordIsValid) {
-          return res.status(401).send({
-            accessToken: null,
-            message: "Invalid Password!",
-          });
+          req.flash("login_message", "Password salah");
+          req.flash("login_status", "401");
+          res.redirect(process.env.URL + "/auth/login-admin");
         }
 
-        var token = jwt.sign(
-          { loginId: admin.id_account, access: "ADMIN" },
-          config.secret,
-          {
-            expiresIn: 86400, // 24 hours
-          }
-        );
+        let accessToken = jwt.sign({ loginId: q.id_account, username: q.username, level: q.level }, process.env.ACCESS_TOKEN_SECRET, {
+          expiresIn: process.env.ACCESS_TOKEN_LIFE,
+        });
+
+        let refreshToken = jwt.sign({ loginId: q.id_account, username: q.username, level: q.level }, process.env.REFRESH_TOKEN_SECRET);
+
+        admin.update({ refresh_token: refreshToken }, { where: { id_account: q.id_account } });
 
         // res.status(200).send({
-        //   loginId: admin.id_account,
-        //   username: admin.username,
+        //   loginId: user.id_account,
+        //   username: user.username,
         //   accessToken: token,
         // });
-
-        res.cookie("x-access-token", token);
+        res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
         res.redirect(process.env.URL + "/admin/dashboard");
       })
       .catch((err) => {
-        res.status(500).send({ message: err.message });
+        req.flash("login_message", "Server Error");
+        req.flash("login_status", "500");
+        res.redirect(process.env.URL + "/auth/login-admin");
       });
   } catch (err) {
-    res.status(500).send({ message: err.message });
+    req.flash("login_message", "Server Error");
+    req.flash("login_status", "500");
+    res.redirect(process.env.URL + "/auth/login-admin");
   }
 };
 
@@ -352,13 +318,9 @@ exports.loginUserToken = (req, res) => {
           res.redirect(process.env.URL + "/auth/login-user");
         }
 
-        var token = jwt.sign(
-          { loginId: user.id_account, access: "USER" },
-          config.secret,
-          {
-            expiresIn: 86400, // 24 hours
-          }
-        );
+        var token = jwt.sign({ loginId: user.id_account, access: "USER" }, config.secret, {
+          expiresIn: 86400, // 24 hours
+        });
 
         // res.status(200).send({
         //   loginId: user.id_account,

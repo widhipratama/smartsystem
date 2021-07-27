@@ -18,10 +18,7 @@ verifyToken = async (req, res, next) => {
     try {
       payload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
     } catch (e) {
-      req.flash(
-        "login_message",
-        "Akses login kadaluarsa, silahkan login kembali"
-      );
+      req.flash("login_message", "Akses login kadaluarsa, silahkan login kembali");
       req.flash("login_status", "401");
     }
 
@@ -33,10 +30,7 @@ verifyToken = async (req, res, next) => {
     try {
       jwt.verify(dataUser.refresh_token, process.env.REFRESH_TOKEN_SECRET);
     } catch (e) {
-      req.flash(
-        "login_message",
-        "Akses login kadaluarsa, silahkan login kembali"
-      );
+      req.flash("login_message", "Akses login kadaluarsa, silahkan login kembali");
       req.flash("login_status", "401");
       res.redirect(process.env.URL + "/auth/login-user");
     }
@@ -59,6 +53,56 @@ verifyToken = async (req, res, next) => {
     // req.flash("login_message", "Silahkan login terlebih dahulu");
     // req.flash("login_status", "401");
     res.redirect(process.env.URL + "/auth/login-user");
+  }
+};
+
+verifyTokenAdmin = async (req, res, next) => {
+  try {
+    let accessToken = req.cookies.jwt;
+
+    if (!accessToken) {
+      req.flash("login_message", "Forbidden Access");
+      req.flash("login_status", "403");
+    }
+
+    let payload;
+    try {
+      payload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (e) {
+      req.flash("login_message", "Akses login kadaluarsa, silahkan login kembali");
+      req.flash("login_status", "401");
+    }
+
+    const dataAdmin = await admin.findOne({
+      where: { username: payload.username },
+    });
+
+    try {
+      jwt.verify(dataAdmin.refresh_token, process.env.REFRESH_TOKEN_SECRET);
+    } catch (e) {
+      req.flash("login_message", "Akses login kadaluarsa, silahkan login kembali");
+      req.flash("login_status", "401");
+      res.redirect(process.env.URL + "/auth/login-admin");
+    }
+
+    let newToken = jwt.sign(
+      {
+        loginId: dataAdmin.id_account,
+        username: dataAdmin.username,
+        access: dataAdmin.level,
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: process.env.ACCESS_TOKEN_LIFE,
+      }
+    );
+
+    res.cookie("jwt", newToken, { secure: true, httpOnly: true });
+    next();
+  } catch (err) {
+    // req.flash("login_message", "Silahkan login terlebih dahulu");
+    // req.flash("login_status", "401");
+    res.redirect(process.env.URL + "/auth/login-admin");
   }
 };
 
@@ -124,6 +168,7 @@ isStaffAdmin = (req, res, next) => {
 
 const authJwt = {
   verifyToken: verifyToken,
+  verifyTokenAdmin: verifyTokenAdmin,
   isAdmin: isAdmin,
   isStaffAdmin: isStaffAdmin,
   isActivatedUser: isActivatedUser,

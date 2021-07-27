@@ -34,18 +34,13 @@ app.use(
 );
 app.use(expressValidator());
 app.use(cookieParser("keyboard cat"));
-app.use(
-  session({ cookie: { maxAge: 60000 }, resave: true, saveUninitialized: true })
-);
+app.use(session({ cookie: { maxAge: 60000 }, resave: true, saveUninitialized: true }));
 app.use(flash());
 
 app.set("views", __dirname + "/views/");
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
-app.use(
-  "/script-stisla",
-  express.static(path.join(__dirname, "/admin-stisla/"))
-);
+app.use("/script-stisla", express.static(path.join(__dirname, "/admin-stisla/")));
 app.use("/assets", express.static(path.join(__dirname, "/views/assets/")));
 app.use(function (req, res, next) {
   res.locals.stuff = {
@@ -224,7 +219,8 @@ app.all("*", function (req, res, next) {
     app.locals = {
       auth: {
         username: payload.username,
-        nama: "USER",
+        nama: payload.nama,
+        level: payload.level ? payload.level : "USER",
       },
     };
   } catch (e) {
@@ -232,6 +228,7 @@ app.all("*", function (req, res, next) {
       auth: {
         username: "USER",
         nama: "USER",
+        level: "USER",
       },
     };
   }

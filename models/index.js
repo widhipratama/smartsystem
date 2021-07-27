@@ -8,22 +8,14 @@ let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config
-  );
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.customer = require("../modules/customer/models/customer")(
-  sequelize,
-  Sequelize
-);
+db.customer = require("../modules/customer/models/customer")(sequelize, Sequelize);
 db.artikel_enews = require("./artikel_enews")(sequelize, Sequelize);
 db.user = require("./user")(sequelize, Sequelize);
 db.admin = require("./admin")(sequelize, Sequelize);
