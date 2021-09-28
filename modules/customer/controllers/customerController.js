@@ -47,9 +47,14 @@ exports.createCustomer = function (req, res) {
         req.flash('alertMessage', err.message);
         req.flash('alertStatus', 'danger');
         req.flash('name', req.body.nama);
-        req.flash('name', req.body.gender);
-        req.flash('name', req.body.no_telp);
-        req.flash('name', req.body.alamat);
+        req.flash('no_telp', req.body.no_telp);
+        req.flash('wa', req.body.wa);
+        req.flash('ig', req.body.ig);
+        req.flash('facebook', req.body.facebook);
+        req.flash('alamat', req.body.alamat);
+        req.flash('alamat_dati2', req.body.alamat_dati2);
+        req.flash('alamat_dati3', req.body.alamat_dati3);
+        req.flash('status', req.body.status);
         res.redirect('/customer');
     });
 }
