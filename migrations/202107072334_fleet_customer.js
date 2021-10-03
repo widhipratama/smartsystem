@@ -11,9 +11,6 @@ module.exports = {
       nama_fleet: {
         type: Sequelize.STRING(100),
       },
-      nama_customer: {
-        type: Sequelize.STRING(50),
-      },
       contact_person: {
         type: Sequelize.STRING(50),
       },
