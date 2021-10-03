@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include ../../../views/templates/header.ejs %>
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="script-stisla/assets/css/style.css" />
+  <link rel="stylesheet" href="script-stisla/assets/css/components.css" />
+</head>
+
+<body>
+  <div id="app">
+    <div class="main-wrapper">
+      <%- include ../../../views/templates/navtop.ejs %> <%- include
+        ../../../views/templates/navleft.ejs %>
+      <div class="main-content">
+        <section class="section">
+          <div class="section-header">
+            <h1>Customer Fleet</h1>
+            <div class="section-header-breadcrumb">
+              <div class="breadcrumb-item active">
+                <a href="#">Dashboard</a>
+              </div>
+              <div class="breadcrumb-item"><%= title %></div>
+            </div>
+          </div>
+
+          <div class="section-body">
+            <div class="row">
+              <div class="col-12 col-md-12 col-lg-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h4><%= tbtitle %></h4>
+                    <div class="float-right">
+                      <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal" onclick="createFunction();"><i
+                          class="fas fa-plus"></i> Tambah Data</button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <% if(alert.message != '') { %>
+                    <br>
+                    <div class="alert alert-<%= alert.status %> alert-autoclose" style="text-align: center;">
+                      <strong><%= alert.message %></strong>
+                    </div>
+                    <% } %>
+                    <table class="table table-striped" id="table-1" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th scope="col" width="5%">No.</th>
+                          <% 
+                            htitle.forEach(function(h) { 
+                              if (h.onTable=="ON"){
+                          %>
+                          <th><%= h.label %></th>
+                          <% 
+                              }
+                            }) 
+                          %>
+                          <th scope="col" width="15%">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% for (var i = 0; i < datarow.length; i++) { %>
+                        <tr>
+                          <th scope="row"><%= i+1 %></th>
+                          <% 
+                            htitle.forEach(function(h) { 
+                              if ([h.onTable]=="ON"){
+                          %>
+                          <td><%= datarow[i][h.id] %></td>
+                          <% 
+                              }
+                            }) 
+                          %>
+                          <td>
+                            <button class="btn btn-primary btn-sm" data-toggle="" data-target=""><i
+                                class="fas fa-car"></i></button>
+                            <button class="btn btn-warning btn-sm"
+                              onclick="editFunction('<%= datarow[i].id %>')" data-id="<%= datarow[i].id %>"
+                              data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"></i></button>
+                            <button class="btn btn-danger btn-sm" onclick="delFunction('<%= datarow[i].id %>')"
+                              data-id="<%= datarow[i].id %>"><i class="fas fa-trash"></i></button>
+                          </td>
+                        </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
+          <div class="modal-dialog" role="document">
+            <form id="formData" method="POST" action="" class="needs-validation"
+              novalidate="">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Form Data <%= title %></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <% htitle.forEach(function(h) { %>
+                    <% if (h.typeInput=="textarea") { %>
+                      <div class="form-group">
+                        <label><%= h.label %></label>
+                        <textarea name="<%= h.id %>" id="<%= h.id %>" class="form-control" required=""></textarea>
+                      </div>
+                    <% }else{ %>
+                      <div class="form-group">
+                        <label><%= h.label %></label>
+                        <input type="<%= h.typeInput %>" id="<%= h.id %>" name="<%= h.id %>" class="form-control" pattern=".{5,}" required="">
+                      </div>
+                    <% } %>
+                  <% }) %>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-success">Save changes</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- END MODAL -->
+      </div>
+      <%- include ../../../views/templates/footer.ejs %>
+    </div>
+  </div>
+  <%- include ../../../views/templates/script.ejs %>
+  <script type="text/javascript">
+    var cleave = new Cleave('#no_telp_cust', {
+      phone: true,
+      phoneRegionCode: 'us',
+      delimiter: ''
+    });
+
+    window.setTimeout(function() {
+      $(".alert-autoclose").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove(); 
+      });
+    }, 5000);
+
+    function createFunction(){
+      $('#formData').attr('action', '<%= process.env.URL %>/custfleet/addcustomer');
+      document.getElementById("formData").reset();
+    };
+    
+    function delFunction(id) {
+      let idData = id;
+      swal({
+          title: "Yakin Ingin Menghapus Data Customer ini?",
+          text: "Data yang dihapus, tidak bisa kembali lagi.",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            window.location.assign(`/custfleet/delete/${idData}`);
+          }
+        });
+    };
+
+    function editFunction(id) {
+      let idData = id;
+      let url = '<%= process.env.URL %>/custfleet/edit/' + idData;
+      $.ajax({
+        type: 'GET',
+        url: url,
+        dataType: 'json',
+        success: function (res) {
+          $('#formData').attr('action', '<%= process.env.URL %>/custfleet/edit/save/'+idData);
+          res.htitle.forEach(h => {
+            document.getElementById(h.id).value = res.data[h.id];
+          });
+        }
+      });
+    };
+  </script>
+</body>
+</html>

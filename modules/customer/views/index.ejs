@@ -39,7 +39,7 @@
                   <div class="card-body">
                     <% if(alert.message != '') { %>
                     <br>
-                    <div class="alert alert-<%= alert.status %>" style="text-align: center;">
+                    <div class="alert alert-<%= alert.status %> alert-autoclose" style="text-align: center;">
                       <strong><%= alert.message %></strong>
                     </div>
                     <% } %>
@@ -94,7 +94,7 @@
               novalidate="">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Form Data Customer</h5>
+                  <h5 class="modal-title">Form Data <%= tbtitle %></h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -178,6 +178,7 @@
             </form>
           </div>
         </div>
+        <!-- END MODAL -->
       </div>
       <%- include ../../../views/templates/footer.ejs %>
     </div>
@@ -189,6 +190,12 @@
       phoneRegionCode: 'us',
       delimiter: ''
     });
+  
+  window.setTimeout(function() {
+    $(".alert-autoclose").fadeTo(500, 0).slideUp(500, function(){
+      $(this).remove(); 
+    });
+  }, 5000);
 
     function delFunction(id) {
       let idData = id;
