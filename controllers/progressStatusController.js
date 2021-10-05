@@ -110,13 +110,11 @@ exports.upload = async (req, res) => {
           sa_notification: row[79],
         };
         dataExcel.push(data);
-        progressStatus
-          .count({ where: { service_order: row[5] } })
-          .then((count) => {
-            if (count < 1) {
-              progressStatus.create(data);
-            }
-          });
+        progressStatus.count({ where: { service_order: row[5] } }).then((count) => {
+          if (count < 1) {
+            progressStatus.create(data);
+          }
+        });
       });
     });
 
@@ -129,4 +127,8 @@ exports.upload = async (req, res) => {
     req.flash("import_status", "500");
     res.redirect(process.env.URL + "/progress-status/import");
   }
+};
+
+exports.notFound = function (req, res) {
+  res.render("page/notfound");
 };
