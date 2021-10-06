@@ -4,5 +4,6 @@ const progressStatusController = require("../controllers/progressStatusControlle
 
 router.post("/upload", upload.single("file"), progressStatusController.upload);
 router.get("/import", progressStatusController.import);
+router.get("*", progressStatusController.notFound);
 
 module.exports = router;

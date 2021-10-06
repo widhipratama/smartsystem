@@ -87,3 +87,7 @@ exports.upload = async (req, res) => {
     res.redirect(process.env.URL + "/job-history/import");
   }
 };
+
+exports.notFound = function (req, res) {
+  res.render("page/notfound");
+};
