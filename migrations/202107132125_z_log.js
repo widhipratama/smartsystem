@@ -14,7 +14,7 @@ module.exports = {
       text_log: {
         type: Sequelize.STRING(100),
       },
-      datetime: {
+      createdAt: {
         allowNull: true,
         type: Sequelize.DATE,
       }
