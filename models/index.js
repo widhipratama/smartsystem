@@ -24,6 +24,7 @@ db.progressStatus = require("./progressStatus")(sequelize, Sequelize);
 db.fleet_customer = require("../modules/custfleet/models/custfleet")(sequelize, Sequelize);
 db.master_kendaraan = require("../modules/cars/models/cars")(sequelize, Sequelize);
 db.whatsapp_blast = require("./whatsapp_blast")(sequelize, Sequelize);
+db.promotion = require("../modules/promotion/models/promotion")(sequelize, Sequelize);
 
 db.user.hasOne(db.customer, { foreignKey: "id_customer" });
 

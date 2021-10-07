@@ -68,7 +68,7 @@
                             <span class="<%= badge %>"><%= status %></span>
                           </td>
                           <td>
-                            <button class="btn btn-primary btn-sm" data-toggle="" data-target=""><i
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#carmodal"><i
                                 class="fas fa-car"></i></button>
                             <button class="btn btn-warning btn-sm"
                               onclick="editFunction('<%= datarow[i].id_customer %>')" data-id="<%= datarow[i].id %>"
@@ -176,6 +176,30 @@
                 </div>
               </div>
             </form>
+          </div>
+        </div>
+        <!-- END MODAL -->
+        <!-- modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="carmodal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">List Kendaraan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <div class="form-group">
+                    <label>Nama Customer</label>
+                    <input type="text" id="nama" name="nama" class="form-control" pattern=".{5,}" required="">
+                  </div>
+              </div>
+              <div class="modal-footer bg-whitesmoke br">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
           </div>
         </div>
         <!-- END MODAL -->
