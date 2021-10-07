@@ -1,9 +1,9 @@
 require("dotenv").config(); // this loads env vars
+
 const { Client, MessageMedia } = require("whatsapp-web.js");
 const { phoneNumberFormatter } = require("./helpers/formatter");
 const express = require("express");
 const expressValidator = require("express-validator");
-const fileUpload = require("express-fileupload");
 const socketIO = require("socket.io");
 const qrcode = require("qrcode");
 const http = require("http");
@@ -24,29 +24,23 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
+global.__basedir = __dirname;
+
 app.use(express.json());
 app.use(
   express.urlencoded({
     extended: true,
   })
 );
-app.use(
-  fileUpload({
-    debug: true,
-  })
-);
 app.use(expressValidator());
 app.use(cookieParser("keyboard cat"));
-app.use(session({ cookie: { maxAge: 60000 } }));
+app.use(session({ cookie: { maxAge: 60000 }, resave: true, saveUninitialized: true }));
 app.use(flash());
 
 app.set("views", __dirname + "/views/");
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
-app.use(
-  "/script-stisla",
-  express.static(path.join(__dirname, "/admin-stisla/"))
-);
+app.use("/script-stisla", express.static(path.join(__dirname, "/admin-stisla/")));
 app.use("/assets", express.static(path.join(__dirname, "/views/assets/")));
 app.use(function (req, res, next) {
   res.locals.stuff = {
@@ -225,7 +219,8 @@ app.all("*", function (req, res, next) {
     app.locals = {
       auth: {
         username: payload.username,
-        nama: "USER",
+        nama: payload.nama,
+        level: payload.level ? payload.level : "USER",
       },
     };
   } catch (e) {
@@ -233,6 +228,7 @@ app.all("*", function (req, res, next) {
       auth: {
         username: "USER",
         nama: "USER",
+        level: "USER",
       },
     };
   }
@@ -250,6 +246,8 @@ const toyotahowRoute = require("./routes/toyotahow");
 const carsRoute = require("./routes/cars");
 const promotionRoute = require("./routes/promotion");
 const customerRoute = require("./routes/customer");
+const jobHistoryRoute = require("./routes/jobHistory");
+const progressStatusRoute = require("./routes/progressStatus");
 
 // routes
 app.use("/", router);
@@ -263,6 +261,8 @@ app.use("/toyotahow", toyotahowRoute);
 app.use("/cars", carsRoute);
 app.use("/promotion", promotionRoute);
 app.use("/customer", customerRoute);
+app.use("/job-history", jobHistoryRoute);
+app.use("/progress-status", progressStatusRoute);
 
 app.post("/send-message", (req, res) => {
   const sender = "smartsystem";

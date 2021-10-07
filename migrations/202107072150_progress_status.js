@@ -2,7 +2,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable("progress_status", {
-      no: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -30,7 +30,7 @@ module.exports = {
         type: Sequelize.STRING(30),
       },
       km: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(30),
       },
       km_aktual: {
         type: Sequelize.INTEGER,

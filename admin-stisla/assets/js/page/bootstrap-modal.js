@@ -3,8 +3,7 @@
 $("#modal-1").fireModal({ body: "Modal body text goes here." });
 $("#modal-2").fireModal({ body: "Modal body text goes here.", center: true });
 
-let modal_3_body =
-  '<p>Object to create a button on the modal.</p><pre class="language-javascript"><code>';
+let modal_3_body = '<p>Object to create a button on the modal.</p><pre class="language-javascript"><code>';
 modal_3_body += "[\n";
 modal_3_body += " {\n";
 modal_3_body += "   text: 'Login',\n";
@@ -42,9 +41,9 @@ $("#modal-4").fireModal({
   ],
 });
 
-$("#modal-5").fireModal({
+$("#modal-send-wa").fireModal({
   title: "Send Whastapp",
-  body: $("#modal-send-wa"),
+  body: $("#body-send-wa"),
   footerClass: "bg-whitesmoke",
   autoFocus: false,
   onFormSubmit: function (modal, e, form) {
@@ -97,9 +96,7 @@ $("#modal-5").fireModal({
 $("#modal-6").fireModal({
   body: "<p>Now you can see something on the left side of the footer.</p>",
   created: function (modal) {
-    modal
-      .find(".modal-footer")
-      .prepend('<div class="mr-auto"><a href="#">I\'m a hyperlink!</a></div>');
+    modal.find(".modal-footer").prepend('<div class="mr-auto"><a href="#">I\'m a hyperlink!</a></div>');
   },
   buttons: [
     {

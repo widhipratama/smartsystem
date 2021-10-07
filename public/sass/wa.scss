@@ -1,0 +1,74 @@
+$header-height: 75px;
+body {
+  background-color: #000 !important;
+}
+.card .card-body {
+  padding: 0px;
+}
+.table-wrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  .fixed-header-table {
+    border-collapse: collapse;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    thead,
+    tbody,
+    tbody tr {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    thead {
+      height: $header-height;
+      position: absolute;
+      top: 0;
+      z-index: 10;
+      background-color: #fff;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    tbody {
+      display: block;
+      height: 100%;
+      overflow-y: auto;
+      position: absolute;
+      padding-top: $header-height;
+      box-sizing: border-box;
+      color: #000;
+    }
+
+    tr {
+      th,
+      td {
+        text-align: left;
+        border-bottom: 1px solid #ccc;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      th {
+        font-size: 1.2em;
+        font-weight: normal;
+        padding: 0 25px;
+      }
+
+      td {
+        padding: 20px 25px;
+      }
+    }
+  }
+}

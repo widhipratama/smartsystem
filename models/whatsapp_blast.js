@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       send_at: DataTypes.DATE,
     },
     {
+      freezeTableName: true,
       underscored: true,
       timestamps: false,
       createdAt: false,

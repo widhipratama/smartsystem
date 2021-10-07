@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const user = sequelize.define(
+  const admin = sequelize.define(
     "admin_account",
     {
       id_account: {
@@ -10,6 +10,8 @@ module.exports = (sequelize, Sequelize) => {
       password: Sequelize.DataTypes.STRING,
       level: Sequelize.DataTypes.STRING,
       last_login: Sequelize.DataTypes.STRING,
+      token: Sequelize.DataTypes.STRING,
+      refresh_token: Sequelize.DataTypes.STRING,
     },
     {
       freezeTableName: true,
@@ -20,5 +22,5 @@ module.exports = (sequelize, Sequelize) => {
     }
   );
 
-  return user;
+  return admin;
 };

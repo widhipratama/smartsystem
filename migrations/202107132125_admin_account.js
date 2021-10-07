@@ -14,6 +14,12 @@ module.exports = {
       password: {
         type: Sequelize.STRING(100),
       },
+      token: {
+        type: Sequelize.STRING(60),
+      },
+      refresh_token: {
+        type: Sequelize.STRING(255),
+      },
       level: {
         type: Sequelize.STRING(20),
       },

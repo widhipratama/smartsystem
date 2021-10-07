@@ -1,232 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include ../templates/header.ejs %>
+
+<head>
+  <%- include ../templates/header.ejs %>
     <!-- Template CSS -->
     <link rel="stylesheet" href="script-stisla/assets/css/style.css" />
     <link rel="stylesheet" href="script-stisla/assets/css/components.css" />
-  </head>
-  <body>
-    <div id="app">
-      <div class="main-wrapper">
-        <%- include ../templates/navtop.ejs %> <%- include
-        ../templates/navleft.ejs %>
-        <div class="main-content">
-          <section class="section">
-            <div class="section-header">
-              <h1>Whatsapp</h1>
-              <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active">
-                  <a href="#">Dashboard</a>
-                </div>
-                <div class="breadcrumb-item">Whatsapp</div>
-              </div>
-            </div>
+</head>
 
-            <div class="section-body">
-              <div class="row">
-                <div class="col-9 col-md-9 col-lg-9">
-                  <div class="card card-primary">
-                    <div class="card-header">
-                      <h4>List Chat Blasting</h4>
-                      <div class="card-header-action">
-                        <a href="#" id="modal-5" class="btn btn-primary">
-                          Kirim Whatsapp
-                        </a>
-                        <a href="#" id="konek" class="btn btn-primary">
-                          Koneksi Whatsapp
-                        </a>
+<body>
+  <div id="app">
+    <div class="main-wrapper">
+      <%- include ../templates/navtop.ejs %>
+        <%- include ../templates/navleft.ejs %>
+          <div class="main-content">
+            <section class="section">
+              <div class="section-header">
+                <h1>Whatsapp</h1>
+                <div class="section-header-breadcrumb">
+                  <div class="breadcrumb-item active">
+                    <a href="#">Dashboard</a>
+                  </div>
+                  <div class="breadcrumb-item">Whatsapp</div>
+                </div>
+              </div>
+
+              <div class="section-body">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <h4>Import Blasting</h4>
+                      </div>
+
+                      <div class="card-body">
+                        <% if(alert.status !='200' && alert.status !='' ) { %>
+                          <div class="alert alert-danger">
+                            <div class="alert-title">
+                              <%= alert.status %>
+                            </div>
+                            <%= alert.message %>
+                          </div>
+                          <% } %>
+                            <% if(alert.status=='200' && alert.status !='' ) { %>
+                              <div class="alert alert-success">
+                                <div class="alert-title">
+                                  <%= alert.status %>
+                                </div>
+                                <%= alert.message %>
+                              </div>
+                              <% } %>
                       </div>
                     </div>
-                    <div class="card-body">
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">Number</th>
-                            <th scope="col">Message</th>
-                            <th scope="col">Waktu Kirim</th>
-                            <th scope="col">Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <th scope="row">628788891123</th>
-                            <td>
-                              Halo, Selamata Siang ini adalah pesan yang akan
-                              diblasting
-                            </td>
-                            <td>2021-05-01 13:00</td>
-                            <td>Pending</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">628788891123</th>
-                            <td>
-                              Halo, Selamata Siang ini adalah pesan yang akan
-                              diblasting
-                            </td>
-                            <td>2021-05-01 13:00</td>
-                            <td>Pending</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">628788891123</th>
-                            <td>
-                              Halo, Selamata Siang ini adalah pesan yang akan
-                              diblasting
-                            </td>
-                            <td>2021-05-01 13:00</td>
-                            <td>Pending</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">628788891123</th>
-                            <td>
-                              Halo, Selamata Siang ini adalah pesan yang akan
-                              diblasting
-                            </td>
-                            <td>2021-05-01 13:00</td>
-                            <td>Pending</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">628788891123</th>
-                            <td>
-                              Halo, Selamata Siang ini adalah pesan yang akan
-                              diblasting
-                            </td>
-                            <td>2021-05-01 13:00</td>
-                            <td>Pending</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                  </div>
+                  <div class="col-9 col-md-9 col-lg-9">
+                    <div class="card card-primary">
+                      <div class="card-header">
+                        <h4>List Chat Blasting</h4>
+                        <div class="card-header-action">
+                          <a href="#" id="modal-send-wa" class="btn btn-primary">
+                            Kirim Whatsapp
+                          </a>
+                          <a href="#" id="konek" class="btn btn-primary">
+                            Koneksi Whatsapp
+                          </a>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <div style="max-height: 300px; overflow-y: scroll;" class="table-wrapper">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">Number</th>
+                                <th scope="col">Message</th>
+                                <th scope="col">Waktu Kirim</th>
+                                <th scope="col">Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% for (var i=0; i < dataPending.length; i++) { %>
+                                <tr>
+                                  <th scope="row">
+                                    <%= i+1 %>
+                                  </th>
+                                  <td>
+                                    <%= dataPending[i].phone %>
+                                  </td>
+                                  <td>
+                                    <%= dataPending[i].message %>
+                                  </td>
+                                  <td>
+                                    <%= dataPending[i].status %>
+                                  </td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card card-danger">
+                      <div class="card-header">
+                        <h4>Unsent</h4>
+                      </div>
+                      <div class="card-body">
+                        <div style="max-height: 300px; overflow-y: scroll;" class="table-wrapper">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">Number</th>
+                                <th scope="col">Message</th>
+                                <th scope="col">Waktu Kirim</th>
+                                <th scope="col">Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% for (var i=0; i < dataFailed.length; i++) { %>
+                                <tr>
+                                  <th scope="row">
+                                    <%= i+1 %>
+                                  </th>
+                                  <td>
+                                    <%= dataFailed[i].phone %>
+                                  </td>
+                                  <td>
+                                    <%= dataFailed[i].message %>
+                                  </td>
+                                  <td>
+                                    <%= dataFailed[i].status %>
+                                  </td>
+                                </tr>
+                                <% } %>
+                                  </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-3 col-md-3 col-lg-3">
-                  <div class="card">
-                    <div class="card-header">
-                      <h4>Status: <span id="status">Disconected</span></h4>
+                  <div class="col-3 col-md-3 col-lg-3">
+                    <div class="card">
+                      <div class="card-header">
+                        <h4>Status: <span id="status">Disconected</span></h4>
+                      </div>
+                      <div id="qrcodebar" class="card-body" style="display: none">
+                        Silahkan Scan QR untuk terhubung<br />
+                        <img width="100%" src="/assets/img/loading.gif" alt="QR Code" id="qrcode" />
+                      </div>
                     </div>
-                    <div id="qrcodebar" class="card-body" style="display: none">
-                      Silahkan Scan QR untuk terhubung<br />
-                      <img
-                        width="100%"
-                        src="/assets/img/loading.gif"
-                        alt="QR Code"
-                        id="qrcode"
-                      />
-                    </div>
-                  </div>
 
-                  <div class="card card-default">
-                    <div class="card-header">
-                      <h4>Logs</h4>
-                      <!-- <h3 class="title"></h3> -->
-                    </div>
-                    <div class="card-body"  id="top-5-scroll">
-                      <ul class="logs list-unstyled list-unstyled-border"></ul>
-                    </div>
+                    <!-- <div class="card card-default">
+                      <div class="card-header">
+                        <h4>Logs</h4>
+                      </div>
+                      <div class="card-body" id="top-5-scroll">
+                        <ul class="logs list-unstyled list-unstyled-border"></ul>
+                      </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
-        </div>
-        <form id="modal-send-wa" method="POST" action="/send-message">
-          <div class="form-group">
-            <label>Phone</label>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">
-                  <i class="fas fa-phone"></i>
+            </section>
+          </div>
+          <form id="body-send-wa" method="POST" action="/send-message">
+            <div class="form-group">
+              <label>Phone</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <i class="fas fa-phone"></i>
+                  </div>
                 </div>
+                <input type="text" class="form-control" placeholder="Phone Number" name="phone" />
               </div>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Phone Number"
-                name="phone"
-              />
             </div>
-          </div>
-          <div class="form-group">
-            <label>Message</label>
-            <textarea
-              style="height: 100px"
-              class="form-control"
-              name="message"
-              rows="3"
-            ></textarea>
-          </div>
-        </form>
-        <%- include ../templates/footer.ejs %>
-      </div>
+            <div class="form-group">
+              <label>Message</label>
+              <textarea style="height: 100px" class="form-control" name="message" rows="3"></textarea>
+            </div>
+          </form>
+          <%- include ../templates/footer.ejs %>
     </div>
-    <%- include ../templates/script.ejs %>
-  </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-  <script>
-    $(document).ready(function () {
-      var socket = io();
+  </div>
+  <%- include ../templates/script.ejs %>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script>
+  $(document).ready(function () {
+    var socket = io();
 
-      $("#konek").click(function () {
-        socket.emit("create-session", {
-          id: "smartsystem",
-        });
-        $("#qrcodebar").show();
+    $("#konek").click(function () {
+      socket.emit("create-session", {
+        id: "smartsystem",
       });
-
-      socket.on("init", function (data) {
-        for (var i = 0; i < data.length; i++) {
-          var session = data[i];
-
-          if (session.ready) {
-            $("#konek").hide();
-            $("#qrcodebar").hide();
-            $("#status").html("Connected");
-            $(`.logs`).append($("<li>").text("Whatsapp is ready!"));
-          } else {
-            $("#konek").show();
-            $("#status").html("Disconected");
-            $("#qrcodebar").show();
-            $(`.logs`).append($("<li>").text("Connecting..."));
-          }
-        }
-      });
-
-      socket.on("message", function (msg) {
-        $(".logs").append($("<li>").text(msg));
-      });
-
-      socket.on("qr", function (data) {
-        $("#status").html("Disconected");
-        $("#qrcodebar").show();
-        $("#konek").show();
-        $("#qrcode").attr("src", data.src);
-      });
-
-      socket.on("message", function (data) {
-        $(`.logs`).append($("<li>").text(data.text));
-      });
-
-      socket.on("remove-session", function (id) {
-        $(`.client.${id}`).remove();
-      });
-
-      socket.on("ready", function (data) {
-        $("#qrcodebar").hide();
-        $("#konek").hide();
-        $("#status").html("Connected");
-      });
-
-      socket.on("disconect", function (data) {
-        $("#status").html("Disconected");
-        $("#qrcodebar").show();
-        $("#konek").show();
-      });
-
-      socket.on("authenticated", function (data) {
-        $("#status").html("Connected");
-        $("#qrcodebar").hide();
-        $("#konek").hide();
-      });
+      $("#qrcodebar").show();
     });
-  </script>
+
+    socket.on("init", function (data) {
+      for (var i = 0; i < data.length; i++) {
+        var session = data[i];
+
+        if (session.ready) {
+          $("#konek").hide();
+          $("#qrcodebar").hide();
+          $("#status").html("Connected");
+          $(`.logs`).append($("<li>").text("Whatsapp is ready!"));
+        } else {
+          $("#konek").show();
+          $("#status").html("Disconected");
+          $("#qrcodebar").show();
+          $(`.logs`).append($("<li>").text("Connecting..."));
+        }
+      }
+    });
+
+    socket.on("message", function (msg) {
+      $(".logs").append($("<li>").text(msg));
+    });
+
+    socket.on("qr", function (data) {
+      $("#status").html("Disconected");
+      $("#qrcodebar").show();
+      $("#konek").show();
+      $("#qrcode").attr("src", data.src);
+    });
+
+    socket.on("message", function (data) {
+      $(`.logs`).append($("<li>").text(data.text));
+    });
+
+    socket.on("remove-session", function (id) {
+      $(`.client.${id}`).remove();
+    });
+
+    socket.on("ready", function (data) {
+      $("#qrcodebar").hide();
+      $("#konek").hide();
+      $("#status").html("Connected");
+    });
+
+    socket.on("disconect", function (data) {
+      $("#status").html("Disconected");
+      $("#qrcodebar").show();
+      $("#konek").show();
+    });
+
+    socket.on("authenticated", function (data) {
+      $("#status").html("Connected");
+      $("#qrcodebar").hide();
+      $("#konek").hide();
+    });
+  });
+</script>
+
 </html>

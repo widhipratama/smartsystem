@@ -2,12 +2,7 @@
   <aside id="sidebar-wrapper">
     <div class="sidebar-brand">
       <a href="/">
-        <img
-          src="/assets/img/logoatkuta.png"
-          alt=""
-          class="img-responsive"
-          width="90px"
-        />
+        <img src="/assets/img/logoatkuta.png" alt="" class="img-responsive" width="90px" />
       </a>
     </div>
     <div class="sidebar-brand sidebar-brand-sm">
@@ -16,9 +11,7 @@
     <ul class="sidebar-menu">
       <li class="menu-header">Dashboard</li>
       <li class="nav-item dropdown">
-        <a href="#" class="nav-link has-dropdown"
-          ><i class="fas fa-fire"></i><span>Dashboard</span></a
-        >
+        <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Dashboard</span></a>
         <ul class="dropdown-menu">
           <li><a class="nav-link" href="/dashboard">Blank Page</a></li>
           <li><a class="nav-link" href="/dashboarduser">Customer Page</a></li>
@@ -27,13 +20,13 @@
       </li>
       <li class="menu-header">Renata</li>
       <li class="">
-        <a class="nav-link" href="/custfleet">
-          <i class="far fa-user"></i> <span>Customer Fleet</span>
+        <a class="nav-link" href="/custfirst">
+          <i class="far fa-gem"></i> <span>Customer First Class</span>
         </a>
       </li>
       <li class="">
         <a class="nav-link" href="/custfirst">
-          <i class="far fa-gem"></i> <span>Customer First Class</span>
+          <i class="far fa-gem"></i> <span>Fleet First Class</span>
         </a>
       </li>
       <li class="">
@@ -69,17 +62,22 @@
         </a>
       </li>
       <li class="">
+        <a class="nav-link" href="/custfleet">
+          <i class="far fa-user"></i> <span>Customer Fleet</span>
+        </a>
+      </li>
+      <li class="">
         <a class="nav-link" href="/cars">
           <i class="fas fa-car-alt"></i> <span>Cars</span>
         </a>
       </li>
       <li class="">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="<%= process.env.URL %>/progress-status/import">
           <i class="fas fa-file-archive"></i> <span>Progress Status</span>
         </a>
       </li>
       <li class="">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="<%= process.env.URL %>/job-history/import">
           <i class="fas fa-file"></i> <span>Job History</span>
         </a>
       </li>
@@ -96,10 +94,7 @@
     </ul>
 
     <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-      <a
-        href="<%= process.env.URL %>/auth/logout"
-        class="btn btn-danger btn-lg btn-block btn-icon-split"
-      >
+      <a href="<%= process.env.URL %>/auth/logout" class="btn btn-danger btn-lg btn-block btn-icon-split">
         <i class="fas fa-sign-out-alt"></i> Logout
       </a>
     </div>
