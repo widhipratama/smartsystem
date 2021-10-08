@@ -21,6 +21,9 @@ module.exports = {
           key: "id_customer",
         },
       },
+      kategori_user: {
+        type: Sequelize.STRING(30),
+      },
       token: {
         type: Sequelize.STRING(60),
       },
