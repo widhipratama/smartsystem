@@ -2,32 +2,26 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable("fleet_kendaraan", {
-      id: {
+      no_rangka: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
       id_fleet: {
-        type: Sequelize.STRING(50),
-      },
-      id_customer_fleet: {
-        type: Sequelize.STRING(50),
-      },
-      model: {
-        type: Sequelize.STRING(30),
-      },
-      type: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.INTEGER,
       },
       warna: {
         type: Sequelize.STRING(20),
       },
-      nopol: {
-        type: Sequelize.STRING(20),
+      total_omzet: {
+        type: Sequelize.INTEGER,
       },
-      norangka: {
-        type: Sequelize.STRING(20),
+      point_reward: {
+        type: Sequelize.INTEGER,
+      },
+      statusFS: {
+        default: 0,
+        type: Sequelize.INTEGER,
       },
     });
   },
