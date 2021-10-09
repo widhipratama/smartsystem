@@ -7,6 +7,7 @@ router.post("/adddata", upload.single('image_mobil'), carsController.createData)
 router.get("/delete/:id", carsController.hapusData);
 router.get("/edit/:id", carsController.editData);
 router.post("/edit/save/:id", carsController.updateData);
+router.post("/ceknorangka/:id", carsController.cekNoRangka);
 router.get("*", carsController.notFound);
 
 module.exports = router;

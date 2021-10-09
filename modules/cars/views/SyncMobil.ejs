@@ -1,0 +1,90 @@
+<!-- modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="carmodal">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">List Kendaraan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="">
+          <div class="form-group">
+            <label>No Rangka</label>
+            <input type="text" id="norangka" name="norangka" onchange="ceknorangka()" class="form-control col-lg-4" required="">
+          </div>
+          <div class="form-group">
+            <label>Warna Kendaraan</label>
+            <input type="text" id="warnamobil" name="warnamobil" class="form-control col-lg-4" required="">
+          </div>
+          <div class="form-group">
+            <label></label>
+            <button type="button" class="btn btn-success m-1"><i class="fas fa-plus"></i> Tambah</button>
+          </div>
+        </form>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>NOPOL</th>
+              <th>NO RANGKA</th>
+              <th>MODEL</th>
+              <th>STATUS</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <img src="<%= process.env.URL %>/assets/img/cars/avanza_silver.png %>" alt="" class="img-responsive img-circle" height="50px">
+              </td>
+              <td>DK-920-OE</td>
+              <td>MHKM5EB3JGK008075</td>
+              <td>AVANZA</td>
+              <td><span class="badge badge-dark text-bold"><i class="fas fa-star text-warning"></i> First Class</span></td>
+              <td>
+                <button type="button" class="btn btn-danger btn-sm m-1"><i class="fas fa-minus"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img src="<%= process.env.URL %>/assets/img/cars/avanza_black.png%>" alt="" class="img-responsive img-circle" height="50px">
+              </td>
+              <td>DK-920-OE</td>
+              <td>MHKM5EB3JGK008075</td>
+              <td>AVANZA</td>
+              <td><span class="badge badge-default text-bold">None</span></td>
+              <td>
+                <button type="button" class="btn btn-danger btn-sm m-1"><i class="fas fa-minus"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END MODAL -->
+<script type="text/javascript">
+    function ceknorangka() {
+      let idData = document.getElementById('norangka').value;
+      let url = '<%= process.env.URL %>/cars/ceknorangka/' + idData;
+      console.log(url);
+      $.ajax({
+        type: 'POST',
+        url: url,
+        dataType: 'json',
+        success: function (res) {
+          if (res) {
+            
+          }
+        }
+      });
+    };
+</script>

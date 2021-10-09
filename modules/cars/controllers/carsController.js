@@ -10,25 +10,25 @@ var htitle = [
 ];
 
 exports.index = function (req, res) {
-    let page = req.query.page || 1;
-    let offset = 0;
-    if (page > 1) {
-        offset = ((page - 1) * 10) + 1;
-    }
+    // let page = req.query.page || 1;
+    // let offset = 0;
+    // if (page > 1) {
+    //     offset = ((page - 1) * 10) + 1;
+    // }
     models.master_kendaraan.findAndCountAll({
-        limit: 10,
-        offset: offset,
+        // limit: 10,
+        // offset: offset,
         order: [['id_mobil', 'DESC']],
     }).then((master_kendaraan) => {
         const alertMessage = req.flash('alertMessage');
         const alertStatus = req.flash('alertStatus');
         const alert = { message: alertMessage, status: alertStatus };
-        const totalPage = Math.ceil(master_kendaraan.count / 10);
-        const pagination = { totalPage: totalPage, currentPage: page };
+        // const totalPage = Math.ceil(master_kendaraan.count / 10);
+        // const pagination = { totalPage: totalPage, currentPage: page };
         res.render('../modules/cars/views/index', {
             datarow: master_kendaraan.rows,
             alert: alert,
-            pagination: pagination,
+            // pagination: pagination,
             title: title,
             tbtitle: tbtitle,
             htitle: htitle,
@@ -105,6 +105,18 @@ exports.updateData = function (req, res) {
         req.flash('alertMessage', err.message);
         req.flash('alertStatus', 'danger');
         res.redirect('/cars');
+    });
+}
+
+// Controller Mengelola data no rangka
+exports.cekNoRangka = function (req, res) {
+    const id = req.params.id;
+    models.progressStatus.findOne({ where: { rangka: { [Op.eq]: id } } }).then((rangka) => {
+        res.send({ 
+            success: true, 
+            message: 'Berhasil ambil data!',
+            data: rangka
+        });
     });
 }
 
