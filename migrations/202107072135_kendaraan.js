@@ -10,8 +10,8 @@ module.exports = {
       id_customer: {
         type: Sequelize.INTEGER,
       },
-      warna: {
-        type: Sequelize.STRING(20),
+      id_mobil: {
+        type: Sequelize.INTEGER,
       },
       total_omzet: {
         type: Sequelize.INTEGER,
@@ -19,7 +19,8 @@ module.exports = {
       point_reward: {
         type: Sequelize.INTEGER,
       },
-      statusFS: {
+      first_class: {
+        allowNull: false,
         default: 0,
         type: Sequelize.INTEGER,
       },

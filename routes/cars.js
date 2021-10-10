@@ -8,6 +8,9 @@ router.get("/delete/:id", carsController.hapusData);
 router.get("/edit/:id", carsController.editData);
 router.post("/edit/save/:id", carsController.updateData);
 router.post("/ceknorangka/:id", carsController.cekNoRangka);
+router.post("/savekendaraan", carsController.createKendaraan);
+router.post("/listkendraan/:id", carsController.getListKendaraan);
+router.post("/delkendaraan/:id", carsController.hapuskendaraan);
 router.get("*", carsController.notFound);
 
 module.exports = router;

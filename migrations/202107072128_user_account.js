@@ -14,7 +14,7 @@ module.exports = {
       password: {
         type: Sequelize.STRING(100),
       },
-      id_customer: {
+      id_user: {
         type: Sequelize.INTEGER,
         references: {
           model: "customer",

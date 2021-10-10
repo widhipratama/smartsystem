@@ -9,18 +9,21 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="">
+        <form id="formKendaraanCust" role="form"  method="POST" action="">
+          <input type="hidden" id="custid" name="custid" value="">
           <div class="form-group">
             <label>No Rangka</label>
             <input type="text" id="norangka" name="norangka" onchange="ceknorangka()" class="form-control col-lg-4" required="">
           </div>
           <div class="form-group">
             <label>Warna Kendaraan</label>
-            <input type="text" id="warnamobil" name="warnamobil" class="form-control col-lg-4" required="">
+            <select name="warna" id="warna" class="form-control col-lg-4">
+              <option value="" id="warnaid">-- pilih warna --</option>
+            </select>
           </div>
           <div class="form-group">
             <label></label>
-            <button type="button" class="btn btn-success m-1"><i class="fas fa-plus"></i> Tambah</button>
+            <button type="submit" class="btn btn-success m-1"><i class="fas fa-plus"></i> Tambah</button>
           </div>
         </form>
 
@@ -35,31 +38,7 @@
               <th>ACTION</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>
-                <img src="<%= process.env.URL %>/assets/img/cars/avanza_silver.png %>" alt="" class="img-responsive img-circle" height="50px">
-              </td>
-              <td>DK-920-OE</td>
-              <td>MHKM5EB3JGK008075</td>
-              <td>AVANZA</td>
-              <td><span class="badge badge-dark text-bold"><i class="fas fa-star text-warning"></i> First Class</span></td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm m-1"><i class="fas fa-minus"></i></button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <img src="<%= process.env.URL %>/assets/img/cars/avanza_black.png%>" alt="" class="img-responsive img-circle" height="50px">
-              </td>
-              <td>DK-920-OE</td>
-              <td>MHKM5EB3JGK008075</td>
-              <td>AVANZA</td>
-              <td><span class="badge badge-default text-bold">None</span></td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm m-1"><i class="fas fa-minus"></i></button>
-              </td>
-            </tr>
+          <tbody id="data-kendaraan">
           </tbody>
         </table>
       </div>
@@ -71,17 +50,148 @@
 </div>
 <!-- END MODAL -->
 <script type="text/javascript">
+    $(document).ready(function () {
+        $(".open-addCarsCustomer").click(function () {
+            $('#custid').val($(this).data('id'));
+            $('#carmodal').modal('show');
+            getDataKendaraan($(this).data('id'));
+        });
+        $.validator.setDefaults({
+          submitHandler: function () {
+            saveKendraan();
+          }
+        });
+        $('#formKendaraanCust').validate({
+          rules: {
+            norangka: {
+              required: true
+            },
+            warna: {
+              required: true
+            }
+          },
+          messages: {
+            warna: {
+              required: "Select this one."
+            }
+          },
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
+    });
     function ceknorangka() {
       let idData = document.getElementById('norangka').value;
       let url = '<%= process.env.URL %>/cars/ceknorangka/' + idData;
-      console.log(url);
+      var alertstatus = false;
       $.ajax({
         type: 'POST',
         url: url,
         dataType: 'json',
         success: function (res) {
-          console.log(res)
+          swal(res.titlemessage, res.message, res.success);
+          if (res.success=='success') {
+            var html = "";
+            res.warna.forEach(element => {
+              html += "<option value=\""+element.id_mobil+"\" >"+element.warna_mobil+"</option>";
+            });
+            $("#warnaid").after(html);
+          }else{
+            document.getElementById('norangka').value = '';
+          }
         }
       });
+    };
+    function getDataKendaraan(id) {
+      let idData = id;
+      let url = '<%= process.env.URL %>/cars/listkendraan/' + idData;
+      var alertstatus = false;
+      $.ajax({
+        type: 'POST',
+        url: url,
+        dataType: 'json',
+        success: function (res) {
+          var html = "";
+          res.data.forEach(element => {
+            if (element.first_class==0) {
+              var fs = '<span class="badge badge-default text-bold">None</span>';
+            }else{
+              var fs = '<span class="badge badge-dark text-bold"><i class="fas fa-star text-warning"></i> First Class</span>';
+            }
+            html +='<tr>';
+            html +='<td><img src="<%= process.env.URL %>/assets/img/cars/'+element.master_kendaraan.image_mobil+'%>" alt="" class="img-responsive img-circle" height="50px"></td>'; 
+            html +='<td>'+element.progress_statuses[0].police_no+'</td>';   
+            html +='<td>'+element.no_rangka+'</td>';   
+            html +='<td>'+element.master_kendaraan.model_mobil+'</td>';   
+            html +='<td>'+fs+'</td>';   
+            html +='<td><button type="button" onclick="delKendraan(\''+element.no_rangka+'\')" class="btn btn-danger btn-sm m-1"><i class="fas fa-minus"></i></button></td>';
+            html +='</tr>';
+          });
+          $("#data-kendaraan").html(html);
+        }
+      });
+    };
+    function delKendraan(id) {
+      let idData = id;
+      swal({
+          title: "Yakin Ingin Menghapus Data Kendaraan ini?",
+          text: "Data yang dihapus, tidak bisa kembali lagi.",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {let idData = id;
+            let url = '<%= process.env.URL %>/cars/delkendaraan/' + idData;
+            var alertstatus = false;
+            $.ajax({
+              type: 'POST',
+              url: url,
+              dataType: 'json',
+              success: function (res) {
+                var idcust = document.getElementById('custid').value;
+                swal(res.titlemessage, res.message, res.success);
+                getDataKendaraan(idcust);
+              }
+            });
+          }
+        });
+    };
+    function saveKendraan() {
+      swal({
+          title: "Yakin Ingin Menambahkan Data Kendaraan ini?",
+          text: "Data yang ditambahkan, tidak bisa digunakan untuk customer lainnya.",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            let url = '<%= process.env.URL %>/cars/savekendaraan/';
+            var data = $('#formKendaraanCust').serialize();
+            var alertstatus = false;
+            $.ajax({
+              type: 'POST',
+              url: url,
+              data: data,
+              dataType: 'json',
+              success: function (res) {
+                var idcust = document.getElementById('custid').value;
+                swal(res.titlemessage, res.message, res.success);
+                getDataKendaraan(idcust);
+                $('#warna').val('');
+                $('#norangka').val('');
+              }
+            });
+          }
+        });
     };
 </script>

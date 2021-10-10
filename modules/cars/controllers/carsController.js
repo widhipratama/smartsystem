@@ -109,14 +109,103 @@ exports.updateData = function (req, res) {
 }
 
 // Controller Mengelola data no rangka
+exports.getListKendaraan = function (req, res) {
+    const id = req.params.id;
+    models.kendaraan.findAll({ 
+        include:[
+            {model: models.master_kendaraan},
+            {
+                model: models.progressStatus,
+                limit: 1,
+                order: [['service_order', 'DESC']],
+            }
+        ],
+        where: { 
+            id_customer: { [Op.eq]: id } 
+        } 
+    }).then((data) => {
+        res.send({ 
+            success: 'success', 
+            data: data
+        });
+    }).catch((err) => {
+        res.send({ 
+            success: 'error', 
+            titlemessage: 'Oops!',
+            message: err.message,
+        }); 
+    });
+}
 exports.cekNoRangka = function (req, res) {
     const id = req.params.id;
-    models.progressStatus.findOne({ where: { rangka: { [Op.eq]: id } } }).then((rangka) => {
+    models.kendaraan.findOne({ where: { no_rangka: { [Op.eq]: id } } }).then((kendraanrangka) => {
+        
         res.send({ 
-            success: true, 
-            message: 'Berhasil ambil data!',
-            data: rangka
+            success: 'error', 
+            titlemessage: `No Rangka ${kendraanrangka.no_rangka} sudah digunakan!`,
+            message: 'Silahkan mengubungi Admin.',
         });
+    }).catch((err) => {
+        models.progressStatus.findOne({ where: { rangka: { [Op.eq]: id } } }).then((rangka) => {
+            models.master_kendaraan.findAll({ where: { model_mobil: { [Op.eq]: rangka.model } } }).then((warna) => {
+                res.send({ 
+                    success: 'success', 
+                    titlemessage: 'No Rangka Tersedia!',
+                    message: 'Silahkan lanjutkan pilih warna!',
+                    data: rangka,
+                    warna: warna
+                }); 
+            });
+        }).catch((err) => {
+            res.send({ 
+                success: 'error', 
+                titlemessage: 'Data kendraan tidak tersedia!',
+                message: 'Silahkan mengubungi Admin.',
+            }); 
+        });
+    });
+}
+exports.createKendaraan = function (req, res) {
+    let dataFound;
+    let data = {
+        no_rangka: req.body.norangka,
+        id_customer: req.body.custid,
+        id_mobil: req.body.warna,
+        first_class: '0'
+    };
+    models.kendaraan.create(data).then((cars) => {
+        dataFound = cars;
+        res.send({ 
+            success: 'success', 
+            titlemessage: 'Sukses Menghapus Data!',
+            message: `No Rangka: ${dataFound.no_rangka} telah di tambahkan ke daftar customer!`,
+        });
+    }).catch((err) => {
+        res.send({ 
+            success: 'error', 
+            titlemessage: 'Oops!',
+            message:  err.message,
+        });
+    });
+}
+exports.hapuskendaraan = function (req, res) {
+    let id = req.params.id;
+    let resFound;
+    models.kendaraan.findOne({ where: { no_rangka: { [Op.eq]: id } } }).then((cars) => {
+        resFound = cars;
+        return cars.destroy().then(() => {
+            res.send({ 
+                success: 'success', 
+                titlemessage: 'Sukses Menghapus Data!',
+                message: `No Rangka: ${resFound.no_rangka} telah di hapus dari daftar customer!`,
+            });
+        })
+    }).catch((err) => {
+        res.send({ 
+            success: 'error', 
+            titlemessage: 'Oops!',
+            message:  err.message,
+        }); 
     });
 }
 
