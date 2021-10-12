@@ -1,6 +1,7 @@
 var exports = (module.exports = {});
 const models = require("../../../models");
 let Op = require("sequelize").Op;
+let sequelize = require("sequelize");
 var title = "Master Kendaraan";
 var tbtitle = "List Master Kendaraan";
 var htitle = [
@@ -167,23 +168,46 @@ exports.cekNoRangka = function (req, res) {
 }
 exports.createKendaraan = function (req, res) {
     let dataFound;
-    let data = {
-        no_rangka: req.body.norangka,
-        id_customer: req.body.custid,
-        id_mobil: req.body.warna,
-        first_class: '0'
-    };
-    models.kendaraan.create(data).then((cars) => {
-        dataFound = cars;
-        res.send({ 
-            success: 'success', 
-            titlemessage: 'Sukses Menghapus Data!',
-            message: `No Rangka: ${dataFound.no_rangka} telah di tambahkan ke daftar customer!`,
-        });
+    let firstClassStts;
+    let dataForm = req.body;
+    let id = dataForm.norangka;
+    models.jobHistory.findAndCountAll({
+        where: { norangka: { [Op.eq]: id }}
+    }).then((dataCount)=>{
+        models.jobHistory.sum('total', {where: { norangka: { [Op.eq]: id }}}).then((dataSum)=>{
+            if ((dataCount.count>=1)&&(dataSum>=1000000)) {
+                firstClassStts = '1';
+            }else{
+                firstClassStts = '0';
+            }
+            var data = {
+                no_rangka: dataForm.norangka,
+                id_customer: dataForm.custid,
+                id_mobil: dataForm.warna,
+                total_omzet: dataSum,
+                first_class: firstClassStts
+            };
+            
+            models.kendaraan.create(data).then((cars) => {
+                dataFound = cars;
+                res.send({ 
+                    success: 'success', 
+                    titlemessage: 'Sukses Menambahkan Data!',
+                    message: `No Rangka: ${dataFound.no_rangka} telah di tambahkan ke daftar customer!`,
+                });
+            }).catch((err) => {
+                res.send({ 
+                    success: 'error', 
+                    titlemessage: 'Oops Kendaraan!',
+                    message: err.message,
+                });
+            });
+
+        })
     }).catch((err) => {
         res.send({ 
             success: 'error', 
-            titlemessage: 'Oops!',
+            titlemessage: 'Oops Job History!',
             message:  err.message,
         });
     });

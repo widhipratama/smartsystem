@@ -4,10 +4,9 @@ let Op = require("sequelize").Op;
 var title = "Customer";
 var tbtitle = "List Customer";
 var htitle = [
-  {id:'nama', label:'Nama Customer', width:""},
-  {id:'no_telp', label:'Telepon', width:""},
-  {id:'alamat', label:'Alamat', width:""},
-//   {id:'status', label:'Status', width:""},
+    {id:'nama', label:'Nama Customer', width:""},
+    {id:'no_telp', label:'Telepon', width:""},
+    {id:'alamat', label:'Alamat', width:""},
 ];
 
 exports.index = function (req, res) {
