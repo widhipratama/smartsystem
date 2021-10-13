@@ -3,6 +3,7 @@ const models = require("../../../models");
 let Op = require("sequelize").Op;
 var title = "Customer Fleet";
 var tbtitle = "List Customer Fleet";
+var menu = "fleet";
 var htitle = [
     {id:'nama_fleet', label:'Nama Fleet', width:"", typeInput:"text", onTable:"ON"},
     {id:'contact_person', label:'PIC', width:"", typeInput:"text", onTable:"ON"},
@@ -35,6 +36,7 @@ exports.index = function (req, res) {
             title: title,
             tbtitle: tbtitle,
             htitle: htitle,
+            menu: menu,
         });
     });
 }

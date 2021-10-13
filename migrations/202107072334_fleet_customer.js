@@ -32,6 +32,9 @@ module.exports = {
       point_reward: {
         type: Sequelize.INTEGER,
       },
+      last_blasting: {
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {

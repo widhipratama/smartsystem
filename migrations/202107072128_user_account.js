@@ -14,12 +14,15 @@ module.exports = {
       password: {
         type: Sequelize.STRING(100),
       },
-      id_customer: {
+      id_user: {
         type: Sequelize.INTEGER,
         references: {
           model: "customer",
           key: "id_customer",
         },
+      },
+      kategori_user: {
+        type: Sequelize.STRING(30),
       },
       token: {
         type: Sequelize.STRING(60),

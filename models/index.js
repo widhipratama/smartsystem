@@ -17,14 +17,25 @@ db.sequelize = sequelize;
 
 db.customer = require("../modules/customer/models/customer")(sequelize, Sequelize);
 db.artikel_enews = require("./artikel_enews")(sequelize, Sequelize);
-db.user = require("./user")(sequelize, Sequelize);
+db.user = require("../modules/useraccount/models/user")(sequelize, Sequelize);
 db.admin = require("./admin")(sequelize, Sequelize);
 db.jobHistory = require("./jobHistory")(sequelize, Sequelize);
 db.progressStatus = require("./progressStatus")(sequelize, Sequelize);
 db.fleet_customer = require("../modules/custfleet/models/custfleet")(sequelize, Sequelize);
 db.master_kendaraan = require("../modules/cars/models/cars")(sequelize, Sequelize);
 db.whatsapp_blast = require("./whatsapp_blast")(sequelize, Sequelize);
+db.promotion = require("../modules/promotion/models/promotion")(sequelize, Sequelize);
+db.kendaraan = require("../modules/cars/models/kendaraan")(sequelize, Sequelize);
 
 db.user.hasOne(db.customer, { foreignKey: "id_customer" });
+db.kendaraan.hasOne(db.master_kendaraan, { foreignKey: "id_mobil" });
+db.kendaraan.belongsTo(db.master_kendaraan, { foreignKey: "id_mobil" });
+db.kendaraan.hasMany(db.progressStatus, { foreignKey: "rangka" });
+db.kendaraan.belongsTo(db.progressStatus, { foreignKey: "no_rangka" });
+db.customer.hasMany(db.kendaraan, { foreignKey: "id_customer" });
+db.kendaraan.belongsTo(db.customer, { foreignKey: "id_customer" });
+db.fleet_customer.hasMany(db.kendaraan, { foreignKey: "id_customer" });
+db.kendaraan.belongsTo(db.fleet_customer, { foreignKey: "id_customer" });
 
 module.exports = db;
+

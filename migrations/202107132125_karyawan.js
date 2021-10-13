@@ -1,26 +1,17 @@
 "use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("admin_account", {
-      id_account: {
+    return queryInterface.createTable("karyawan", {
+      id_karyawan: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      username: {
+      nama_karyawan: {
         type: Sequelize.STRING(30),
       },
-      password: {
-        type: Sequelize.STRING(100),
-      },
-      token: {
-        type: Sequelize.STRING(60),
-      },
-      refresh_token: {
-        type: Sequelize.STRING(255),
-      },
-      level: {
+      level_karyawan: {
         type: Sequelize.STRING(20),
       },
       last_login: {
@@ -30,6 +21,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("admin_account");
+    return queryInterface.dropTable("karyawan");
   },
 };

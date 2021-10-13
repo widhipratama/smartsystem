@@ -73,7 +73,7 @@
                             }) 
                           %>
                           <td>
-                            <button class="btn btn-primary btn-sm" data-toggle="" data-target=""><i
+                            <button class="btn btn-primary btn-sm open-addCarsCustomer" data-id="<%= datarow[i].id %>" data-kategori="fleet" data-toggle="modal" data-target="#carmodal"><i
                                 class="fas fa-car"></i></button>
                             <button class="btn btn-warning btn-sm"
                               onclick="editFunction('<%= datarow[i].id %>')" data-id="<%= datarow[i].id %>"
@@ -132,6 +132,7 @@
     </div>
   </div>
   <%- include ../../../views/templates/script.ejs %>
+  <%- include ../../../modules/cars/views/SyncMobil.ejs %>
   <script type="text/javascript">
     var cleave = new Cleave('#no_telp_cust', {
       phone: true,

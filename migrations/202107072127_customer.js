@@ -37,6 +37,12 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
+      last_blasting: {
+        type: Sequelize.DATE,
+      },
+      last_update: {
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {

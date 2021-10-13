@@ -1,6 +1,7 @@
 var exports = (module.exports = {});
 const models = require("../../../models");
 let Op = require("sequelize").Op;
+let sequelize = require("sequelize");
 var title = "Master Kendaraan";
 var tbtitle = "List Master Kendaraan";
 var htitle = [
@@ -10,25 +11,25 @@ var htitle = [
 ];
 
 exports.index = function (req, res) {
-    let page = req.query.page || 1;
-    let offset = 0;
-    if (page > 1) {
-        offset = ((page - 1) * 10) + 1;
-    }
+    // let page = req.query.page || 1;
+    // let offset = 0;
+    // if (page > 1) {
+    //     offset = ((page - 1) * 10) + 1;
+    // }
     models.master_kendaraan.findAndCountAll({
-        limit: 10,
-        offset: offset,
+        // limit: 10,
+        // offset: offset,
         order: [['id_mobil', 'DESC']],
     }).then((master_kendaraan) => {
         const alertMessage = req.flash('alertMessage');
         const alertStatus = req.flash('alertStatus');
         const alert = { message: alertMessage, status: alertStatus };
-        const totalPage = Math.ceil(master_kendaraan.count / 10);
-        const pagination = { totalPage: totalPage, currentPage: page };
+        // const totalPage = Math.ceil(master_kendaraan.count / 10);
+        // const pagination = { totalPage: totalPage, currentPage: page };
         res.render('../modules/cars/views/index', {
             datarow: master_kendaraan.rows,
             alert: alert,
-            pagination: pagination,
+            // pagination: pagination,
             title: title,
             tbtitle: tbtitle,
             htitle: htitle,
@@ -105,6 +106,161 @@ exports.updateData = function (req, res) {
         req.flash('alertMessage', err.message);
         req.flash('alertStatus', 'danger');
         res.redirect('/cars');
+    });
+}
+
+// Controller Mengelola data no rangka
+exports.getListKendaraan = function (req, res) {
+    const id = req.params.id;
+    const kategori = req.params.h;
+    models.kendaraan.findAll({ 
+        include:[
+            {model: models.master_kendaraan},
+            {
+                model: models.progressStatus,
+                limit: 1,
+                order: [['service_order', 'DESC']],
+            }
+        ],
+        where: [ 
+            {id_customer: { [Op.eq]: id }},
+            {kategori_customer: { [Op.eq]: kategori }}
+        ]
+    }).then((data) => {
+        res.send({ 
+            success: 'success', 
+            data: data
+        });
+    }).catch((err) => {
+        res.send({ 
+            success: 'error', 
+            titlemessage: 'Oops!',
+            message: err.message,
+        }); 
+    });
+}
+exports.cekNoRangka = function (req, res) {
+    const id = req.params.id;
+    models.kendaraan.findOne({ where: { no_rangka: { [Op.eq]: id } } }).then((kendraanrangka) => {
+        
+        res.send({ 
+            success: 'error', 
+            titlemessage: `No Rangka ${kendraanrangka.no_rangka} sudah digunakan!`,
+            message: 'Silahkan mengubungi Admin.',
+        });
+    }).catch((err) => {
+        models.progressStatus.findOne({ where: { rangka: { [Op.eq]: id } } }).then((rangka) => {
+            models.master_kendaraan.findAll({ where: { model_mobil: { [Op.eq]: rangka.model } } }).then((warna) => {
+                res.send({ 
+                    success: 'success', 
+                    titlemessage: 'No Rangka Tersedia!',
+                    message: 'Silahkan lanjutkan pilih warna!',
+                    data: rangka,
+                    warna: warna
+                }); 
+            });
+        }).catch((err) => {
+            res.send({ 
+                success: 'error', 
+                titlemessage: 'Data kendraan tidak tersedia!',
+                message: 'Silahkan mengubungi Admin.',
+            }); 
+        });
+    });
+}
+exports.createKendaraan = function (req, res) {
+    let dataFound;
+    let firstClassStts;
+    let kategori;
+    let dataForm = req.body;
+    let id = dataForm.norangka;
+    models.jobHistory.findAndCountAll({
+        where: { norangka: { [Op.eq]: id }}
+    }).then((dataCount)=>{
+        models.jobHistory.sum('total', {where: { norangka: { [Op.eq]: id }}}).then((dataSum)=>{
+            //menarik data last service
+            models.jobHistory.findAll({
+                attribute:['norangka'],
+                where: { norangka: { [Op.eq]: id }},
+                limit: 1,
+                order: [['invoice_date', 'DESC'],['id', 'DESC']],
+            }).then((lastService)=>{
+                models.jobHistory.findAll({
+                    attribute:['norangka'],
+                    where: { norangka: { [Op.eq]: id }},
+                    limit: 1,
+                    order: [['invoice_date', 'ASC'],['id', 'ASC']],
+                }).then((firstService)=>{
+
+                    //mendari selisih bulan
+                    var dateFrom = new Date(firstService[0].invoice_date);
+                    var dateTo = new Date(lastService[0].invoice_date);
+                    var selisih = dateTo.getMonth() - dateFrom.getMonth() + (12 * (dateTo.getFullYear() - dateFrom.getFullYear()));
+                    var rumusFS = selisih/dataCount.count;
+
+                    //menghitung jumlah rata" omset
+                    var avg_omzet = dataSum/dataCount.count;
+
+                    //memberikan status FS atau tidak
+                    if ((rumusFS<7)&&(avg_omzet>=1750000)) {
+                        firstClassStts = '1';
+                    }else{
+                        firstClassStts = '0';
+                    }
+                    var data = {
+                        no_rangka: dataForm.norangka,
+                        id_customer: dataForm.custid,
+                        id_mobil: dataForm.warna,
+                        total_omzet: dataSum,
+                        first_class: firstClassStts,
+                        kategori_customer: dataForm.kategoricust,
+                        avg_omzet: avg_omzet,
+                        qty_service: dataCount.count,
+                    };
+                    
+                    models.kendaraan.create(data).then((cars) => {
+                        dataFound = cars;
+                        res.send({ 
+                            success: 'success', 
+                            titlemessage: 'Sukses Menambahkan Data!',
+                            message: `No Rangka: ${dataFound.no_rangka} telah di tambahkan ke daftar customer!`,
+                        });
+                    }).catch((err) => {
+                        res.send({ 
+                            success: 'error', 
+                            titlemessage: 'Oops Kendaraan!',
+                            message: err.message,
+                        });
+                    });
+                });
+            });
+        })
+    }).catch((err) => {
+        res.send({ 
+            success: 'error', 
+            titlemessage: 'Oops Job History!',
+            message:  err.message,
+        });
+    });
+}
+exports.hapuskendaraan = function (req, res) {
+    let id = req.params.id;
+    let resFound;
+    models.kendaraan.findOne({ where: { no_rangka: { [Op.eq]: id } } }).then((cars) => {
+        resFound = cars;
+        return cars.destroy().then(() => {
+            res.send({ 
+                success: 'success', 
+                titlemessage: 'Sukses Menghapus Data!',
+                message: `No Rangka: ${resFound.no_rangka} telah di hapus dari daftar customer!`,
+            });
+        })
+    }).catch((err) => {
+        res.send({ 
+            success: 'error', 
+            titlemessage: 'Oops!',
+            message:  err.message,
+        }); 
     });
 }
 
