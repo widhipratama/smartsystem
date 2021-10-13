@@ -11,6 +11,7 @@
       <div class="modal-body">
         <form id="formKendaraanCust" role="form"  method="POST" action="">
           <input type="hidden" id="custid" name="custid" value="">
+          <input type="hidden" id="kategoricust" name="kategoricust" value="<%= menu %>">
           <div class="form-group">
             <label>No Rangka</label>
             <input type="text" id="norangka" name="norangka" onchange="ceknorangka()" class="form-control col-lg-4" required="">
@@ -54,7 +55,7 @@
         $(".open-addCarsCustomer").click(function () {
             $('#custid').val($(this).data('id'));
             $('#carmodal').modal('show');
-            getDataKendaraan($(this).data('id'));
+            getDataKendaraan($(this).data('id'), $(this).data('kategori'));
         });
         $.validator.setDefaults({
           submitHandler: function () {
@@ -101,8 +102,9 @@
           if (res.success=='success') {
             var html = "";
             res.warna.forEach(element => {
-              html += "<option value=\""+element.id_mobil+"\" >"+element.warna_mobil+"</option>";
+              html += "<option class=\"data-warna\" value=\""+element.id_mobil+"\" >"+element.warna_mobil+"</option>";
             });
+            $('.data-warna').remove();
             $("#warnaid").after(html);
           }else{
             document.getElementById('norangka').value = '';
@@ -110,9 +112,9 @@
         }
       });
     };
-    function getDataKendaraan(id) {
+    function getDataKendaraan(id, ketegori) {
       let idData = id;
-      let url = '<%= process.env.URL %>/cars/listkendraan/' + idData;
+      let url = '<%= process.env.URL %>/cars/listkendraan/' + idData+'/'+ketegori;
       var alertstatus = false;
       $.ajax({
         type: 'POST',
@@ -158,8 +160,9 @@
               dataType: 'json',
               success: function (res) {
                 var idcust = document.getElementById('custid').value;
+                var kategori = document.getElementById('kategoricust').value;
                 swal(res.titlemessage, res.message, res.success);
-                getDataKendaraan(idcust);
+                getDataKendaraan(idcust, kategori);
               }
             });
           }
@@ -184,9 +187,11 @@
               data: data,
               dataType: 'json',
               success: function (res) {
+                console.log(res)
                 var idcust = document.getElementById('custid').value;
+                var kategori = document.getElementById('kategoricust').value;
                 swal(res.titlemessage, res.message, res.success);
-                getDataKendaraan(idcust);
+                getDataKendaraan(idcust, kategori);
                 $('#warna').val('');
                 $('#norangka').val('');
               }

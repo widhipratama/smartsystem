@@ -19,11 +19,20 @@ module.exports = {
       point_reward: {
         type: Sequelize.INTEGER,
       },
+      avg_omzet: {
+        type: Sequelize.INTEGER,
+      },
+      qty_service: {
+        type: Sequelize.INTEGER,
+      },
       first_class: {
         allowNull: false,
         default: 0,
         type: Sequelize.INTEGER,
       },
+      kategori_customer: {
+        type: Sequelize.STRING(10)
+      }
     });
   },
   down: (queryInterface, Sequelize) => {

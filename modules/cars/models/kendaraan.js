@@ -10,10 +10,13 @@ module.exports = (sequelize, Sequelize) => {
       id_mobil: Sequelize.DataTypes.STRING,
       total_omzet: Sequelize.DataTypes.INTEGER,
       point_reward: Sequelize.DataTypes.INTEGER,
+      avg_omzet: Sequelize.DataTypes.INTEGER,
+      qty_service: Sequelize.DataTypes.INTEGER,
       first_class: {
         type: Sequelize.DataTypes.INTEGER,
         default: 0,
       },
+      kategori_customer: Sequelize.DataTypes.STRING,
     },
     {
       freezeTableName: true,
