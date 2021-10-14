@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "root",
-    "password": "R3n@ta#8947099",
+    "password": "",
     "database": "db_smartsystem",
-    "host": "agungtoyotakuta.com",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
