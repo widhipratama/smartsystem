@@ -33,9 +33,9 @@ module.exports = {
         type: Sequelize.STRING(200),
       },
       status: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: 0,
       },
       last_blasting: {
         type: Sequelize.DATE,

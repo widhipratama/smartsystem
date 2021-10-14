@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<%- include ../../../views/templates/header.ejs %>
+</head>
+
+<body>
+	<div id="app">
+		<section class="section">
+			<div class="container mt-5">
+				<div class="row">
+					<div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
+						<div class="login-brand">
+							<img src="<%= process.env.URL %>/assets/img/customer_stiker.png" alt="logo" width="100"
+								class="shadow-light rounded-circle">
+						</div>
+
+						<div class="card card-primary">
+							<div class="card-header">
+								<h4>Register</h4>
+							</div>
+
+							<div class="card-body">
+								<form id="formRegister">
+									<div class="form-group">
+										<label for="nama">Nama</label>
+										<input id="nama" type="text" class="form-control" name="nama" tabindex="1" required autofocus>
+										<div class="invalid-feedback">
+											Please fill in your nama
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="nopol">Nopol</label>
+										<input id="nopol" type="text" class="form-control" name="nopol" tabindex="1" required autofocus>
+										<div class="invalid-feedback">
+											Please fill in your nopol
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="norangka">No Rangka</label>
+										<input id="norangka" type="text" class="form-control" name="norangka" tabindex="1" autofocus>
+										<div class="invalid-feedback">
+											Please fill in your norangka
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="whatsapp">Whatsapp</label>
+										<input id="whatsapp" type="text" class="form-control" name="whatsapp" tabindex="1" autofocus>
+										<div class="invalid-feedback">
+											Please fill in your whatsapp
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="whatsapp">No. Telp</label>
+										<input id="no_telp" type="text" class="form-control" name="no_telp" tabindex="1" required autofocus>
+										<div class="invalid-feedback">
+											Please fill in your no_telp
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="alamat">Alamat</label>
+										<textarea name="alamat" id="alamat" cols="30" rows="10" class="form-control"></textarea>
+										<div class="invalid-feedback">
+											Please fill in your alamat
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="username">Username</label>
+										<input id="username" type="text" class="form-control" name="username" tabindex="1" required
+											autofocus>
+										<div class="invalid-feedback">
+											Please fill in your username
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="password">Password</label>
+										<input id="password" type="password" class="form-control" name="password" tabindex="2" required>
+										<div class="invalid-feedback">
+											please fill in your password
+										</div>
+									</div>
+
+									<!-- <div class="form-group">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
+                        <label class="custom-control-label" for="remember-me">Remember Me</label>
+                      </div>
+                    </div> -->
+
+									<div class="form-group">
+										<button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+											Daftar
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+						<!-- <div class="mt-5 text-muted text-center">
+                Don't have an account? <a href="auth-register.html">Create One</a>
+              </div> -->
+						<div class="simple-footer">
+							Copyright &copy; Renata x Team Maria 2021
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<%- include ../../../views/templates/script.ejs %>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				window.setTimeout(function () {
+					$(".alert-autoclose").fadeTo(500, 0).slideUp(500, function () {
+						$(this).remove();
+					});
+				}, 5000);
+
+				$("form#formRegister").on('submit', function (e) {
+					e.preventDefault();
+
+					const url = '<%= process.env.URL %>/auth/daftar';
+
+					$.ajax({
+						type: 'post',
+						url: url,
+						data: {
+							nama: $("#nama").val(),
+							nopol: $("#nopol").val(),
+							norangka: $("#norangka").val(),
+							whatsapp: $("#whatsapp").val(),
+							no_telp: $("#no_telp").val(),
+							alamat: $("#alamat").val(),
+							username: $("#username").val(),
+							password: $("#password").val()
+						},
+						dataType: 'json',
+					})
+						.done(function (data) {
+							const { status, message } = data
+							if (status === "200") {
+								iziToast.show({
+									title: 'Daftar berhasil!',
+									message: 'Silahkan melakukan login terlebih dahulu',
+									position: 'topCenter',
+									onClosing: function () {
+										location.href = '/auth/login';
+									},
+									close: false,
+									timeout: 1000,
+								});
+							} else {
+								swal({
+									title: "Gagal daftar",
+									text: "Terjadi sebuah kesalahan.",
+									icon: 'error',
+									showConfirmButton: false,
+								})
+							}
+						});
+				});
+			})
+		</script>
+</body>
+
+</html>

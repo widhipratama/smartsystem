@@ -2,9 +2,9 @@ const db = require("../models");
 const config = require("../config/auth");
 const { body, validationResult } = require("express-validator/check");
 const { randomString } = require("../helpers/randomString");
-const admin = db.admin;
-const user = db.user;
+const user_account = db.user_account;
 const customer = db.customer;
+const karyawan = db.karyawan;
 
 const Op = db.Sequelize.Op;
 
@@ -17,7 +17,9 @@ exports.validate = (method) => {
       return [
         body("username", "username tidak boleh kosong").exists(),
         body("password", "password tidak boleh kosong").exists(),
-        body("nama", "nama tidak boleh kosong").exists(),
+        body("kategori", "nama tidak boleh kosong")
+          .if((value) => value === "ADMIN")
+          .exists(),
         body("no_telp", "no telepon tidak boleh kosong").exists(),
       ];
     }
@@ -149,6 +151,14 @@ exports.loginUser = (req, res) => {
           req.flash("login_message", "User tidak terdaftar");
           req.flash("login_status", "401");
           res.redirect(process.env.URL + "/auth/login-user");
+
+          // const loginMessage = req.flash("login_message");
+          // const loginStatus = req.flash("login_status");
+          // const alert = { message: loginMessage, status: loginStatus };
+
+          // res.render("login/user-index", {
+          //   alert: alert,
+          // });
         }
 
         var passwordIsValid = bcrypt.compareSync(req.body.password, q.password);
@@ -159,16 +169,16 @@ exports.loginUser = (req, res) => {
           res.redirect(process.env.URL + "/auth/login-user");
         }
 
-        let accessToken = jwt.sign({ loginId: q.id_account, username: q.username, level: "USER" }, process.env.ACCESS_TOKEN_SECRET, {
+        let accessToken = jwt.sign({ loginId: q.id, username: q.username, level: "USER" }, process.env.ACCESS_TOKEN_SECRET, {
           expiresIn: process.env.ACCESS_TOKEN_LIFE,
         });
 
-        let refreshToken = jwt.sign({ loginId: q.id_account, username: q.username, level: "USER" }, process.env.REFRESH_TOKEN_SECRET);
+        let refreshToken = jwt.sign({ loginId: q.id, username: q.username, level: "USER" }, process.env.REFRESH_TOKEN_SECRET);
 
-        user.update({ refresh_token: refreshToken }, { where: { id_account: q.id_account } });
+        user.update({ refresh_token: refreshToken }, { where: { id: q.id } });
 
         // res.status(200).send({
-        //   loginId: user.id_account,
+        //   loginId: user.id,
         //   username: user.username,
         //   accessToken: token,
         // });
@@ -198,7 +208,7 @@ exports.daftarAdmin = (req, res) => {
 
     const { username, password, level } = req.body;
 
-    admin
+    user
       .create({
         username: username,
         password: bcrypt.hashSync(password, 8),
@@ -247,16 +257,16 @@ exports.loginAdmin = (req, res) => {
           res.redirect(process.env.URL + "/auth/login-admin");
         }
 
-        let accessToken = jwt.sign({ loginId: q.id_account, username: q.username, level: q.level }, process.env.ACCESS_TOKEN_SECRET, {
+        let accessToken = jwt.sign({ loginId: q.id, username: q.username, level: q.level }, process.env.ACCESS_TOKEN_SECRET, {
           expiresIn: process.env.ACCESS_TOKEN_LIFE,
         });
 
-        let refreshToken = jwt.sign({ loginId: q.id_account, username: q.username, level: q.level }, process.env.REFRESH_TOKEN_SECRET);
+        let refreshToken = jwt.sign({ loginId: q.id, username: q.username, level: q.level }, process.env.REFRESH_TOKEN_SECRET);
 
-        admin.update({ refresh_token: refreshToken }, { where: { id_account: q.id_account } });
+        admin.update({ refresh_token: refreshToken }, { where: { id: q.id } });
 
         // res.status(200).send({
-        //   loginId: user.id_account,
+        //   loginId: user.id,
         //   username: user.username,
         //   accessToken: token,
         // });
@@ -318,12 +328,12 @@ exports.loginUserToken = (req, res) => {
           res.redirect(process.env.URL + "/auth/login-user");
         }
 
-        var token = jwt.sign({ loginId: user.id_account, access: "USER" }, config.secret, {
+        var token = jwt.sign({ loginId: user.id, access: "USER" }, config.secret, {
           expiresIn: 86400, // 24 hours
         });
 
         // res.status(200).send({
-        //   loginId: user.id_account,
+        //   loginId: user.id,
         //   username: user.username,
         //   accessToken: token,
         // });
