@@ -1,14 +1,14 @@
 module.exports = (sequelize, Sequelize) => {
-  const enews = sequelize.define(
-    "artikel_enews",
+  const how = sequelize.define(
+    "toyota_how",
     {
-      id_enews: {
+      id_how: {
         type: Sequelize.DataTypes.INTEGER,
         primaryKey: true,
       },
-      judul_enews: Sequelize.DataTypes.STRING,
-      sampul_enews: Sequelize.DataTypes.STRING,
-      location_enews: Sequelize.DataTypes.STRING,
+      judul_how: Sequelize.DataTypes.STRING,
+      sampul_how: Sequelize.DataTypes.STRING,
+      location_how: Sequelize.DataTypes.STRING,
       status: Sequelize.DataTypes.BOOLEAN,
       date_upload: Sequelize.DataTypes.DATE,
     },
@@ -21,5 +21,5 @@ module.exports = (sequelize, Sequelize) => {
     }
   );
 
-  return enews;
+  return how;
 };

@@ -1,7 +1,7 @@
 const multer = require("multer");
 
 const imageFilter = (req, file, cb) => {
-  if (file.fieldname === "location_enews") { // if uploading resume
+  if (file.fieldname === "location_how") { // if uploading resume
     if (
       file.mimetype.includes("application/pdf")
     ) {
@@ -24,10 +24,10 @@ const imageFilter = (req, file, cb) => {
 
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, __basedir + "/views/assets/e-news");
+    cb(null, __basedir + "/views/assets/how");
   },
   filename: (req, file, cb) => {
-    if (file.fieldname === "sampul_enews") {
+    if (file.fieldname === "sampul_how") {
       cb(null, `Sampul_${Date.now()}`);
     }else{
       cb(null, `File_${Date.now()}`);

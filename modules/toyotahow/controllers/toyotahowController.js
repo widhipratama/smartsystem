@@ -3,23 +3,24 @@ const fs = require("fs");
 const models = require("../../../models");
 const datenow = Date.now();
 let Op = require("sequelize").Op;
-var title = "Master E-News";
-var tbtitle = "List Master E-News";
+var title = "Master Toyota How";
+var tbtitle = "List Master Toyota How";
 var htitle = [
-    {id:'judul_enews', label:'Judul', width:"", typeInput:"text", onTable:"ON"},
-    {id:'sampul_enews', label:'Sampul', width:"", typeInput:"file", onTable:"ON"},
-    {id:'location_enews', label:'File', width:"", typeInput:"file", onTable:"OFF"},
+    {id:'judul_how', label:'Judul', width:"", typeInput:"text", onTable:"ON"},
+    {id:'sampul_how', label:'Sampul', width:"", typeInput:"file", onTable:"ON"},
+    {id:'location_how', label:'File', width:"", typeInput:"file", onTable:"OFF"},
     {id:'status', label:'Status', width:"", typeInput:"status", onTable:"OFF"},
 ];
 
-exports.index = function (req, res) {models.artikel_enews.findAndCountAll({
-        order: [['id_enews', 'DESC']],
-    }).then((enews) => {
+exports.index = function (req, res) {
+    models.toyota_how.findAndCountAll({
+        order: [['id_how', 'DESC']],
+    }).then((how) => {
         const alertMessage = req.flash('alertMessage');
         const alertStatus = req.flash('alertStatus');
         const alert = { message: alertMessage, status: alertStatus };
-        res.render('../modules/enews/views/index', {
-            datarow: enews.rows,
+        res.render('../modules/toyotahow/views/index', {
+            datarow: how.rows,
             alert: alert,
             title: title,
             tbtitle: tbtitle,
@@ -30,9 +31,9 @@ exports.index = function (req, res) {models.artikel_enews.findAndCountAll({
 
 exports.indexdetail = function (req, res) {
     const id = req.params.id;
-    models.artikel_enews.findOne({ where: { id_enews: { [Op.eq]: id } } }).then((enews) => {
-        res.render('../modules/enews/views/detail', {
-            datarow: enews,
+    models.toyota_how.findOne({ where: { id_how: { [Op.eq]: id } } }).then((how) => {
+        res.render('../modules/toyotahow/views/detail', {
+            datarow: how,
             tbtitle: tbtitle,
             htitle: htitle,
         });
@@ -40,14 +41,14 @@ exports.indexdetail = function (req, res) {
 }
 
 exports.input = function (req, res) {
-    models.artikel_enews.findAndCountAll({
-        order: [['id_enews', 'DESC']],
-    }).then((enews) => {
+    models.toyota_how.findAndCountAll({
+        order: [['id_how', 'DESC']],
+    }).then((how) => {
         const alertMessage = req.flash('alertMessage');
         const alertStatus = req.flash('alertStatus');
         const alert = { message: alertMessage, status: alertStatus };
-        res.render('../modules/enews/views/input', {
-            datarow: enews.rows,
+        res.render('../modules/toyotahow/views/input', {
+            datarow: how.rows,
             alert: alert,
             title: title,
             tbtitle: tbtitle,
@@ -58,21 +59,21 @@ exports.input = function (req, res) {
 exports.createData = function (req, res) {
     let dataFound;
     let data = {
-        judul_enews: req.body.judul_enews,
+        judul_how: req.body.judul_how,
         status: req.body.status,
-        location_enews: req.files.location_enews[0].filename,
-        sampul_enews: req.files.sampul_enews[0].filename,
+        location_how: req.files.location_how[0].filename,
+        sampul_how: req.files.sampul_how[0].filename,
         date_upload: datenow,
     };
-    models.artikel_enews.create(data).then((enews) => {
-        dataFound = enews;
-        req.flash('alertMessage', `Sukses Menambahkan Data ${title} dengan nama : ${dataFound.judul_enews}`);
+    models.toyota_how.create(data).then((how) => {
+        dataFound = how;
+        req.flash('alertMessage', `Sukses Menambahkan Data ${title} dengan nama : ${dataFound.judul_how}`);
         req.flash('alertStatus', 'success');
-        res.redirect('/enews/input');
+        res.redirect('/toyotahow/input');
     }).catch((err) => {
         req.flash('alertMessage', err.message);
         req.flash('alertStatus', 'danger');
-        res.redirect('/enews/input');
+        res.redirect('/toyotahow/input');
     });
 }
 
@@ -80,37 +81,37 @@ exports.updateDataSampul = function (req, res) {
     const id = req.params.id;
     let dataFound;
     let data;
-    models.artikel_enews.findOne({ where: { id: { [Op.eq]: id } } }).then((enews) => {
-        dataFound = enews;
+    models.toyota_how.findOne({ where: { id: { [Op.eq]: id } } }).then((how) => {
+        dataFound = how;
         data = {
-            sampul_enews: req.file.filename,
+            sampul_how: req.file.filename,
         };
-        return enews.update(data).then(() => {
+        return how.update(data).then(() => {
         req.flash('alertMessage', `Sukses Upload Sampul ${title} dengan nama : ${dataFound.judul}`);
             req.flash('alertStatus', 'success');
-            res.redirect('/enews');
+            res.redirect('/toyotahow');
         })
     }).catch((err) => {
         req.flash('alertMessage', err.message);
         req.flash('alertStatus', 'danger');
-        res.redirect('/enews');
+        res.redirect('/how');
     });
 }
 
 exports.hapusData = function (req, res) {
     let id = req.params.id;
     let dataFound;
-    models.artikel_enews.findOne({ where: { id: { [Op.eq]: id } } }).then((enews) => {
-        dataFound = enews;
-        return enews.destroy().then(() => {
+    models.toyota_how.findOne({ where: { id: { [Op.eq]: id } } }).then((how) => {
+        dataFound = how;
+        return how.destroy().then(() => {
         req.flash('alertMessage', `Sukses Menghapus Data ${title} dengan nama : ${dataFound.judul}`);
             req.flash('alertStatus', 'success');
-            res.redirect('/enews');
+            res.redirect('/toyotahow');
         })
     }).catch((err) => {
         req.flash('alertMessage', err.message);
         req.flash('alertStatus', 'danger');
-        res.redirect('/enews');
+        res.redirect('/toyotahow');
     });
 }
 exports.editData = function (req, res) {
@@ -119,12 +120,12 @@ exports.editData = function (req, res) {
     const alert = { message: alertMessage, status: alertStatus };
 
     const id = req.params.id;
-    models.artikel_enews.findOne({ where: { id: { [Op.eq]: id } } }).then((enews) => {
+    models.toyota_how.findOne({ where: { id: { [Op.eq]: id } } }).then((how) => {
         res.send({ 
             success: true, 
             message: 'Berhasil ambil data!',
             htitle: htitle,
-            data: enews
+            data: how
         });
     });
 }
@@ -132,8 +133,8 @@ exports.updateData = function (req, res) {
     const id = req.params.id;
     let dataFound;
     let data;
-    models.artikel_enews.findOne({ where: { id: { [Op.eq]: id } } }).then((enews) => {
-        dataFound = enews;
+    models.toyota_how.findOne({ where: { id: { [Op.eq]: id } } }).then((how) => {
+        dataFound = how;
         if (req.body.gambar!=''&&req.body.gambar!=null) {
             data = {
                 judul: req.body.judul,
@@ -146,15 +147,15 @@ exports.updateData = function (req, res) {
                 status: req.body.status,
             };
         }
-        return enews.update(data).then(() => {
+        return how.update(data).then(() => {
         req.flash('alertMessage', `Sukses Mengubah Data ${title} dengan nama : ${dataFound.judul}`);
             req.flash('alertStatus', 'success');
-            res.redirect('/enews');
+            res.redirect('/toyotahow');
         })
     }).catch((err) => {
         req.flash('alertMessage', err.message);
         req.flash('alertStatus', 'danger');
-        res.redirect('/enews');
+        res.redirect('/toyotahow');
     });
 }
 exports.pdf = function (req, res) {

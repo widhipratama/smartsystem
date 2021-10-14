@@ -17,6 +17,7 @@ db.sequelize = sequelize;
 
 db.customer = require("../modules/customer/models/customer")(sequelize, Sequelize);
 db.artikel_enews = require("../modules/enews/models/enews")(sequelize, Sequelize);
+db.toyota_how = require("../modules/toyotahow/models/toyotahow")(sequelize, Sequelize);
 db.user = require("../modules/useraccount/models/user")(sequelize, Sequelize);
 db.admin = require("./admin")(sequelize, Sequelize);
 db.jobHistory = require("./jobHistory")(sequelize, Sequelize);

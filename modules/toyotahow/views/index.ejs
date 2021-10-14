@@ -11,12 +11,12 @@
         <div class="main-content" style="padding-top: 90px">
           <section class="section">
             <div class="section-header">
-              <h1>E-News</h1>
+              <h1>Toyota How</h1>
               <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active">
                   <a href="#">Dashboard</a>
                 </div>
-                <div class="breadcrumb-item">E-News</div>
+                <div class="breadcrumb-item">Toyota How</div>
               </div>
             </div>
 
@@ -26,16 +26,16 @@
                 <div class="col-6 col-md-3 col-lg-3">
                   <article class="article article-style-c">
                     <div class="article-header pt-2">
-                      <div class="article-image" style="height: 100%; width: 80%; margin: 1px auto;" data-background="/assets/e-news/<%= datarow[i].sampul_enews %>"></div>
+                      <div class="article-image" style="height: 100%; width: 100%; margin: 1px auto;" data-background="/assets/how/<%= datarow[i].sampul_how %>"></div>
                       <div class="article-badge">
-                        <a href="/assets/e-news/<%= datarow[i].location_enews %>" class="article-badge-item bg-danger">
+                        <a href="/assets/how/<%= datarow[i].location_how %>" class="article-badge-item bg-danger">
                           <i class="fas fa-file-pdf"></i> Download
                         </a>
                       </div>
                     </div>
                     <div class="article-details">
                       <div class="article-category">
-                        <a href="#">News</a>
+                        <a href="#">How</a>
                         <div class="bullet"></div>
                         <%
                           var date = new Date(datarow[i].date_upload);
@@ -47,7 +47,7 @@
                       </div>
                       <div class="article-title">
                         <h2>
-                          <a href="/enews/detail/<%= datarow[i].id_enews %>"><b><%= datarow[i].judul_enews %></b></a>
+                          <a href="/toyotahow/detail/<%= datarow[i].id_how %>"><b><%= datarow[i].judul_how %></b></a>
                         </h2>
                       </div>
                     </div>
@@ -82,7 +82,7 @@
       $(document).on("click", "#m", function () {
           var myBookId = $(this).data('id');
           $(".modal-body #fileEnews").removeAttr('src');
-          $(".modal-body #fileEnews").attr('src', '/assets/e-news/'+myBookId);
+          $(".modal-body #fileEnews").attr('src', '/assets/toyotahow/'+myBookId);
       });
     </script>
   </body>

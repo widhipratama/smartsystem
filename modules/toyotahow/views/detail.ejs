@@ -11,20 +11,20 @@
         <div class="main-content" style="padding-top: 90px">
           <section class="section">
             <div class="section-header">
-              <h1><a href="/enews" class="text-black"><b>E-News</b></a></h1>
+              <h1><a href="/toyotahow" class="text-black"><b>Toyota How</b></a></h1>
               <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active">
                   <a href="#">Dashboard</a>
                 </div>
-                <div class="breadcrumb-item"><a href="/enews"><b>E-News</b></a></div>
+                <div class="breadcrumb-item"><a href="/toyotahow"><b>Toyota How</b></a></div>
               </div>
             </div>
 
             <div class="section-body">
               <h2 class="section-title">
-                <%= datarow.judul_enews %>
+                <%= datarow.judul_how %>
               </h2>
-              <embed id="fileEnews" src="/assets/e-news/<%= datarow.location_enews %>#view=fitH,100&toolbar=0&navpanes=0&scrollbar=0" frameBorder="0" type="application/pdf" height="1080px" width="100%">
+              <embed id="fileEnews" src="/assets/how/<%= datarow.location_how %>#view=fitH,100&toolbar=0&navpanes=0&scrollbar=0" frameBorder="0" type="application/pdf" height="1080px" width="100%">
             </div>
           </section>
         </div>
@@ -52,7 +52,7 @@
       $(document).on("click", "#m", function () {
           var myBookId = $(this).data('id');
           $(".modal-body #fileEnews").removeAttr('src');
-          $(".modal-body #fileEnews").attr('src', '/assets/e-news/'+myBookId);
+          $(".modal-body #fileEnews").attr('src', '/assets/Toyota How/'+myBookId);
       });
     </script>
   </body>
