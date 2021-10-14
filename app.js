@@ -236,7 +236,7 @@ app.all("*", function (req, res, next) {
   next();
 });
 
-const authRoute = require("./routes/auth");
+const authRoute = require("./modules/auth/routes/authRoute");
 const whatsappRoute = require("./routes/whatsapp");
 const custfleetRoute = require("./routes/custfleet");
 const custfirstRoute = require("./routes/custfirst");
