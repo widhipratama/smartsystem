@@ -7,7 +7,7 @@
     <div id="app">
       <div class="main-wrapper">
         <%- include ../../../views/templates/navtop.ejs %> 
-        <%- include ../../../views/templates/navleft_user.ejs %>
+        <%- include ../../../views/templates/navleft.ejs %>
         <div class="main-content" style="padding-top: 90px">
           <section class="section">
             <div class="section-header">
@@ -23,8 +23,8 @@
             <div class="section-body">
               <div class="row">
                 <% for (var i = 0; i < datarow.length; i++) { %>
-                <div class="col-6 col-md-3 col-lg-3">
-                  <article class="article article-style-c">
+                <div class="col-6 col-md-3 col-lg-3" >
+                  <article class="article article-style-c" >
                     <div class="article-header pt-2">
                       <div class="article-image" style="height: 100%; width: 80%; margin: 1px auto;" data-background="/assets/e-news/<%= datarow[i].sampul_enews %>"></div>
                       <div class="article-badge">
@@ -45,7 +45,7 @@
                         %>
                         <a href="#"><%= day+"-"+month+"-"+year;  %></a>
                       </div>
-                      <div class="article-title">
+                      <div class="article-title" style="max-height: 50px; min-height: 50px;">
                         <h2>
                           <a href="/enews/detail/<%= datarow[i].id_enews %>"><b><%= datarow[i].judul_enews %></b></a>
                         </h2>
