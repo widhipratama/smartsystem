@@ -43,7 +43,7 @@
                       <strong><%= alert.message %></strong>
                     </div>
                     <% } %>
-                    <table class="table table-striped" id="table-1" style="width:100%">
+                    <table class="table table-striped" id="tabledata" style="width:100%">
                       <thead>
                         <tr>
                           <th scope="col" width="5%">No.</th>
@@ -113,7 +113,7 @@
                     <% }else{ %>
                       <div class="form-group">
                         <label><%= h.label %></label>
-                        <input type="<%= h.typeInput %>" id="<%= h.id %>" name="<%= h.id %>" class="form-control" pattern=".{5,}" required="">
+                        <input type="<%= h.typeInput %>" id="<%= h.id %>" name="<%= h.id %>" class="form-control" required="">
                       </div>
                     <% } %>
                   <% }) %>
@@ -138,6 +138,37 @@
       phone: true,
       phoneRegionCode: 'us',
       delimiter: ''
+    });
+
+    $('#tabledata').DataTable({
+      dom: 'Bfrtip',
+      searching: true,
+      paging: true,
+      buttons: [
+        'copy',
+        {
+          extend: 'print',
+          title: 'First Class | Data Fleet',
+          orientation: 'landscape',
+          pageSize: 'A4'
+        },
+        {
+          extend: 'excel',
+          title: 'First Class | Data Fleet',
+        },
+        {
+          extend: 'pdfHtml5',
+          title: 'First Class | Data Fleet',
+          orientation: 'landscape',
+          pageSize: 'A4',
+          customize: function(doc) {
+            doc.styles['td:nth-child(2)'] = {
+              width: '100px',
+              'max-width': '100px'
+            }
+          }
+        },
+      ]
     });
 
     window.setTimeout(function() {

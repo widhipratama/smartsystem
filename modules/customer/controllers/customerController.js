@@ -11,25 +11,15 @@ var htitle = [
 ];
 
 exports.index = function (req, res) {
-    let page = req.query.page || 1;
-    let offset = 0;
-    if (page > 1) {
-        offset = ((page - 1) * 10) + 1;
-    }
     models.customer.findAndCountAll({
-        limit: 10,
-        offset: offset,
         order: [['id_customer', 'DESC']],
     }).then((customer) => {
         const alertMessage = req.flash('alertMessage');
         const alertStatus = req.flash('alertStatus');
         const alert = { message: alertMessage, status: alertStatus };
-        const totalPage = Math.ceil(customer.count / 10);
-        const pagination = { totalPage: totalPage, currentPage: page };
         res.render('../modules/customer/views/index', {
             datarow: customer.rows,
             alert: alert,
-            pagination: pagination,
             title: title,
             tbtitle: tbtitle,
             htitle: htitle,
