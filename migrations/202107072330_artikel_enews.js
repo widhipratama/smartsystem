@@ -2,26 +2,26 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable("artikel_enews", {
-      id: {
+      id_enews: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      judul: {
+      judul_enews: {
         type: Sequelize.STRING(50),
       },
-      deskripsi: {
-        type: Sequelize.STRING(100),
+      sampul_enews: {
+        type: Sequelize.STRING(50),
       },
-      video: {
-        type: Sequelize.STRING(100),
+      location_enews: {
+        type: Sequelize.STRING(50),
       },
       status: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.BOOLEAN,
       },
-      type: {
-        type: Sequelize.STRING(20),
+      date_upload: {
+        type: Sequelize.DATE,
       },
     });
   },

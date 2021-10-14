@@ -68,7 +68,7 @@
                             htitle.forEach(function(h) { 
                               if (([h.onTable]=="ON")&&([h.typeInput]=="file")){
                           %>
-                          <td><img src="/assets/img/promo/<%= datarow[i][h.id] %>" alt="" class="img-responsive" height="150px"></td>
+                          <td><img src="/assets/e-news/<%= datarow[i][h.id] %>" alt="" class="img-responsive" height="150px"></td>
                           <% 
                               } else if ([h.onTable]=="ON"){
                           %>
@@ -158,7 +158,7 @@
     }, 5000);
 
     function createFunction(){
-      $('#formData').attr('action', '<%= process.env.URL %>/promotion/adddata');
+      $('#formData').attr('action', '<%= process.env.URL %>/enews/adddata');
       $('#gambar').attr('required', 'required');
       document.getElementById("formData").reset();
     };
@@ -174,20 +174,20 @@
         })
         .then((willDelete) => {
           if (willDelete) {
-            window.location.assign(`/promotion/delete/${idData}`);
+            window.location.assign(`/enews/delete/${idData}`);
           }
         });
     };
 
     function editFunction(id) {
       let idData = id;
-      let url = '<%= process.env.URL %>/promotion/edit/' + idData;
+      let url = '<%= process.env.URL %>/enews/edit/' + idData;
       $.ajax({
         type: 'GET',
         url: url,
         dataType: 'json',
         success: function (res) {
-          $('#formData').attr('action', '<%= process.env.URL %>/promotion/edit/save/'+idData);
+          $('#formData').attr('action', '<%= process.env.URL %>/enews/edit/save/'+idData);
           res.htitle.forEach(h => {
             if (h.typeInput!='file') {
               document.getElementById(h.id).value = res.data[h.id];
