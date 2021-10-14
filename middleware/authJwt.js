@@ -47,7 +47,7 @@ verifyToken = async (req, res, next) => {
       }
     );
 
-    res.cookie("jwt", newToken, { secure: true, httpOnly: true });
+    res.cookie("jwt", newToken, { secure: true });
     next();
   } catch (err) {
     // req.flash("login_message", "Silahkan login terlebih dahulu");
