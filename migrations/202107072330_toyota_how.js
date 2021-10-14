@@ -1,20 +1,20 @@
 "use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("artikel_enews", {
-      id_enews: {
+    return queryInterface.createTable("toyota_how", {
+      id_how: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      judul_enews: {
+      judul_how: {
         type: Sequelize.STRING(50),
       },
-      sampul_enews: {
+      sampul_how: {
         type: Sequelize.TEXT,
       },
-      location_enews: {
+      location_how: {
         type: Sequelize.TEXT,
       },
       status: {
@@ -26,6 +26,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("artikel_enews");
+    return queryInterface.dropTable("toyota_how");
   },
 };

@@ -162,13 +162,13 @@ module.exports = {
         type: Sequelize.STRING(20),
       },
       sts: {
-        type: Sequelize.STRING(10),
+        type: Sequelize.STRING(50),
       },
       telephone: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING(50),
       },
       handphone: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING(50),
       },
       contact_person: {
         type: Sequelize.STRING(50),

@@ -6,7 +6,7 @@ var tbtitle = "List Master Promotion";
 var htitle = [
     {id:'judul', label:'Judul', width:"", typeInput:"text", onTable:"ON"},
     {id:'gambar', label:'Gambar', width:"", typeInput:"file", onTable:"ON"},
-    {id:'status', label:'Status', width:"", typeInput:"select", onTable:"ON"},
+    {id:'status', label:'Status', width:"", typeInput:"status", onTable:"OFF"},
 ];
 
 exports.index = function (req, res) {

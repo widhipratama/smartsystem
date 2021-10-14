@@ -3,6 +3,7 @@ const models = require("../../../models");
 let Op = require("sequelize").Op;
 var title = "Customer Fleet";
 var tbtitle = "List Customer Fleet";
+var menu = "fleet";
 var htitle = [
     {id:'nama_fleet', label:'Nama Fleet', width:"", typeInput:"text", onTable:"ON"},
     {id:'contact_person', label:'PIC', width:"", typeInput:"text", onTable:"ON"},
@@ -13,28 +14,19 @@ var htitle = [
 ];
 
 exports.index = function (req, res) {
-    let page = req.query.page || 1;
-    let offset = 0;
-    if (page > 1) {
-        offset = ((page - 1) * 10) + 1;
-    }
     models.fleet_customer.findAndCountAll({
-        limit: 10,
-        offset: offset,
         order: [['id', 'DESC']],
     }).then((fleet_customer) => {
         const alertMessage = req.flash('alertMessage');
         const alertStatus = req.flash('alertStatus');
         const alert = { message: alertMessage, status: alertStatus };
-        const totalPage = Math.ceil(fleet_customer.count / 10);
-        const pagination = { totalPage: totalPage, currentPage: page };
         res.render('../modules/custfleet/views/index', {
             datarow: fleet_customer.rows,
             alert: alert,
-            pagination: pagination,
             title: title,
             tbtitle: tbtitle,
             htitle: htitle,
+            menu: menu,
         });
     });
 }

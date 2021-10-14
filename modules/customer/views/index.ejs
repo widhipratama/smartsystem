@@ -68,7 +68,7 @@
                             <span class="<%= badge %>"><%= status %></span>
                           </td>
                           <td>
-                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#carmodal"><i
+                            <button class="btn btn-primary btn-sm open-addCarsCustomer" data-id="<%= datarow[i].id_customer %>" data-kategori="customer" data-toggle="modal" data-target="#carmodal"><i
                                 class="fas fa-car"></i></button>
                             <button class="btn btn-warning btn-sm"
                               onclick="editFunction('<%= datarow[i].id_customer %>')" data-id="<%= datarow[i].id %>"
@@ -113,7 +113,7 @@
                         </div>
                       </div>
                       <input type="text" id="no_telp" name="no_telp" class="form-control phone-number input-phone"
-                        maxlength="12" minlength="11" pattern=".{11,12}" required="">
+                        maxlength="15" minlength="11" pattern=".{11,15}" required="">
                     </div>
                   </div>
                   <div class="form-group">
@@ -124,8 +124,8 @@
                           <i class="fab fa-whatsapp"></i>
                         </div>
                       </div>
-                      <input type="text" id="wa" name="wa" class="form-control phone-number input-phone" maxlength="12"
-                        minlength="11" pattern=".{11,12}" required="">
+                      <input type="text" id="wa" name="wa" class="form-control phone-number input-phone" maxlength="15"
+                        minlength="11" pattern=".{11,15}" required="">
                     </div>
                   </div>
                   <div class="form-group">
@@ -136,7 +136,7 @@
                           <i class="fab fa-instagram"></i>
                         </div>
                       </div>
-                      <input type="text" id="ig" name="ig" class="form-control" pattern=".{1,}" required="">
+                      <input type="text" id="ig" name="ig" class="form-control" pattern=".{1,}" >
                     </div>
                   </div>
                   <div class="form-group">
@@ -147,7 +147,7 @@
                           <i class="fab fa-facebook"></i>
                         </div>
                       </div>
-                      <input type="text" id="facebook" name="facebook" class="form-control" pattern=".{1,}" required="">
+                      <input type="text" id="facebook" name="facebook" class="form-control" pattern=".{1,}">
                     </div>
                   </div>
                   <div class="form-group">
@@ -156,11 +156,11 @@
                   </div>
                   <div class="form-group">
                     <label>Alamat Dati 2</label>
-                    <textarea name="alamat_dati2" id="alamat_dati2" class="form-control" required=""></textarea>
+                    <textarea name="alamat_dati2" id="alamat_dati2" class="form-control"></textarea>
                   </div>
                   <div class="form-group">
                     <label>Alamat Dari 3</label>
-                    <textarea name="alamat_dati3" id="alamat_dati3" class="form-control" required=""></textarea>
+                    <textarea name="alamat_dati3" id="alamat_dati3" class="form-control" ></textarea>
                   </div>
                   <div class="form-group">
                     <label>Status</label>
@@ -179,16 +179,16 @@
           </div>
         </div>
         <!-- END MODAL -->
-        <%- include ../../../modules/cars/views/SyncMobil.ejs %>
       </div>
       <%- include ../../../views/templates/footer.ejs %>
     </div>
   </div>
   <%- include ../../../views/templates/script.ejs %>
+  <%- include ../../../modules/cars/views/SyncMobil.ejs %>
   <script type="text/javascript">
     var cleave = new Cleave('.input-phone', {
       phone: true,
-      phoneRegionCode: 'us',
+      phoneRegionCode: 'id',
       delimiter: ''
     });
   
@@ -201,17 +201,17 @@
     function delFunction(id) {
       let idData = id;
       swal({
-          title: "Yakin Ingin Menghapus Data Customer ini?",
-          text: "Data yang dihapus, tidak bisa kembali lagi.",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true,
-        })
-        .then((willDelete) => {
-          if (willDelete) {
-            window.location.assign(`/customer/delete/${idData}`);
-          }
-        });
+        title: "Yakin Ingin Menghapus Data Customer ini?",
+        text: "Data yang dihapus, tidak bisa kembali lagi.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          window.location.assign(`/customer/delete/${idData}`);
+        }
+      });
     };
 
     function editFunction(id) {

@@ -31,19 +31,9 @@
                 <div class="card">
                   <div class="card-header">
                     <h4><%= tbtitle %></h4>
-                    <div class="float-right">
-                      <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal" onclick="createFunction();"><i
-                          class="fas fa-plus"></i> Tambah Data</button>
-                    </div>
                   </div>
                   <div class="card-body">
-                    <% if(alert.message != '') { %>
-                    <br>
-                    <div class="alert alert-<%= alert.status %> alert-autoclose" style="text-align: center;">
-                      <strong><%= alert.message %></strong>
-                    </div>
-                    <% } %>
-                    <table class="table table-striped" id="table-1" style="width:100%">
+                    <table class="table table-striped" id="tabledata" style="width:100%">
                       <thead>
                         <tr>
                           <th scope="col" width="5%">No.</th>
@@ -56,41 +46,18 @@
                               }
                             }) 
                           %>
-                          <th scope="col" width="15%">Status</th>
-                          <th scope="col" width="15%">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         <% for (var i = 0; i < datarow.length; i++) { %>
                         <tr>
                           <th scope="row"><%= i+1 %></th>
-                          <% 
-                            htitle.forEach(function(h) { 
-                              if (([h.onTable]=="ON")&&([h.typeInput]=="file")){
-                          %>
-                          <td><img src="/assets/img/promo/<%= datarow[i][h.id] %>" alt="" class="img-responsive" height="150px"></td>
-                          <% 
-                              } else if ([h.onTable]=="ON"){
-                          %>
-                          <td><%= datarow[i][h.id] %></td>
-                          <%
-                              }
-                            }) 
-                          %>
-                          <%
-                            status = (datarow[i].status!='1' ? 'Tidak Aktif' : 'Aktif' ) 
-                            badge = (datarow[i].status!='1' ? 'badge badge-danger' : 'badge badge-success' ) 
-                          %>
-                          <td>
-                            <span class="<%= badge %>"><%= status %></span>
-                          </td>
-                          <td>
-                            <!-- <button class="btn btn-warning btn-sm"
-                              onclick="editFunction('<%= datarow[i].id %>')" data-id="<%= datarow[i].id %>"
-                              data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"></i></button> -->
-                            <button class="btn btn-danger btn-sm" onclick="delFunction('<%= datarow[i].id %>')"
-                              data-id="<%= datarow[i].id %>"><i class="fas fa-trash"></i></button>
-                          </td>
+                          <td><%= datarow[i].progress_statuses[0].police_no %></td>
+                          <td><%= datarow[i].no_rangka %></td>
+                          <td><%= datarow[i].fleet_customer.nama_fleet %></td>
+                          <td><%= datarow[i].qty_service %></td>
+                          <td><%= Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(datarow[i].total_omzet); %></td>
+                          <td><%= Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(datarow[i].avg_omzet); %></td>
                         </tr>
                         <% } %>
                       </tbody>
@@ -120,14 +87,6 @@
                         <label><%= h.label %></label>
                         <textarea name="<%= h.id %>" id="<%= h.id %>" class="form-control" required=""></textarea>
                       </div>
-                    <% }else if (h.typeInput=="status") { %>
-                      <div class="form-group">
-                        <label><%= h.label %></label>
-                        <select class="form-control" name="<%= h.id %>" id="<%= h.id %>" required="">
-                          <option id="optionfalse" value="0">Tidak Aktif</option>
-                          <option id="optiontrue" value="1">Aktif</option>
-                        </select>
-                      </div>
                     <% }else{ %>
                       <div class="form-group">
                         <label><%= h.label %></label>
@@ -151,15 +110,48 @@
   </div>
   <%- include ../../../views/templates/script.ejs %>
   <script type="text/javascript">
-    window.setTimeout(function() {
-      $(".alert-autoclose").fadeTo(500, 0).slideUp(500, function(){
-        $(this).remove(); 
+    
+    $(document).ready(function() {
+      window.setTimeout(function() {
+        $(".alert-autoclose").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove(); 
+        });
+      }, 5000);
+
+      $('#tabledata').DataTable({
+        dom: 'Bfrtip',
+        searching: true,
+        paging: true,
+        buttons: [
+          'copy',
+          {
+            extend: 'print',
+            title: 'First Class',
+            orientation: 'landscape',
+            pageSize: 'A4'
+          },
+          {
+            extend: 'excel',
+            title: 'First Class',
+          },
+          {
+            extend: 'pdfHtml5',
+            title: 'First Class',
+            orientation: 'landscape',
+            pageSize: 'A4',
+            customize: function(doc) {
+              doc.styles['td:nth-child(2)'] = {
+                width: '100px',
+                'max-width': '100px'
+              }
+            }
+          },
+        ]
       });
-    }, 5000);
+    });
 
     function createFunction(){
-      $('#formData').attr('action', '<%= process.env.URL %>/promotion/adddata');
-      $('#gambar').attr('required', 'required');
+      $('#formData').attr('action', '<%= process.env.URL %>/cars/adddata');
       document.getElementById("formData").reset();
     };
     
@@ -174,26 +166,22 @@
         })
         .then((willDelete) => {
           if (willDelete) {
-            window.location.assign(`/promotion/delete/${idData}`);
+            window.location.assign(`/cars/delete/${idData}`);
           }
         });
     };
 
     function editFunction(id) {
       let idData = id;
-      let url = '<%= process.env.URL %>/promotion/edit/' + idData;
+      let url = '<%= process.env.URL %>/cars/edit/' + idData;
       $.ajax({
         type: 'GET',
         url: url,
         dataType: 'json',
         success: function (res) {
-          $('#formData').attr('action', '<%= process.env.URL %>/promotion/edit/save/'+idData);
+          $('#formData').attr('action', '<%= process.env.URL %>/cars/edit/save/'+idData);
           res.htitle.forEach(h => {
-            if (h.typeInput!='file') {
-              document.getElementById(h.id).value = res.data[h.id];
-            }else{
-              document.getElementById(h.id).removeAttribute("required");
-            }
+            document.getElementById(h.id).value = res.data[h.id];
           });
         }
       });
