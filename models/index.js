@@ -20,6 +20,8 @@ db.artikel_enews = require("../modules/enews/models/enews")(sequelize, Sequelize
 db.toyota_how = require("../modules/toyotahow/models/toyotahow")(sequelize, Sequelize);
 db.user = require("../modules/useraccount/models/user")(sequelize, Sequelize);
 db.admin = require("./admin")(sequelize, Sequelize);
+db.useraccount = require("../modules/useraccount/models/useraccount")(sequelize, Sequelize);
+db.karyawan = require("../modules/karyawan/models/karyawan")(sequelize, Sequelize);
 db.jobHistory = require("./jobHistory")(sequelize, Sequelize);
 db.progressStatus = require("./progressStatus")(sequelize, Sequelize);
 db.fleet_customer = require("../modules/custfleet/models/custfleet")(sequelize, Sequelize);
@@ -41,4 +43,3 @@ db.fleet_customer.hasMany(db.kendaraan, { foreignKey: "id_customer" });
 db.kendaraan.belongsTo(db.fleet_customer, { foreignKey: "id_customer" });
 
 module.exports = db;
-
