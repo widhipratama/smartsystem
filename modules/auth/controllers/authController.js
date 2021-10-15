@@ -123,6 +123,39 @@ exports.daftar_account_customer = (req, res) => {
   }
 };
 
+exports.login_account_customer_token = (req, res) => {
+  try {
+    const token = req.params.token;
+    useraccount
+      .findOne({
+        where: {
+          token: token,
+        },
+      })
+      .then((q) => {
+        if (!q) {
+          res.redirect(process.env.URL + "/auth/login");
+        }
+
+        let accessToken = jwt.sign({ loginId: q.id, username: q.username, kategori_user: "USER" }, process.env.ACCESS_TOKEN_SECRET, {
+          expiresIn: process.env.ACCESS_TOKEN_LIFE,
+        });
+
+        let refreshToken = jwt.sign({ loginId: q.id, username: q.username, kategori_user: "USER" }, process.env.REFRESH_TOKEN_SECRET);
+
+        useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
+        res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
+
+        res.redirect(process.env.URL + "/auth/onetaps");
+      })
+      .catch((err) => {
+        res.redirect(process.env.URL + "/auth/login");
+      });
+  } catch (err) {
+    res.redirect(process.env.URL + "/auth/login");
+  }
+};
+
 exports.login_account_customer = (req, res) => {
   try {
     const errors = validationResult(req);
