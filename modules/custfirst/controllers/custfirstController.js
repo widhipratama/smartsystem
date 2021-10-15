@@ -12,8 +12,8 @@ var htitle = [
 
 exports.index = function (req, res) {
     const kategori = req.params.kat;
-    var title = "Customer Frist Class";
-    var tbtitle = "List Customer Frist Class";
+    var title = "Customer First Class";
+    var tbtitle = "List Customer First Class";
     models.kendaraan.findAndCountAll({
         include:[
             {model: models.customer},
@@ -39,8 +39,8 @@ exports.index = function (req, res) {
 
 exports.indexfleet = function (req, res) {
     const kategori = req.params.kat;
-    var title = "Fleet Frist Class";
-    var tbtitle = "List Fleet Frist Class";
+    var title = "Fleet First Class";
+    var tbtitle = "List Fleet First Class";
     models.kendaraan.findAndCountAll({
         include:[
             {model: models.fleet_customer},
