@@ -15,7 +15,7 @@ router.post(
 );
 router.post("/login", [authController.validate("login_account_customer")], authController.login_account_customer);
 router.post("/login/karyawan", [authController.validate("login_account_karyawan")], authController.login_account_karyawan);
-// router.get("/login/onetaps/:token", authController.loginonetaps);
+router.get("/login/onetaps/:token", authController.login_account_customer_token);
 
 // router.get("/daftar/account/karyawan", authController.view_daftar_account_karyawan);
 router.get("/login", authController.view_login_account_customer);
