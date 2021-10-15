@@ -105,14 +105,57 @@ exports.firstclass = function (req, res) {
 }
 exports.syncdataFristClass = function (req, res) {
     models.jobHistory.findAll({
-        attributes: ['norangka','police_no',[sequelize.fn('count', sequelize.col('norangka')), 'total_count'],[sequelize.fn('sum', sequelize.col('total')), 'total_omzet']], 
+        attributes: [
+            'norangka',
+            [sequelize.fn('count', sequelize.col('norangka')), 'total_count'],
+            [sequelize.fn('sum', sequelize.col('total')), 'total_omzet']
+        ],
         group: ['norangka'],
-        where: {norangka: { [Op.not]: "" }}
+        where: {
+            norangka: { [Op.not]: "" }, 
+            repair_type: "SBE",
+        }
     }).then((fs) => {
-        res.send({ 
-            success: true, 
-            message: 'Berhasil ambil data!',
-            data: fs
+        fs.forEach(e => {
+            models.jobHistory.findAll({
+                attribute:['norangka'],
+                where: { norangka: { [Op.eq]: e.norangka }},
+                limit: 1,
+                order: [['invoice_date', 'DESC'],['id', 'DESC']],
+            }).then((lastService)=>{
+                models.jobHistory.findAll({
+                    attribute:['norangka'],
+                    where: { norangka: { [Op.eq]: e.norangka }},
+                    limit: 1,
+                    order: [['invoice_date', 'ASC'],['id', 'ASC']],
+                }).then((firstService)=>{
+                    //mendari selisih bulan
+                    var dateFrom = new Date(firstService[0].invoice_date);
+                    var dateTo = new Date(lastService[0].invoice_date);
+                    var selisih = dateTo.getMonth() - dateFrom.getMonth() + (12 * (dateTo.getFullYear() - dateFrom.getFullYear()));
+                    var rumusFS = selisih/e.total_count;
+
+                    //menghitung jumlah rata" omset
+                    let avg_omzet = (e.total_omzet/e.total_count);
+
+                    //memberikan status FS atau tidak
+                    if ((rumusFS<7)&&(avg_omzet>=1750000)) {
+                        firstClassStts = '1';
+                    }else{
+                        firstClassStts = '0';
+                    }
+
+                    //simpan data 
+                    let data = {
+                        no_rangka: e.norangka,
+                        total_omzet: e.total_omzet,
+                        avg_omzet: avg_omzet,
+                        qty_service: e.total_count,
+                        first_class: firstClassStts
+                    }
+                    models.kendaraan.create(data);
+                });
+            });
         });
     }).catch((err) => {
         res.send({ 

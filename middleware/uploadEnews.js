@@ -27,6 +27,8 @@ var storage = multer.diskStorage({
     cb(null, __basedir + "/views/assets/e-news");
   },
   filename: (req, file, cb) => {
+    let extArray = file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
     var date = Date.now();
     if (file.fieldname === "sampul_enews") {
       cb(null, 'Sampul-' + date + '.' +extension)
