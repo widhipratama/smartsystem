@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include ../../../views/templates/header.ejs %>
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="script-stisla/assets/css/style.css" />
+  <link rel="stylesheet" href="script-stisla/assets/css/components.css" />
+</head>
+
+<body>
+  <div id="app">
+    <div class="main-wrapper">
+      <%- include ../../../views/templates/navtop.ejs %> <%- include
+        ../../../views/templates/navleft.ejs %>
+      <div class="main-content">
+        <section class="section">
+          <div class="section-header">
+            <h1><%= title %></h1>
+            <div class="section-header-breadcrumb">
+              <div class="breadcrumb-item active">
+                <a href="#">Dashboard</a>
+              </div>
+              <div class="breadcrumb-item"><%= title %></div>
+            </div>
+          </div>
+
+          <div class="section-body">
+            <div class="row">
+              <div class="col-12 col-md-12 col-lg-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h4><%= tbtitle %></h4>
+                    <div class="float-right">
+                      <button class="btn btn-warning btn-sm" onclick="createFunction();"><i
+                          class="fas fa-sync-alt"></i> Update Data</button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <table class="table table-striped" id="tabledata" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th scope="col" width="5%">No.</th>
+                          <% 
+                            htitle.forEach(function(h) { 
+                              if (h.onTable=="ON"){
+                          %>
+                          <th><%= h.label %></th>
+                          <% 
+                              }
+                            }) 
+                          %>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% for (var i = 0; i < datarow.length; i++) { %>
+                        <tr>
+                          <th scope="row"><%= i+1 %></th>
+                          <td><%= datarow[i].progress_statuses[0].police_no %></td>
+                          <td><%= datarow[i].no_rangka %></td>
+                          <td><%= datarow[i].progress_statuses[0].customer %></td>
+                          <td><%= datarow[i].qty_service %></td>
+                          <td><%= Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(datarow[i].total_omzet); %></td>
+                          <td><%= Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(datarow[i].avg_omzet); %></td>
+                          <td><%= ((datarow[i].total_omzet*1)/100000).toFixed(0) %></td>
+                          <td><%= (datarow[i].id_customer!="" ? "Registered" : "None") %></td>
+                        </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <%- include ../../../views/templates/footer.ejs %>
+    </div>
+  </div>
+  <%- include ../../../views/templates/script.ejs %>
+  <script type="text/javascript">
+    
+    $(document).ready(function() {
+      window.setTimeout(function() {
+        $(".alert-autoclose").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove(); 
+        });
+      }, 5000);
+
+      $('#tabledata').DataTable({
+        dom: 'Bfrtip',
+        searching: true,
+        paging: true,
+        buttons: [
+          'copy',
+          {
+            extend: 'print',
+            title: 'First Class',
+            orientation: 'landscape',
+            pageSize: 'A4'
+          },
+          {
+            extend: 'excel',
+            title: 'First Class',
+          },
+          {
+            extend: 'pdfHtml5',
+            title: 'First Class',
+            orientation: 'landscape',
+            pageSize: 'A4',
+            customize: function(doc) {
+              doc.styles['td:nth-child(2)'] = {
+                width: '100px',
+                'max-width': '100px'
+              }
+            }
+          },
+        ]
+      });
+    });
+
+    function createFunction(){
+      $('#formData').attr('action', '<%= process.env.URL %>/cars/adddata');
+      document.getElementById("formData").reset();
+    };
+    
+    function delFunction(id) {
+      let idData = id;
+      swal({
+          title: "Yakin Ingin Menghapus Data Kendaraan ini?",
+          text: "Data yang dihapus, tidak bisa kembali lagi.",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            window.location.assign(`/cars/delete/${idData}`);
+          }
+        });
+    };
+
+    function editFunction(id) {
+      let idData = id;
+      let url = '<%= process.env.URL %>/cars/edit/' + idData;
+      $.ajax({
+        type: 'GET',
+        url: url,
+        dataType: 'json',
+        success: function (res) {
+          $('#formData').attr('action', '<%= process.env.URL %>/cars/edit/save/'+idData);
+          res.htitle.forEach(h => {
+            document.getElementById(h.id).value = res.data[h.id];
+          });
+        }
+      });
+    };
+  </script>
+</body>
+</html>

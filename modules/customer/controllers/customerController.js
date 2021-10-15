@@ -1,8 +1,8 @@
 var exports = (module.exports = {});
 const models = require("../../../models");
 let Op = require("sequelize").Op;
-var title = "Customer";
-var tbtitle = "List Customer";
+var title = "Customer Account";
+var tbtitle = "List Customer Account";
 var menu = "customer";
 var htitle = [
     {id:'nama', label:'Nama Customer', width:""},

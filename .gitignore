@@ -41,6 +41,9 @@ node_modules/
 jspm_packages/
 admin-stisla/
 uploads/
+views/assets/e-news/
+views/assets/how/
+views/assets/img/promo/
 
 # Wa Session
 session/

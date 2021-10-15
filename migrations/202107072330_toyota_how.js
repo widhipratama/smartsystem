@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       judul_how: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.STRING(255),
       },
       sampul_how: {
         type: Sequelize.TEXT,

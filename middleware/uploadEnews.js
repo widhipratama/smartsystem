@@ -29,9 +29,9 @@ var storage = multer.diskStorage({
   filename: (req, file, cb) => {
     var date = Date.now();
     if (file.fieldname === "sampul_enews") {
-      cb(null, `Sampul_${date}`);
+      cb(null, 'Sampul-' + date + '.' +extension)
     }else{
-      cb(null, `File_${date}`);
+      cb(null, 'File-' + date + '.' +extension)
     }
   },
 });

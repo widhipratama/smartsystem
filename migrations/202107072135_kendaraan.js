@@ -16,8 +16,8 @@ module.exports = {
       total_omzet: {
         type: Sequelize.INTEGER,
       },
-      point_reward: {
-        type: Sequelize.INTEGER,
+      last_service: {
+        type: Sequelize.DATE,
       },
       avg_omzet: {
         type: Sequelize.INTEGER,

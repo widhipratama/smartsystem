@@ -9,7 +9,7 @@ module.exports = (sequelize, Sequelize) => {
       id_customer: Sequelize.DataTypes.INTEGER,
       id_mobil: Sequelize.DataTypes.STRING,
       total_omzet: Sequelize.DataTypes.INTEGER,
-      point_reward: Sequelize.DataTypes.INTEGER,
+      last_service: Sequelize.DataTypes.DATE,
       avg_omzet: Sequelize.DataTypes.INTEGER,
       qty_service: Sequelize.DataTypes.INTEGER,
       first_class: {

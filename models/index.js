@@ -39,5 +39,7 @@ db.customer.hasMany(db.kendaraan, { foreignKey: "id_customer" });
 db.kendaraan.belongsTo(db.customer, { foreignKey: "id_customer" });
 db.fleet_customer.hasMany(db.kendaraan, { foreignKey: "id_customer" });
 db.kendaraan.belongsTo(db.fleet_customer, { foreignKey: "id_customer" });
+db.progressStatus.hasOne(db.jobHistory, { foreignKey: "no_order" });
+db.progressStatus.belongsTo(db.jobHistory, { foreignKey: "service_order" });
 
 module.exports = db;
