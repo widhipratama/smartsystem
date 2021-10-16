@@ -57,8 +57,7 @@ exports.createCustomer = function (req, res) {
 exports.hapusCustomer = function (req, res) {
   let id = req.params.id;
   let customerFound;
-  models.customer
-    .findOne({ where: { id_customer: { [Op.eq]: id } } })
+  models.customer.findOne({ where: { id_customer: { [Op.eq]: id } } })
     .then((customer) => {
       customerFound = customer;
       return customer.destroy().then(() => {

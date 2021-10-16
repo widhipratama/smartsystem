@@ -1,6 +1,7 @@
 var exports = (module.exports = {});
 const models = require("../../../models");
 const { sequelize, QueryTypes, Op } = require("sequelize");
+const kendaraan = require("../../cars/models/kendaraan");
 var htitle = [
   { id: "police_np", label: "NoPol", width: "", typeInput: "text", onTable: "ON" },
   { id: "no_rangka", label: "No Rangka", width: "", typeInput: "text", onTable: "ON" },
@@ -69,29 +70,35 @@ exports.firstclass = function (req, res) {
   const kategori = req.params.kat;
   var title = "Database First Class";
   var tbtitle = "List Database First Class";
+  let page = req.query.page || 1;
+  let offset = 0;
+  if (page > 1) {
+      offset = ((page - 1) * 10) + 1;
+  }
   models.kendaraan
     .findAndCountAll({
       include: [
-        { model: models.customer },
+        { model: models.customer, required:false },
         {
           model: models.progressStatus,
           limit: 1,
           order: [["service_order", "DESC"]],
         },
       ],
-      where: [{ first_class: "1" }, { kategori_customer: "customer" }],
+      where: [{ first_class: "1" }],
+      limit: 10,
+      offset: offset,
+      order: [['last_service', 'DESC']],
     })
     .then((kendaraan) => {
+      const totalPage = Math.ceil(kendaraan.count / 10);
+      const pagination = { totalPage: totalPage, currentPage: page };
       res.render("../modules/custfirst/views/indexfs", {
         datarow: kendaraan.rows,
         title: title,
         tbtitle: tbtitle,
         htitle: htitle,
-      });
-      res.send({
-        success: true,
-        message: "Berhasil ambil data!",
-        data: fs,
+        pagination: pagination
       });
     })
     .catch((err) => {
@@ -105,6 +112,7 @@ exports.syncdataFristClass = async function (req, res) {
     `SELECT 
         job.norangka,
         MAX(job.customer) customer,
+        MIN(DATE(job.invoice_date)) first_service,
         MAX(DATE(job.invoice_date)) last_service,
         COUNT(job.norangka) total_count,
         SUM(job.total) total_omzet,
@@ -119,10 +127,76 @@ exports.syncdataFristClass = async function (req, res) {
     }
   );
 
+  //hapus data kendaraan berdasarkan no id_customer = kosong
+  models.kendaraan.findAll({ where: { status_kendaraan: 'none' } }).then((cars) => {
+    customerFound = cars;
+    return cars.destroy().then(() => {})
+  });
+  var i = 0;
+  job.forEach(e => {
+    //mendari selisih bulan
+    var dateFrom = new Date(e.first_service);
+    var dateTo = new Date(e.last_service);
+    var selisih = dateTo.getMonth() - dateFrom.getMonth() + 12 * (dateTo.getFullYear() - dateFrom.getFullYear());
+    var rumusFS = selisih / e.total_count;
+
+    //menghitung jumlah rata" omset
+    let avg_omzet = e.total_omzet/ e.total_count;
+
+    //memberikan status FS atau tidak
+    if (rumusFS < 7 && avg_omzet >= 1750000) {
+      firstClassStts = "1";
+    } else {
+      firstClassStts = "0";
+    }
+
+    //point reward
+    let pointReward = (e.total_omzet/10000).toFixed();
+
+    //simpan data
+
+    models.kendaraan.findOne({ where: { no_rangka: { [Op.eq]: e.norangka } } }).then((cars) => {
+      let data = {
+        total_omzet: e.total_omzet,
+        avg_omzet: avg_omzet,
+        qty_service: e.total_count,
+        first_class: firstClassStts,
+        last_service: e.last_service,
+        first_service: e.first_service,
+        point_reward: pointReward,
+      };
+      return cars.update(data).then(() => {
+        res.send({ 
+            success: true, 
+            message: 'Berhasil simpan data!',
+            htitle: htitle,
+        });
+      });
+    }).catch((err)=>{
+      let data = {
+        no_rangka: e.norangka,
+        total_omzet: e.total_omzet,
+        avg_omzet: avg_omzet,
+        qty_service: e.total_count,
+        first_class: firstClassStts,
+        last_service: e.last_service,
+        first_service: e.first_service,
+        point_reward: pointReward,
+        status_kendaraan: 'none'
+      };
+      return models.kendaraan.create(data).then(() => {
+        res.send({ 
+            success: true, 
+            message: 'Berhasil simpan data!',
+            htitle: htitle,
+        });
+      });
+    });
+  });
   res.send({
     success: true,
     message: "Success!",
-    data: job,
+    data: datarow,
   });
 };
 // exports.syncdataFristClass = function async(req, res) {

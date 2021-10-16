@@ -19,6 +19,9 @@ module.exports = {
       last_service: {
         type: Sequelize.DATE,
       },
+      first_service: {
+        type: Sequelize.DATE,
+      },
       avg_omzet: {
         type: Sequelize.INTEGER,
       },
@@ -32,7 +35,10 @@ module.exports = {
       },
       kategori_customer: {
         type: Sequelize.STRING(10)
-      }
+      },
+      status_kendaraan: {
+        type: Sequelize.STRING(11),
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
