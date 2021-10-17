@@ -43,7 +43,7 @@
                       <strong><%= alert.message %></strong>
                     </div>
                     <% } %>
-                    <table class="table table-striped" id="table-1" style="width:100%">
+                    <table class="table table-striped table-responsive" id="table-1" style="width:100%">
                       <thead>
                         <tr>
                           <th scope="col" width="5%">No.</th>
@@ -70,6 +70,7 @@
                           <td>
                             <button class="btn btn-primary btn-sm open-addCarsCustomer" data-id="<%= datarow[i].id_customer %>" data-kategori="customer" data-toggle="modal" data-target="#carmodal"><i
                                 class="fas fa-car"></i></button>
+                            <button class="btn btn-sm btn-info"><i class="fas fa-link"></i></button>
                             <button class="btn btn-warning btn-sm"
                               onclick="editFunction('<%= datarow[i].id_customer %>')" data-id="<%= datarow[i].id %>"
                               data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"></i></button>
