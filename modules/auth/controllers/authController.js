@@ -181,11 +181,11 @@ exports.login_account_customer = (req, res) => {
           res.json({ status: "401", message: "Password salah" });
         }
 
-        let accessToken = jwt.sign({ loginId: q.id, username: q.username, kategori_user: "USER" }, process.env.ACCESS_TOKEN_SECRET, {
+        let accessToken = jwt.sign({ loginId: q.id, username: q.username, kategori_user: q.kategori_user }, process.env.ACCESS_TOKEN_SECRET, {
           expiresIn: process.env.ACCESS_TOKEN_LIFE,
         });
 
-        let refreshToken = jwt.sign({ loginId: q.id, username: q.username, kategori_user: "USER" }, process.env.REFRESH_TOKEN_SECRET);
+        let refreshToken = jwt.sign({ loginId: q.id, username: q.username, kategori_user: q.kategori_user }, process.env.REFRESH_TOKEN_SECRET);
 
         useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
         res.cookie("jwt", accessToken, { secure: true, httpOnly: true });

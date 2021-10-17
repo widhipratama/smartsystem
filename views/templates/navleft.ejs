@@ -9,103 +9,128 @@
       <a href="index.html">Ss</a>
     </div>
     <ul class="sidebar-menu">
-      <li class="menu-header">Dashboard</li>
-      <li class="nav-item dropdown">
-        <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Dashboard</span></a>
-        <ul class="dropdown-menu">
-          <li><a class="nav-link" href="/dashboard">Blank Page</a></li>
-          <li><a class="nav-link" href="/dashboarduser">Customer Page</a></li>
-          <!-- <li><a class="nav-link" href="index.html">Ecommerce Dashboard</a></li> -->
-        </ul>
-      </li>
-      <li class="menu-header">Renata</li>
-      <li class="">
-        <a class="nav-link" href="/custfirst/customer">
-          <i class="far fa-gem"></i> <span>Customer First Class</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="/custfirst/fleet">
-          <i class="far fa-gem"></i> <span>Fleet First Class</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="/nextservice">
-          <i class="fas fa-calendar-check"></i> <span>Next Service</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="#">
-          <i class="fas fa-tools"></i> <span>Booking Service</span>
-        </a>
-      </li>
-      <li class="menu-header">Selena</li>
-      <li class="">
-        <a class="nav-link" href="/enews">
-          <i class="far fa-newspaper"></i> <span>E-News</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="/toyotahow">
-          <i class="fas fa-book-open"></i> <span>Toyota How</span>
-        </a>
-      </li>
-      <li class="menu-header">master</li>
-      <li class="">
-        <a class="nav-link" href="#">
-          <i class="fas fa-user-friends"></i> <span>User Account</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="/customer">
-          <i class="fas fa-user-alt"></i> <span>Customer Account</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="/custfleet">
-          <i class="far fa-user"></i> <span>Customer Fleet</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="/custfirst/fs">
-          <i class="fas fa-database"></i> <span>Database Fist Class</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="/cars">
-          <i class="fas fa-car-alt"></i> <span>Cars</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="<%= process.env.URL %>/progress-status/import">
-          <i class="fas fa-file-archive"></i> <span>Progress Status</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="<%= process.env.URL %>/job-history/import">
-          <i class="fas fa-file"></i> <span>Job History</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="/promotion">
-          <i class="fas fa-calendar-check"></i> <span>Promotion</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="/enews/input">
-          <i class="fas fa-newspaper"></i> <span>E-News</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="/toyotahow/input">
-          <i class="fas fa-book-open"></i> <span>ToyotaHow</span>
-        </a>
-      </li>
-      <li class="">
-        <a class="nav-link" href="/whatsapp">
-          <i class="fas fa-comments"></i> <span>Whatsapp</span>
-        </a>
-      </li>
+      <% if(auth.level=='USER'){ %>
+        <li class="menu-header">MENU</li>
+        <li class="">
+          <a class="nav-link" href="/dashboard">
+            <i class="fas fa-fire"></i> <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="/enews">
+            <i class="far fa-newspaper"></i> <span>E-News</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="/toyotahow">
+            <i class="fas fa-book-open"></i> <span>Toyota How</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link disabled" href="/toyotahow">
+            <i class="fas fa-trophy"></i> <span>Reward <i class="text-danger">soon</i></span>
+          </a>
+        </li>
+      <% } %>
+      <% if(auth.level!='USER'){ %>
+        <li class="menu-header">Dashboard</li>
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Dashboard</span></a>
+          <ul class="dropdown-menu">
+            <li><a class="nav-link" href="/dashboard">Blank Page</a></li>
+            <li><a class="nav-link" href="/dashboarduser">Customer Page</a></li>
+            <!-- <li><a class="nav-link" href="index.html">Ecommerce Dashboard</a></li> -->
+          </ul>
+        </li>
+        <li class="menu-header">Renata</li>
+        <li class="">
+          <a class="nav-link" href="/custfirst/customer">
+            <i class="far fa-gem"></i> <span>Customer First Class</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="/custfirst/fleet">
+            <i class="far fa-gem"></i> <span>Fleet First Class</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="/nextservice">
+            <i class="fas fa-calendar-check"></i> <span>Next Service</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="#">
+            <i class="fas fa-tools"></i> <span>Booking Service</span>
+          </a>
+        </li>
+        <li class="menu-header">Selena</li>
+        <li class="">
+          <a class="nav-link" href="/enews">
+            <i class="far fa-newspaper"></i> <span>E-News</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="/toyotahow">
+            <i class="fas fa-book-open"></i> <span>Toyota How</span>
+          </a>
+        </li>
+        <li class="menu-header">master</li>
+        <li class="">
+          <a class="nav-link" href="#">
+            <i class="fas fa-user-friends"></i> <span>User Account</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="/customer">
+            <i class="fas fa-user-alt"></i> <span>Customer Account</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="/custfleet">
+            <i class="far fa-user"></i> <span>Customer Fleet</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="/custfirst/fs">
+            <i class="fas fa-database"></i> <span>Database Fist Class</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="/cars">
+            <i class="fas fa-car-alt"></i> <span>Cars</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="<%= process.env.URL %>/progress-status/import">
+            <i class="fas fa-file-archive"></i> <span>Progress Status</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="<%= process.env.URL %>/job-history/import">
+            <i class="fas fa-file"></i> <span>Job History</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="/promotion">
+            <i class="fas fa-calendar-check"></i> <span>Promotion</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="/enews/input">
+            <i class="fas fa-newspaper"></i> <span>E-News</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="/toyotahow/input">
+            <i class="fas fa-book-open"></i> <span>ToyotaHow</span>
+          </a>
+        </li>
+        <li class="">
+          <a class="nav-link" href="/whatsapp">
+            <i class="fas fa-comments"></i> <span>Whatsapp</span>
+          </a>
+        </li>
+      <% } %>
     </ul>
 
     <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
