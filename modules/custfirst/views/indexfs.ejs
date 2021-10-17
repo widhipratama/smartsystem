@@ -50,6 +50,7 @@
                               }
                             }) 
                           %>
+                          <th>Account</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -124,8 +125,15 @@
     });
 
     function createFunction(){
-      $('#formData').attr('action', '<%= process.env.URL %>/cars/adddata');
-      document.getElementById("formData").reset();
+      let url = '<%= process.env.URL %>/custfirst/fs/sync';
+      $.ajax({
+        type: 'GET',
+        url: url,
+        dataType: 'json',
+        success: function (res) {
+          swal('Behasil', res.message, res.success);
+        }
+      });
     };
     
     function delFunction(id) {

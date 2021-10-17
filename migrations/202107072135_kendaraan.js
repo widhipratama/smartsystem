@@ -39,6 +39,11 @@ module.exports = {
       status_kendaraan: {
         type: Sequelize.STRING(11),
       },
+      point_reward: {
+        allowNull: false,
+        default: 0,
+        type: Sequelize.INTEGER,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {

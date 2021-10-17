@@ -19,6 +19,7 @@ module.exports = (sequelize, Sequelize) => {
         default: 0,
       },
       kategori_customer: Sequelize.DataTypes.STRING,
+      point_reward: Sequelize.DataTypes.INTEGER,
     },
     {
       freezeTableName: true,

@@ -141,14 +141,7 @@ exports.getListKendaraan = function (req, res) {
 }
 exports.cekNoRangka = function (req, res) {
     const id = req.params.id;
-    models.kendaraan.findOne({ where: { no_rangka: { [Op.eq]: id } } }).then((kendraanrangka) => {
-        
-        res.send({ 
-            success: 'error', 
-            titlemessage: `No Rangka ${kendraanrangka.no_rangka} sudah digunakan!`,
-            message: 'Silahkan mengubungi Admin.',
-        });
-    }).catch((err) => {
+    models.kendaraan.findOne({ where: [{ no_rangka: { [Op.eq]: id } }, { status_kendaraan: 'none' }] }).then((kendraanrangka) => {
         models.progressStatus.findOne({ where: { rangka: { [Op.eq]: id } } }).then((rangka) => {
             models.master_kendaraan.findAll({ where: { model_mobil: { [Op.eq]: rangka.model } } }).then((warna) => {
                 res.send({ 
@@ -165,6 +158,12 @@ exports.cekNoRangka = function (req, res) {
                 titlemessage: 'Data kendraan tidak tersedia!',
                 message: 'Silahkan mengubungi Admin.',
             }); 
+        });
+    }).catch((err) => {
+        res.send({ 
+            success: 'error', 
+            titlemessage: `No Rangka ${kendraanrangka.no_rangka} belum terdaftar!`,
+            message: 'Silahkan mengubungi Admin.',
         });
     });
 }
@@ -237,29 +236,37 @@ exports.createKendaraan = function (req, res) {
                     //menghitung jumlah rata" omset
                     var avg_omzet = dataSum/dataCount.count;
 
+                    //point reward
+                    let pointReward = (dataSum/10000).toFixed();
+
                     //memberikan status FS atau tidak
                     if ((rumusFS<7)&&(avg_omzet>=1750000)) {
                         firstClassStts = '1';
                     }else{
                         firstClassStts = '0';
                     }
-                    var data = {
-                        no_rangka: dataForm.norangka,
-                        id_customer: dataForm.custid,
-                        id_mobil: dataForm.warna,
-                        total_omzet: dataSum,
-                        first_class: firstClassStts,
-                        kategori_customer: dataForm.kategoricust,
-                        avg_omzet: avg_omzet,
-                        qty_service: dataCount.count,
-                    };
                     
-                    models.kendaraan.create(data).then((cars) => {
-                        dataFound = cars;
-                        res.send({ 
-                            success: 'success', 
-                            titlemessage: 'Sukses Menambahkan Data!',
-                            message: `No Rangka: ${dataFound.no_rangka} telah di tambahkan ke daftar customer!`,
+                    models.kendaraan.findOne({ where: { no_rangka: { [Op.eq]: id } } }).then((cars) => {
+                        let data = {
+                            total_omzet: dataSum,
+                            avg_omzet: avg_omzet,
+                            id_customer: dataForm.custid,
+                            id_mobil: dataForm.warna,
+                            qty_service: dataCount.count,
+                            first_class: firstClassStts,
+                            last_service: lastService[0].invoice_date,
+                            first_service: firstService[0].invoice_date,
+                            point_reward: pointReward,
+                            kategori_customer: dataForm.kategoricust,
+                            status_kendaraan: 'registred'
+                        };
+                        return cars.update(data).then(() => {
+                            dataFound = cars;
+                            res.send({ 
+                                success: 'success', 
+                                titlemessage: 'Sukses Menambahkan Data!',
+                                message: `No Rangka: ${dataFound.no_rangka} telah di tambahkan ke daftar customer!`,
+                            });
                         });
                     }).catch((err) => {
                         res.send({ 
