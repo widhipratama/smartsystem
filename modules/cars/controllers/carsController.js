@@ -119,7 +119,7 @@ exports.getListKendaraan = function (req, res) {
             {
                 model: models.progressStatus,
                 limit: 1,
-                order: [['service_order', 'DESC']],
+                order: [['service_order', 'ASC']],
             }
         ],
         where: [ 
@@ -311,6 +311,28 @@ exports.hapuskendaraan = function (req, res) {
                 message: `No Rangka: ${resFound.no_rangka} telah di hapus dari daftar customer!`,
             });
         })
+    }).catch((err) => {
+        res.send({ 
+            success: 'error', 
+            titlemessage: 'Oops!',
+            message:  err.message,
+        }); 
+    });
+}
+
+exports.get_job_history = function (req, res) {
+    let id = req.params.id;
+    let resFound;
+    models.jobHistory.findAll({ 
+        where: { norangka: { [Op.eq]: id } }, 
+        order: [['invoice_date', 'DESC']]
+    }).then((cars) => {
+        res.send({ 
+            success: 'success', 
+            titlemessage: 'Data Job History tersedia!',
+            message: 'Ini datanya.',
+            data: cars
+        });
     }).catch((err) => {
         res.send({ 
             success: 'error', 

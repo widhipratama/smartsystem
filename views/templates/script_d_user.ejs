@@ -1,0 +1,134 @@
+<!-- modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="carmodal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">List Kendaraan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table>
+          <tr>
+            <td rowspan="3" id="imagejob"></td>
+          </tr>
+          <tr>
+            <td><b id="modeljob"></b></td>
+          </tr>
+          <tr>
+            <td id="nopoljob"></td>
+          </tr>
+        </table>
+        <table  class="table table-striped table-responsive" style="max-height: 400px;">
+          <thead>
+            <tr>
+              <th width="10%">#</th>
+              <th width="20%">INVOICE DATE</th>
+              <th width="40%">JOB</th>
+              <th width="30%">AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody id="job-history">
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END MODAL -->
+<script>
+  $(document).ready(function () {
+    let idcust = '234';
+    let kategori = 'customer';
+    promotion();
+    get_data_kendaraan(idcust, kategori);
+  });
+  function get_data_kendaraan(idcust, kategori) {
+    //mendari data kendaraan customer
+    $.ajax({
+      type: 'POST',
+      url: '<%= process.env.URL %>/cars/listkendraan/' + idcust +'/'+kategori,
+      dataType: 'json',
+      success: function (res) {
+        var html = '';
+        var point = 0;
+        res.data.forEach(element => {
+          html += `<li class="media">`;
+          html += `<a href="#" data-toggle="modal" data-target="#exampleModal">`;
+          html += `<img class="mr-3 mt-2 rounded" width="55"src="<%= process.env.URL %>/assets/img/cars/${element.master_kendaraan.image_mobil}" alt="product" />`;
+          html += `</a>`;
+          html += `<div class="media-body">`;
+          html += `<div class="float-right">`;
+          html += `<div class="font-weight-600 text-muted text-small"></div>`;
+          html += `</div>`;
+          html += `<div class="media-title">`;
+          html += `<b>${element.master_kendaraan.model_mobil}</b>`;
+          html += `&ensp;<small class="text-blue">${element.progress_statuses[0].police_no}</small>`;
+          html += `</div>`;
+          html += `<div class="mt-1">`;
+          html += `<div class="text-success text-small font-600-bold">`;
+          html += `<a href="https://wa.me/6287852646336" target="_blank"  class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i> Booking Now</a>`;
+          html += `&ensp;<button class="btn btn-sm btn-primary open-jobhistory" onclick="get_job_history('${element.no_rangka}', '${element.master_kendaraan.image_mobil}')" data-toggle="modal" data-target="#carmodal"><i class="fas fa-history"></i> Histori</button>`;
+          html += `</div>`;
+          html += `</div>`;
+          html += `</div>`;
+          html += `</li>`;
+          point = point+parseInt(element.point_reward);
+        });
+        $("#listcars").html(html);
+        $("#jmlcars").html(res.data.length);
+        $("#pointcars").html(point.toLocaleString());
+      }
+    });
+  }
+  function get_job_history(norankga, img) {
+    $.ajax({
+      type: 'GET',
+      url: '<%= process.env.URL %>/cars/jobhistory/' + norankga,
+      dataType: 'json',
+      success: function (res) {
+        var html = '';
+        var num = 1;
+        res.data.forEach(element => {
+          html +='<tr>';
+          html +='<td>'+(num++)+'</td>';   
+          html +='<td>'+element.invoice_date+'</td>';   
+          html +='<td>'+element.job+'</td>';   
+          html +='<td class="text-right">'+element.total.toLocaleString()+'</td>';   
+          html +='</tr>';
+        });
+        var image = `<img class="mr-3 mt-2 rounded" width="90"src="<%= process.env.URL %>/assets/img/cars/${img}" alt="product" />`;
+        $("#job-history").html(html);
+        $("#imagejob").html(image);
+        $("#modeljob").html(res.data[0].model);
+        $("#nopoljob").html(res.data[0].police_no);
+      }
+    });
+  }
+  function promotion() {
+    $.ajax({
+      type: 'GET',
+      url: '<%= process.env.URL %>/promotion/cust',
+      dataType: 'json',
+      success: function (res) {
+        var htmlnum = '';
+        var html = '';
+        var num = 0;
+        res.datarow.forEach(element => {
+          htmlnum +='<li data-target="#carouselExampleIndicators2" class="'+(num==0 ? "active" : "")+'" data-slide-to="'+(num)+'"></li>';
+          html +='<div class="carousel-item '+(num==0 ? "active" : "")+'">';   
+          html +='<img class="d-block w-100" src="<%= process.env.URL %>/assets/img/promo/'+element.gambar+'" alt="First slide" />';   
+          html +='<div class="carousel-caption d-none d-md-block"><h5>'+element.judul+'</h5></div>';   
+          html +='</div>';  
+          num++
+        });
+        $("#promo-gambar").html(html);
+        $("#promo-num").html(htmlnum);
+      }
+    });
+  }
+</script>

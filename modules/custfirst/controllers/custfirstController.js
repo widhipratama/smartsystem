@@ -73,7 +73,7 @@ exports.firstclass = function (req, res) {
   let page = req.query.page || 1;
   let offset = 0;
   if (page > 1) {
-      offset = ((page - 1) * 10) + 1;
+      offset = ((page - 1) * 50) + 1;
   }
   models.kendaraan
     .findAndCountAll({
@@ -86,12 +86,12 @@ exports.firstclass = function (req, res) {
         },
       ],
       where: [{ first_class: "1" }],
-      limit: 10,
+      limit: 50,
       offset: offset,
       order: [['last_service', 'DESC']],
     })
     .then((kendaraan) => {
-      const totalPage = Math.ceil(kendaraan.count / 10);
+      const totalPage = Math.ceil(kendaraan.count / 50);
       const pagination = { totalPage: totalPage, currentPage: page };
       res.render("../modules/custfirst/views/indexfs", {
         datarow: kendaraan.rows,
@@ -128,64 +128,66 @@ exports.syncdataFristClass = async function (req, res) {
   );
 
   //hapus data kendaraan berdasarkan no id_customer = kosong
-  models.kendaraan.findAll({ where: { status_kendaraan: 'none' } }).then((cars) => {
-    customerFound = cars;
-    return cars.destroy().then(() => {})
-  });
-  var i = 0;
-  job.forEach(e => {
-    //mendari selisih bulan
-    var dateFrom = new Date(e.first_service);
-    var dateTo = new Date(e.last_service);
-    var selisih = dateTo.getMonth() - dateFrom.getMonth() + 12 * (dateTo.getFullYear() - dateFrom.getFullYear());
-    var rumusFS = selisih / e.total_count;
-
-    //menghitung jumlah rata" omset
-    let avg_omzet = e.total_omzet/ e.total_count;
-
-    //memberikan status FS atau tidak
-    if (rumusFS < 7 && avg_omzet >= 1750000) {
-      firstClassStts = "1";
-    } else {
-      firstClassStts = "0";
+  models.kendaraan.destroy({
+    where: {
+      status_kendaraan: 'none'
     }
+  }).then((cars) => {
+    var i = 0;
+    job.forEach(e => {
+      //mendari selisih bulan
+      var dateFrom = new Date(e.first_service);
+      var dateTo = new Date(e.last_service);
+      var selisih = dateTo.getMonth() - dateFrom.getMonth() + 12 * (dateTo.getFullYear() - dateFrom.getFullYear());
+      var rumusFS = selisih / e.total_count;
 
-    //point reward
-    let pointReward = (e.total_omzet/10000).toFixed();
+      //menghitung jumlah rata" omset
+      let avg_omzet = e.total_omzet/ e.total_count;
 
-    //simpan data
+      //memberikan status FS atau tidak
+      if (rumusFS < 7 && avg_omzet >= 1750000) {
+        firstClassStts = "1";
+      } else {
+        firstClassStts = "0";
+      }
 
-    models.kendaraan.findOne({ where: { no_rangka: { [Op.eq]: e.norangka } } }).then((cars) => {
-      let data = {
-        total_omzet: e.total_omzet,
-        avg_omzet: avg_omzet,
-        qty_service: e.total_count,
-        first_class: firstClassStts,
-        last_service: e.last_service,
-        first_service: e.first_service,
-        point_reward: pointReward,
-      };
-      return cars.update(data).then(() => {});
-    }).catch((err)=>{
-      let data = {
-        no_rangka: e.norangka,
-        total_omzet: e.total_omzet,
-        avg_omzet: avg_omzet,
-        qty_service: e.total_count,
-        first_class: firstClassStts,
-        last_service: e.last_service,
-        first_service: e.first_service,
-        point_reward: pointReward,
-        status_kendaraan: 'none'
-      };
-      return models.kendaraan.create(data).then(() => {});
+      //point reward
+      let pointReward = (e.total_omzet/10000).toFixed();
+
+      //simpan data
+
+      models.kendaraan.findOne({ where: { no_rangka: { [Op.eq]: e.norangka } } }).then((cars) => {
+        let data = {
+          total_omzet: e.total_omzet,
+          avg_omzet: avg_omzet,
+          qty_service: e.total_count,
+          first_class: firstClassStts,
+          last_service: e.last_service,
+          first_service: e.first_service,
+          point_reward: pointReward,
+        };
+        return cars.update(data).then(() => {});
+      }).catch((err)=>{
+        let data = {
+          no_rangka: e.norangka,
+          total_omzet: e.total_omzet,
+          avg_omzet: avg_omzet,
+          qty_service: e.total_count,
+          first_class: firstClassStts,
+          last_service: e.last_service,
+          first_service: e.first_service,
+          point_reward: pointReward,
+          status_kendaraan: 'none'
+        };
+        return models.kendaraan.create(data).then(() => {});
+      });
     });
-  });
-  res.send({
-    success: true,
-    message: "Success!",
-    data: datarow,
-  });
+    res.send({
+      success: true,
+      message: "Success!",
+      data: datarow,
+    });
+  })
 };
 
 exports.notFound = function (req, res) {

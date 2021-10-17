@@ -62,9 +62,9 @@
                           <td><%= datarow[i].no_rangka %></td>
                           <td><%= datarow[i].progress_statuses[0].customer %></td>
                           <td><%= datarow[i].qty_service %></td>
-                          <td><%= Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(datarow[i].total_omzet); %></td>
-                          <td><%= Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(datarow[i].avg_omzet); %></td>
-                          <td><%= ((datarow[i].total_omzet*1)/100000).toFixed(0) %></td>
+                          <td><%= datarow[i].total_omzet.toLocaleString(); %></td>
+                          <td><%= datarow[i].avg_omzet.toLocaleString() %></td>
+                          <td><%= (((datarow[i].total_omzet*1)/100000).toFixed(0)).toLocaleString() %></td>
                           <td><%= datarow[i].status_kendaraan %></td>
                         </tr>
                         <% } %>

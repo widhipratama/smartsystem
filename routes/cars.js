@@ -12,6 +12,7 @@ router.post("/savekendaraan", carsController.createKendaraan);
 router.post("/listkendraan/:id/:h", carsController.getListKendaraan);
 router.post("/delkendaraan/:id", carsController.hapuskendaraan);
 router.get("/cekkendaraan/:id", carsController.cekKendaraan);
+router.get("/jobhistory/:id", carsController.get_job_history);
 router.get("*", carsController.notFound);
 
 module.exports = router;

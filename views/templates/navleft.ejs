@@ -75,40 +75,50 @@
           </a>
         </li>
         <li class="menu-header">master</li>
-        <li class="">
-          <a class="nav-link" href="#">
-            <i class="fas fa-user-friends"></i> <span>User Account</span>
-          </a>
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link has-dropdown"><i class="fas fa-user"></i><span>Account</span></a>
+          <ul class="dropdown-menu">
+            <li class="">
+              <a class="nav-link" href="#">
+                <span>Employe Account</span>
+              </a>
+            </li>
+            <li class="">
+              <a class="nav-link" href="/customer">
+                <span>Customer Account</span>
+              </a>
+            </li>
+            <li class="">
+              <a class="nav-link" href="/custfleet">
+                <span>Customer Fleet</span>
+              </a>
+            </li>
+          </ul>
         </li>
-        <li class="">
-          <a class="nav-link" href="/customer">
-            <i class="fas fa-user-alt"></i> <span>Customer Account</span>
-          </a>
-        </li>
-        <li class="">
-          <a class="nav-link" href="/custfleet">
-            <i class="far fa-user"></i> <span>Customer Fleet</span>
-          </a>
-        </li>
-        <li class="">
-          <a class="nav-link" href="/custfirst/fs">
-            <i class="fas fa-database"></i> <span>Database Fist Class</span>
-          </a>
-        </li>
-        <li class="">
-          <a class="nav-link" href="/cars">
-            <i class="fas fa-car-alt"></i> <span>Cars</span>
-          </a>
-        </li>
-        <li class="">
-          <a class="nav-link" href="<%= process.env.URL %>/progress-status/import">
-            <i class="fas fa-file-archive"></i> <span>Progress Status</span>
-          </a>
-        </li>
-        <li class="">
-          <a class="nav-link" href="<%= process.env.URL %>/job-history/import">
-            <i class="fas fa-file"></i> <span>Job History</span>
-          </a>
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link has-dropdown"><i class="fas fa-database"></i><span>Database</span></a>
+          <ul class="dropdown-menu">
+            <li class="">
+              <a class="nav-link" href="/custfirst/fs">
+                <span>Database Fist Class</span>
+              </a>
+            </li>
+            <li class="">
+              <a class="nav-link" href="/cars">
+                <span>Cars</span>
+              </a>
+            </li>
+            <li class="">
+              <a class="nav-link" href="<%= process.env.URL %>/progress-status/import">
+                <span>Progress Status</span>
+              </a>
+            </li>
+            <li class="">
+              <a class="nav-link" href="<%= process.env.URL %>/job-history/import">
+                <span>Job History</span>
+              </a>
+            </li>
+          </ul>
         </li>
         <li class="">
           <a class="nav-link" href="/promotion">
