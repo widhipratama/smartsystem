@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
   res.redirect(process.env.URL + "/dashboard");
 });
 
-router.get("/dashboard", [authMiddleware.verifyToken], dashboardController.user);
+router.get("/dashboard", dashboardController.user);
 router.get("/admin/dashboard", [authMiddleware.verifyToken], dashboardController.admin);
 
 // router.get("/admin/dashboard", [authJwt.verifyTokenAdmin, authJwt.isStaffAdmin], (req, res) => {

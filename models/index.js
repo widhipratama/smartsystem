@@ -29,6 +29,7 @@ db.promotion = require("../modules/promotion/models/promotion")(sequelize, Seque
 db.kendaraan = require("../modules/cars/models/kendaraan")(sequelize, Sequelize);
 
 db.useraccount.hasOne(db.customer, { foreignKey: "id_customer" });
+db.customer.hasOne(db.useraccount, { foreignKey: "id_user" });
 db.kendaraan.hasOne(db.master_kendaraan, { foreignKey: "id_mobil" });
 db.kendaraan.belongsTo(db.master_kendaraan, { foreignKey: "id_mobil" });
 db.kendaraan.hasMany(db.progressStatus, { foreignKey: "rangka" });

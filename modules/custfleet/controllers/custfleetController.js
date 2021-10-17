@@ -11,6 +11,8 @@ var htitle = [
     {id:'alamat', label:'Alamat', width:"", typeInput:"textarea", onTable:"ON"},
     {id:'alamat_dati2', label:'Alamat Dati2', width:"", typeInput:"textarea", onTable:"OFF"},
     {id:'alamat_dati3', label:'Alamat Dati3', width:"", typeInput:"textarea", onTable:"OFF"},
+    {id:'username', label:'Username', width:"", typeInput:"text", onTable:"OFF"},
+    {id:'password', label:'Password', width:"", typeInput:"password", onTable:"OFF"},
 ];
 
 exports.index = function (req, res) {
