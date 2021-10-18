@@ -40,6 +40,7 @@ verifyToken = async (req, res, next) => {
         loginId: account.id,
         username: account.username,
         kategori_user: account.kategori_user,
+        id_user: account.id_user,
       },
       process.env.ACCESS_TOKEN_SECRET,
       {

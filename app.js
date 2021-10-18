@@ -220,7 +220,8 @@ app.all("*", function (req, res, next) {
       auth: {
         username: payload.username,
         nama: payload.nama,
-        level: payload.ketegori_user ? payload.ketegori_user : "USER",
+        kategori_user: payload.ketegori_user,
+        id_user: payload.id_user,
       },
     };
   } catch (e) {
@@ -228,7 +229,8 @@ app.all("*", function (req, res, next) {
       auth: {
         username: "-",
         nama: "-",
-        level: "-",
+        kategori_user: "-",
+        id_user: "-",
       },
     };
   }
