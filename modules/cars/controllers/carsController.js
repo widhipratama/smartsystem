@@ -119,7 +119,7 @@ exports.getListKendaraan = function (req, res) {
             {
                 model: models.progressStatus,
                 limit: 1,
-                order: [['service_order', 'DESC']],
+                order: [['service_order', 'ASC']],
             }
         ],
         where: [ 
@@ -141,14 +141,7 @@ exports.getListKendaraan = function (req, res) {
 }
 exports.cekNoRangka = function (req, res) {
     const id = req.params.id;
-    models.kendaraan.findOne({ where: { no_rangka: { [Op.eq]: id } } }).then((kendraanrangka) => {
-        
-        res.send({ 
-            success: 'error', 
-            titlemessage: `No Rangka ${kendraanrangka.no_rangka} sudah digunakan!`,
-            message: 'Silahkan mengubungi Admin.',
-        });
-    }).catch((err) => {
+    models.kendaraan.findOne({ where: [{ no_rangka: { [Op.eq]: id } }, { status_kendaraan: 'none' }] }).then((kendraanrangka) => {
         models.progressStatus.findOne({ where: { rangka: { [Op.eq]: id } } }).then((rangka) => {
             models.master_kendaraan.findAll({ where: { model_mobil: { [Op.eq]: rangka.model } } }).then((warna) => {
                 res.send({ 
@@ -166,41 +159,60 @@ exports.cekNoRangka = function (req, res) {
                 message: 'Silahkan mengubungi Admin.',
             }); 
         });
+    }).catch((err) => {
+        res.send({ 
+            success: 'error', 
+            titlemessage: `No Rangka ${kendraanrangka.no_rangka} belum terdaftar!`,
+            message: 'Silahkan mengubungi Admin.',
+        });
     });
 }
 exports.cekKendaraan = function (req, res) {
     const id = req.params.id;
+    var data;
     models.progressStatus.findOne({
         include:[
             {model: models.kendaraan},
         ],
         where: { police_no: { [Op.eq]: id } } 
     }).then((kendraanrangka) => {
-        var id_customer = kendraanrangka.kendaraan.id_customer;
-        models.kendaraan.findAll({ 
-            attributes: [[sequelize.fn('sum', sequelize.col('first_class')), 'first_class']],
-            group : ['id_customer'],
-            where: { id_customer: id_customer },
-        }).then((kendaraan) => {
-            res.send({ 
-                success: 'success', 
-                titlemessage: 'Data kendraan tersedia!',
-                message: 'Silahkan mengubungi Admin.',
-                data: kendaraan
-            });
-        }).catch((err) => {
-            res.send({ 
-                success: 'error', 
-                titlemessage: 'Data kendraan tidak tersedia!',
-                message: 'Silahkan mengubungi Admin.',
-                data: err.message
-            });
+        if (kendraanrangka.kendaraan.first_class!=''&&kendraanrangka.kendaraan.first_class!=null) {
+            data = { first_class: kendraanrangka.kendaraan.first_class};
+        }else{
+            data = { first_class: 0 };
+        }
+        res.send({ 
+            success: 'success', 
+            titlemessage: 'Data kendraan tersedia!',
+            message: 'Silahkan mengubungi Admin.',
+            data: data
         });
+        // var id_customer = kendraanrangka.kendaraan.id_customer;
+        // models.kendaraan.findAll({ 
+        //     attributes: [[sequelize.fn('sum', sequelize.col('first_class')), 'first_class']],
+        //     group : ['id_customer'],
+        //     where: { id_customer: id_customer },
+        // }).then((kendaraan) => {
+        //     res.send({ 
+        //         success: 'success', 
+        //         titlemessage: 'Data kendraan tersedia!',
+        //         message: 'Silahkan mengubungi Admin.',
+        //         data: kendaraan
+        //     });
+        // }).catch((err) => {
+        //     res.send({ 
+        //         success: 'error', 
+        //         titlemessage: 'Data kendraan tidak tersedia!',
+        //         message: 'Silahkan mengubungi Admin.',
+        //         data: err.message
+        //     });
+        // });
     }).catch((err) => {
         res.send({ 
             success: 'error', 
             titlemessage: 'Data customer tidak tersedia!',
             message: 'Silahkan mengubungi Admin.',
+            data: { first_class: 0 }
         });
     });
 }
@@ -237,29 +249,37 @@ exports.createKendaraan = function (req, res) {
                     //menghitung jumlah rata" omset
                     var avg_omzet = dataSum/dataCount.count;
 
+                    //point reward
+                    let pointReward = (dataSum/10000).toFixed();
+
                     //memberikan status FS atau tidak
                     if ((rumusFS<7)&&(avg_omzet>=1750000)) {
                         firstClassStts = '1';
                     }else{
                         firstClassStts = '0';
                     }
-                    var data = {
-                        no_rangka: dataForm.norangka,
-                        id_customer: dataForm.custid,
-                        id_mobil: dataForm.warna,
-                        total_omzet: dataSum,
-                        first_class: firstClassStts,
-                        kategori_customer: dataForm.kategoricust,
-                        avg_omzet: avg_omzet,
-                        qty_service: dataCount.count,
-                    };
                     
-                    models.kendaraan.create(data).then((cars) => {
-                        dataFound = cars;
-                        res.send({ 
-                            success: 'success', 
-                            titlemessage: 'Sukses Menambahkan Data!',
-                            message: `No Rangka: ${dataFound.no_rangka} telah di tambahkan ke daftar customer!`,
+                    models.kendaraan.findOne({ where: { no_rangka: { [Op.eq]: id } } }).then((cars) => {
+                        let data = {
+                            total_omzet: dataSum,
+                            avg_omzet: avg_omzet,
+                            id_customer: dataForm.custid,
+                            id_mobil: dataForm.warna,
+                            qty_service: dataCount.count,
+                            first_class: firstClassStts,
+                            last_service: lastService[0].invoice_date,
+                            first_service: firstService[0].invoice_date,
+                            point_reward: pointReward,
+                            kategori_customer: dataForm.kategoricust,
+                            status_kendaraan: 'registred'
+                        };
+                        return cars.update(data).then(() => {
+                            dataFound = cars;
+                            res.send({ 
+                                success: 'success', 
+                                titlemessage: 'Sukses Menambahkan Data!',
+                                message: `No Rangka: ${dataFound.no_rangka} telah di tambahkan ke daftar customer!`,
+                            });
                         });
                     }).catch((err) => {
                         res.send({ 
@@ -291,6 +311,28 @@ exports.hapuskendaraan = function (req, res) {
                 message: `No Rangka: ${resFound.no_rangka} telah di hapus dari daftar customer!`,
             });
         })
+    }).catch((err) => {
+        res.send({ 
+            success: 'error', 
+            titlemessage: 'Oops!',
+            message:  err.message,
+        }); 
+    });
+}
+
+exports.get_job_history = function (req, res) {
+    let id = req.params.id;
+    let resFound;
+    models.jobHistory.findAll({ 
+        where: { norangka: { [Op.eq]: id } }, 
+        order: [['invoice_date', 'DESC']]
+    }).then((cars) => {
+        res.send({ 
+            success: 'success', 
+            titlemessage: 'Data Job History tersedia!',
+            message: 'Ini datanya.',
+            data: cars
+        });
     }).catch((err) => {
         res.send({ 
             success: 'error', 

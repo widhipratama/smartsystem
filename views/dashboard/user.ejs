@@ -9,67 +9,13 @@
   <div id="app">
     <div class="main-wrapper">
       <%- include ../templates/navtop.ejs %>
-        <%- include ../templates/navleft_user.ejs %>
+        <%- include ../templates/navleft.ejs %>
           <div class="main-content">
             <section class="section">
               <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                  <li data-target="#carouselExampleIndicators2" data-slide-to="0" class="active"></li>
-                  <li data-target="#carouselExampleIndicators2" data-slide-to="1"></li>
-                  <li data-target="#carouselExampleIndicators2" data-slide-to="2"></li>
-                  <li data-target="#carouselExampleIndicators2" data-slide-to="3"></li>
+                <ol class="carousel-indicators" id="promo-num">
                 </ol>
-                <div class="carousel-inner">
-                  <div class="carousel-item active">
-                    <img class="d-block w-100"
-                      src="<%= process.env.URL %>/assets/img/promo/home-banner-raize-1920x1000.jpg" alt="First slide" />
-                    <div class="carousel-caption d-none d-md-block">
-                      <h5>Heading</h5>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna
-                        aliqua.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <img class="d-block w-100"
-                      src="<%= process.env.URL %>/assets/img/promo/banner-test-drive-raize-ig-challenge-1920x1000.jpeg"
-                      alt="Second slide" />
-                    <div class="carousel-caption d-none d-md-block">
-                      <h5>Heading</h5>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna
-                        aliqua.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <img class="d-block w-100"
-                      src="<%= process.env.URL %>/assets/img/promo/home-banner-vellfire-alphard-1920x1000.jpg"
-                      alt="Third slide" />
-                    <div class="carousel-caption d-none d-md-block">
-                      <h5>Heading</h5>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna
-                        aliqua.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <img class="d-block w-100"
-                      src="<%= process.env.URL %>/assets/img/promo/home-banner-PPnBM-1920x1000.jpg" alt="Four slide" />
-                    <div class="carousel-caption d-none d-md-block">
-                      <h5>Heading</h5>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna
-                        aliqua.
-                      </p>
-                    </div>
-                  </div>
+                <div class="carousel-inner" id="promo-gambar">
                 </div>
                 <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -96,7 +42,7 @@
                 </p>
 
                 <div class="row mt-sm-4">
-                  <div class="col-12 col-md-12 col-lg-6">
+                  <div class="col-12 col-md-12 col-lg-8">
                     <div class="card profile-widget">
                       <div class="profile-widget-header">
                         <img alt="image" src="<%= process.env.URL %>/assets/img/avatar/avatar-1.png"
@@ -104,11 +50,11 @@
                         <div class="profile-widget-items">
                           <div class="profile-widget-item">
                             <div class="profile-widget-item-label">Cars</div>
-                            <div class="profile-widget-item-value">12</div>
+                            <div class="profile-widget-item-value"><span id="jmlcars"></span></div>
                           </div>
                           <div class="profile-widget-item">
                             <div class="profile-widget-item-label">Point</div>
-                            <div class="profile-widget-item-value">6,8K</div>
+                            <div class="profile-widget-item-value"><span id="pointcars"></span></div>
                           </div>
                         </div>
                       </div>
@@ -121,12 +67,12 @@
                             </div>
                         </div>
                         <div class="text-left">
-                          <button class="btn btn-success">
+                          <a href="https://wa.me/6287852646336" target="_blank"  class="btn btn-success">
                             <i class="fab fa-whatsapp"></i> Chat Me!
-                          </button>
-                          <button class="btn btn-danger">
+                          </a>
+                          <a href="https://wa.me/6287852646336" target="_blank" class="btn btn-danger">
                             <i class="fas fa-heartbeat"></i> Emergency Call
-                          </button>
+                          </a>
                           <a href="/enews" class="btn btn-primary"><i class="fas fa-newspaper"></i> E-News</a>
                         </div>
                       </div>
@@ -149,182 +95,14 @@
                       </div>
                     </div>
                   </div>
-<<<<<<< HEAD
-                  <div class="col-12 col-md-12 col-lg-6">
+                  <div class="col-12 col-md-12 col-lg-4">
                     <div class="card">
                       <div class="card gradient-bottom">
                         <div class="card-header">
                           <h4>My Cars</h4>
                         </div>
                         <div class="card-body" id="top-5-scroll">
-                          <ul class="list-unstyled list-unstyled-border">
-                            <li class="media">
-                              <a href="#" data-toggle="modal" data-target="#exampleModal">
-                                <img class="mr-3 mt-2 rounded" width="55"
-                                  src="<%= process.env.URL %>/assets/img/cars/raize-yellow-black.png" alt="product" />
-                              </a>
-                              <div class="media-body">
-                                <div class="float-right">
-                                  <div class="font-weight-600 text-muted text-small"></div>
-                                </div>
-                                <div class="media-title">
-                                  <b>RAIZE</b>
-                                  <small class="text-blue">DK-123-XX</small>
-                                </div>
-                                <div class="mt-1">
-                                  <div class="text-success text-small font-600-bold">
-                                    <button class="btn btn-sm btn-success">
-                                      <i class="fab fa-whatsapp"></i> Booking Now
-                                    </button>
-                                    <button class="btn btn-sm btn-primary">
-                                      <i class="fas fa-history"></i> Histori
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
-                            <li class="media">
-                              <img class="mr-3 mt-2 rounded" width="55"
-                                src="<%= process.env.URL %>/assets/img/cars/innova-attitude-black_0.png"
-                                alt="product" />
-                              <div class="media-body">
-                                <div class="float-right beep">
-                                  <div class="font-weight-600 text-muted text-small"></div>
-                                </div>
-                                <div class="media-title">
-                                  <b>INNOVA</b>
-                                  <small class="text-blue">DK-123-XX</small>
-                                </div>
-                                <div class="mt-1">
-                                  <div class="text-success text-small font-600-bold">
-                                    <button class="btn btn-sm btn-success">
-                                      <i class="fab fa-whatsapp"></i> Booking Now
-                                    </button>
-                                    <button class="btn btn-sm btn-primary">
-                                      <i class="fas fa-history"></i> Histori
-                                    </button>
-                                  </div>
-                                </div>
-=======
-                </div>
-                <div class="col-12 col-md-12 col-lg-6">
-                  <div class="card">
-                    <div class="card gradient-bottom">
-                      <div class="card-header">
-                        <h4>My Cars</h4>
-                      </div>
-                      <div class="card-body" id="top-5-scroll">
-                        <ul class="list-unstyled list-unstyled-border">
-                          <li class="media">
-                            <a
-                              href="#"
-                              data-toggle="modal"
-                              data-target="#exampleModal"
-                            >
-                              <img
-                                class="mr-3 mt-2 rounded"
-                                width="55"
-                                src="/assets/img/cars/raize-turquoise.png"
-                                alt="product"
-                              />
-                            </a>
-                            <div class="media-body">
-                              <div class="float-right">
-                                <div
-                                  class="font-weight-600 text-muted text-small"
-                                ></div>
-                              </div>
-                              <div class="media-title">
-                                <b>RAIZE</b>
-                                <small class="text-blue">DK-123-XX</small>
-                              </div>
-                              <div class="mt-1">
-                                <div
-                                  class="text-success text-small font-600-bold"
-                                >
-                                  <button class="btn btn-sm btn-success">
-                                    <i class="fab fa-whatsapp"></i> Booking Now
-                                  </button>
-                                  <button class="btn btn-sm btn-primary">
-                                    <i class="fas fa-history"></i> Histori
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </li>
-                          <li class="media">
-                            <img
-                              class="mr-3 mt-2 rounded"
-                              width="55"
-                              src="/assets/img/cars/86_orange.png"
-                              alt="product"
-                            />
-                            <div class="media-body">
-                              <div class="float-right beep">
-                                <div
-                                  class="font-weight-600 text-muted text-small"
-                                ></div>
-                              </div>
-                              <div class="media-title">
-                                <b>86</b>
-                                <small class="text-blue">DK-123-XX</small>
-                              </div>
-                              <div class="mt-1">
-                                <div
-                                  class="text-success text-small font-600-bold"
-                                >
-                                  <button class="btn btn-sm btn-success">
-                                    <i class="fab fa-whatsapp"></i> Booking Now
-                                  </button>
-                                  <button class="btn btn-sm btn-primary">
-                                    <i class="fas fa-history"></i> Histori
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </li>
-                          <li class="media">
-                            <img
-                              class="mr-3 mt-2 rounded"
-                              width="55"
-                              src="/assets/img/cars/fortuner_white.png"
-                              alt="product"
-                            />
-                            <div class="media-body">
-                              <div class="float-right beep">
-                                <div
-                                  class="font-weight-600 text-muted text-small"
-                                ></div>
-                              </div>
-                              <div class="media-title">
-                                <b>FORTUNER</b>
-                                <small class="text-blue">DK-123-XX</small>
->>>>>>> c7c809468bec27646e4694792a4aa967d9902d95
-                              </div>
-                            </li>
-                            <li class="media">
-                              <img class="mr-3 mt-2 rounded" width="55"
-                                src="/assets/img/cars/fortunerTRD2020-super-white_2.png" alt="product" />
-                              <div class="media-body">
-                                <div class="float-right beep">
-                                  <div class="font-weight-600 text-muted text-small"></div>
-                                </div>
-                                <div class="media-title">
-                                  <b>FORTUNER</b>
-                                  <small class="text-blue">DK-123-XX</small>
-                                </div>
-                                <div class="mt-1">
-                                  <div class="text-success text-small font-600-bold">
-                                    <button class="btn btn-sm btn-success">
-                                      <i class="fab fa-whatsapp"></i> Booking Now
-                                    </button>
-                                    <button class="btn btn-sm btn-primary">
-                                      <i class="fas fa-history"></i> Histori
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
+                          <ul id="listcars" class="list-unstyled list-unstyled-border">
                           </ul>
                         </div>
                         <div class="card-footer pt-3 d-flex justify-content-center">
@@ -395,6 +173,7 @@
     </div>
   </div>
   <%- include ../templates/script.ejs %>
+  <%- include ../templates/script_d_user.ejs %>
 </body>
 
 </html>

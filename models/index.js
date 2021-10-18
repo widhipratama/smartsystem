@@ -29,6 +29,7 @@ db.promotion = require("../modules/promotion/models/promotion")(sequelize, Seque
 db.kendaraan = require("../modules/cars/models/kendaraan")(sequelize, Sequelize);
 
 db.useraccount.hasOne(db.customer, { foreignKey: "id_customer" });
+db.customer.hasOne(db.useraccount, { foreignKey: "id_user" });
 db.kendaraan.hasOne(db.master_kendaraan, { foreignKey: "id_mobil" });
 db.kendaraan.belongsTo(db.master_kendaraan, { foreignKey: "id_mobil" });
 db.kendaraan.hasMany(db.progressStatus, { foreignKey: "rangka" });
@@ -39,5 +40,7 @@ db.customer.hasMany(db.kendaraan, { foreignKey: "id_customer" });
 db.kendaraan.belongsTo(db.customer, { foreignKey: "id_customer" });
 db.fleet_customer.hasMany(db.kendaraan, { foreignKey: "id_customer" });
 db.kendaraan.belongsTo(db.fleet_customer, { foreignKey: "id_customer" });
+db.jobHistory.hasOne(db.progressStatus, { foreignKey: "service_order" });
+db.jobHistory.belongsTo(db.progressStatus, { foreignKey: "no_order" });
 
 module.exports = db;

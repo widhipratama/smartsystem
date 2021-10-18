@@ -30,7 +30,7 @@ router.get("/logout", (req, res, next) => {
         next(err);
       } else {
         res.clearCookie("jwt");
-        res.redirect("/");
+        res.redirect("/auth/login");
       }
     });
   }

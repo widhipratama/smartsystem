@@ -10,25 +10,32 @@ var htitle = [
 ];
 
 exports.index = function (req, res) {
-    let page = req.query.page || 1;
-    let offset = 0;
-    if (page > 1) {
-        offset = ((page - 1) * 10) + 1;
-    }
     models.promotion.findAndCountAll({
-        limit: 10,
-        offset: offset,
         order: [['id', 'DESC']],
     }).then((promotion) => {
         const alertMessage = req.flash('alertMessage');
         const alertStatus = req.flash('alertStatus');
         const alert = { message: alertMessage, status: alertStatus };
-        const totalPage = Math.ceil(promotion.count / 10);
-        const pagination = { totalPage: totalPage, currentPage: page };
         res.render('../modules/promotion/views/index', {
             datarow: promotion.rows,
             alert: alert,
-            pagination: pagination,
+            title: title,
+            tbtitle: tbtitle,
+            htitle: htitle,
+        });
+    });
+}
+exports.index_cust = function (req, res) {
+    models.promotion.findAndCountAll({
+        where: { status: '1' },
+        order: [['id', 'DESC']],
+    }).then((promotion) => {
+        const alertMessage = req.flash('alertMessage');
+        const alertStatus = req.flash('alertStatus');
+        const alert = { message: alertMessage, status: alertStatus };
+        res.send({
+            datarow: promotion.rows,
+            alert: alert,
             title: title,
             tbtitle: tbtitle,
             htitle: htitle,

@@ -220,15 +220,15 @@ app.all("*", function (req, res, next) {
       auth: {
         username: payload.username,
         nama: payload.nama,
-        level: payload.level ? payload.level : "USER",
+        level: payload.ketegori_user ? payload.ketegori_user : "USER",
       },
     };
   } catch (e) {
     app.locals = {
       auth: {
-        username: "USER",
-        nama: "USER",
-        level: "USER",
+        username: "-",
+        nama: "-",
+        level: "-",
       },
     };
   }

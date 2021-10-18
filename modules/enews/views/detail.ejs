@@ -24,7 +24,15 @@
               <h2 class="section-title">
                 <%= datarow.judul_enews %>
               </h2>
-              <embed id="fileEnews" src="/assets/e-news/<%= datarow.location_enews %>#view=fitH,100&toolbar=0&navpanes=0&scrollbar=0" frameBorder="0" type="application/pdf" height="1080px" width="100%">
+              <input type="hidden" name="sumber" id="sumber" value="/assets/e-news/<%= datarow.location_enews %>">
+              <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+              <div>
+                <button class="btn btn-xs btn-outline-secondary btn-round" id="prev">Previous</button>
+                <button class="btn btn-xs btn-outline-secondary btn-round" id="next">Next</button>
+                &nbsp; &nbsp;
+                <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+              </div>
+              <canvas id="the-canvas"></canvas>
             </div>
           </section>
         </div>
@@ -48,6 +56,7 @@
       </div>
     </div>
     <%- include ../../../views/templates/script.ejs %>
+    <%- include ../../../views/templates/scriptpdf.ejs %>
     <script>
       $(document).on("click", "#m", function () {
           var myBookId = $(this).data('id');

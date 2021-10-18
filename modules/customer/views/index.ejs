@@ -43,7 +43,7 @@
                       <strong><%= alert.message %></strong>
                     </div>
                     <% } %>
-                    <table class="table table-striped" id="table-1" style="width:100%">
+                    <table class="table table-striped table-responsive" id="table-1" style="width:100%">
                       <thead>
                         <tr>
                           <th scope="col" width="5%">No.</th>
@@ -70,6 +70,7 @@
                           <td>
                             <button class="btn btn-primary btn-sm open-addCarsCustomer" data-id="<%= datarow[i].id_customer %>" data-kategori="customer" data-toggle="modal" data-target="#carmodal"><i
                                 class="fas fa-car"></i></button>
+                            <button class="btn btn-sm btn-info"><i class="fas fa-link"></i></button>
                             <button class="btn btn-warning btn-sm"
                               onclick="editFunction('<%= datarow[i].id_customer %>')" data-id="<%= datarow[i].id %>"
                               data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"></i></button>
@@ -90,8 +91,9 @@
         <!-- modal -->
         <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
           <div class="modal-dialog" role="document">
-            <form id="formData" method="POST" action="<%= process.env.URL %>/customer/addcustomer" class="needs-validation"
+            <form id="formRegister" method="POST" action="" class="needs-validation"
               novalidate="">
+              <input type="hidden" name="urlsubmit" id="urlsubmit">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title">Form Data <%= tbtitle %></h5>
@@ -163,10 +165,18 @@
                     <textarea name="alamat_dati3" id="alamat_dati3" class="form-control" ></textarea>
                   </div>
                   <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" name="username" class="form-control" minlength="4" required="">
+                  </div>
+                  <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" name="password" class="form-control" minlength="4">
+                  </div>
+                  <div class="form-group">
                     <label>Status</label>
                     <select class="form-control" id="status" name="status" required="">
-                      <option id="optionfalse" value="0">Tidak Aktif</option>
-                      <option id="optiontrue" value="1">Aktif</option>
+                      <option id="option0" value="0">Tidak Aktif</option>
+                      <option id="option1" value="1">Aktif</option>
                     </select>
                   </div>
                 </div>
@@ -186,17 +196,69 @@
   <%- include ../../../views/templates/script.ejs %>
   <%- include ../../../modules/cars/views/SyncMobil.ejs %>
   <script type="text/javascript">
-    var cleave = new Cleave('.input-phone', {
-      phone: true,
-      phoneRegionCode: 'id',
-      delimiter: ''
-    });
+    $(document).ready(function () {
+				window.setTimeout(function () {
+					$(".alert-autoclose").fadeTo(500, 0).slideUp(500, function () {
+						$(this).remove();
+					});
+				}, 5000);
+
+				$("form#formRegister").on('submit', function (e) {
+					e.preventDefault();
+
+					const url = document.getElementById('urlsubmit').value;
+          const date = new Date();
+					$.ajax({
+						type: 'post',
+						url: url,
+						data: {
+							nama: $("#nama").val(),
+							no_telp: $("#no_telp").val(),
+							whatsapp: $("#wa").val(),
+							ig: $("#ig").val(),
+							facebook: $("#facebook").val(),
+							alamat: $("#alamat").val(),
+							alamat_dati2: $("#alamat_dati2").val(),
+							alamat_dati3: $("#alamat_dati3").val(),
+							username: $("#username").val(),
+							password: $("#password").val(),
+						},
+						dataType: 'json',
+					}).done(function (data) {
+            const { status, message } = data
+            if (status === "200") {
+              iziToast.show({
+                title: 'Pengolahan Data berhasil!',
+                message: message,
+                position: 'topCenter',
+                onClosing: function () {
+                  location.href = '/customer';
+                },
+                close: false,
+                timeout: 1000,
+              });
+            } else {
+              swal({
+                title: "Gagal daftar",
+                text: message,
+                icon: 'error',
+                showConfirmButton: false,
+              })
+            }
+          });
+				});
+        var cleave = new Cleave('.input-phone', {
+          phone: true,
+          phoneRegionCode: 'id',
+          delimiter: ''
+        });
+        window.setTimeout(function() {
+          $(".alert-autoclose").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+          });
+        }, 5000);
+		});
   
-  window.setTimeout(function() {
-    $(".alert-autoclose").fadeTo(500, 0).slideUp(500, function(){
-      $(this).remove(); 
-    });
-  }, 5000);
 
     function delFunction(id) {
       let idData = id;
@@ -223,7 +285,7 @@
         url: url,
         dataType: 'json',
         success: function (res) {
-          $('#formData').attr('action', '<%= process.env.URL %>/customer/edit/save/'+idData);
+          document.getElementById("urlsubmit").value = '<%= process.env.URL %>/customer/edit/save/'+idData;
           document.getElementById("nama").value = res.data.nama;
           document.getElementById("no_telp").value = res.data.no_telp;
           document.getElementById("wa").value = res.data.wa;
@@ -232,12 +294,15 @@
           document.getElementById("alamat").value = res.data.alamat;
           document.getElementById("alamat_dati2").value = res.data.alamat_dati2;
           document.getElementById("alamat_dati3").value = res.data.alamat_dati3;
+          document.getElementById("username").value = (res.data.useraccount ? res.data.useraccount.username : '');
+          document.getElementById("password").value = '';
           document.getElementById("option"+res.data.status).selected = true;
+          $('#password').removeAttr('required', 'required');
         }
       });
     };
     function createFunction(){
-      $('#formData').attr('action', '<%= process.env.URL %>/customer/addcustomer');
+      document.getElementById("urlsubmit").value = '<%= process.env.URL %>/auth/daftar';
       document.getElementById("nama").value = '';
       document.getElementById("no_telp").value = '';
       document.getElementById("wa").value = '';
@@ -246,7 +311,8 @@
       document.getElementById("alamat").value = '';
       document.getElementById("alamat_dati2").value = '';
       document.getElementById("alamat_dati3").value = '';
-      document.getElementById("optionfalse").selected = true;
+      document.getElementById("option1").selected = true;
+      $('#password').attr('required', 'required');
     };
   </script>
 </body>

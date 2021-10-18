@@ -16,8 +16,11 @@ module.exports = {
       total_omzet: {
         type: Sequelize.INTEGER,
       },
-      point_reward: {
-        type: Sequelize.INTEGER,
+      last_service: {
+        type: Sequelize.DATE,
+      },
+      first_service: {
+        type: Sequelize.DATE,
       },
       avg_omzet: {
         type: Sequelize.INTEGER,
@@ -32,7 +35,15 @@ module.exports = {
       },
       kategori_customer: {
         type: Sequelize.STRING(10)
-      }
+      },
+      status_kendaraan: {
+        type: Sequelize.STRING(11),
+      },
+      point_reward: {
+        allowNull: false,
+        default: 0,
+        type: Sequelize.INTEGER,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {

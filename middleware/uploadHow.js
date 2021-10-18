@@ -27,10 +27,13 @@ var storage = multer.diskStorage({
     cb(null, __basedir + "/views/assets/how");
   },
   filename: (req, file, cb) => {
+    let extArray = file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
+    var date = Date.now();
     if (file.fieldname === "sampul_how") {
-      cb(null, `Sampul_${Date.now()}`);
+      cb(null, 'Sampul-' + date + '.' +extension)
     }else{
-      cb(null, `File_${Date.now()}`);
+      cb(null, 'File-' + date + '.' +extension)
     }
   },
 });

@@ -27,11 +27,13 @@ var storage = multer.diskStorage({
     cb(null, __basedir + "/views/assets/e-news");
   },
   filename: (req, file, cb) => {
+    let extArray = file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
     var date = Date.now();
     if (file.fieldname === "sampul_enews") {
-      cb(null, `Sampul_${date}`);
+      cb(null, 'Sampul-' + date + '.' +extension)
     }else{
-      cb(null, `File_${date}`);
+      cb(null, 'File-' + date + '.' +extension)
     }
   },
 });
