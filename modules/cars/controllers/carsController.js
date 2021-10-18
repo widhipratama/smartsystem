@@ -176,37 +176,40 @@ exports.cekKendaraan = function (req, res) {
         ],
         where: { police_no: { [Op.eq]: id } } 
     }).then((kendraanrangka) => {
-        if (kendraanrangka.kendaraan.first_class!=''&&kendraanrangka.kendaraan.first_class!=null) {
-            data = { first_class: kendraanrangka.kendaraan.first_class};
+        if (kendraanrangka.kendaraan.id_customer!=''&&kendraanrangka.kendaraan.id_customer!=null) {
+            var id_customer = kendraanrangka.kendaraan.id_customer;
+            models.kendaraan.findAll({ 
+                attributes: [[sequelize.fn('sum', sequelize.col('first_class')), 'first_class']],
+                group : ['id_customer'],
+                where: { id_customer: id_customer },
+            }).then((kendaraan) => {
+                res.send({ 
+                    success: 'success', 
+                    titlemessage: 'Data kendraan tersedia!',
+                    message: 'Silahkan mengubungi Admin.',
+                    data: kendaraan
+                });
+            }).catch((err) => {
+                res.send({ 
+                    success: 'error', 
+                    titlemessage: 'Data customer tidak tersedia!',
+                    message: 'Silahkan mengubungi Admin.',
+                    data: { first_class: 0 }
+                });
+            });
         }else{
-            data = { first_class: 0 };
+            if (kendraanrangka.kendaraan.first_class!=''&&kendraanrangka.kendaraan.first_class!=null) {
+                data = { first_class: kendraanrangka.kendaraan.first_class};
+            }else{
+                data = { first_class: 0 };
+            }
+            res.send({ 
+                success: 'success', 
+                titlemessage: 'Data kendraan tersedia!',
+                message: 'Silahkan mengubungi Admin.',
+                data: data
+            });
         }
-        res.send({ 
-            success: 'success', 
-            titlemessage: 'Data kendraan tersedia!',
-            message: 'Silahkan mengubungi Admin.',
-            data: data
-        });
-        // var id_customer = kendraanrangka.kendaraan.id_customer;
-        // models.kendaraan.findAll({ 
-        //     attributes: [[sequelize.fn('sum', sequelize.col('first_class')), 'first_class']],
-        //     group : ['id_customer'],
-        //     where: { id_customer: id_customer },
-        // }).then((kendaraan) => {
-        //     res.send({ 
-        //         success: 'success', 
-        //         titlemessage: 'Data kendraan tersedia!',
-        //         message: 'Silahkan mengubungi Admin.',
-        //         data: kendaraan
-        //     });
-        // }).catch((err) => {
-        //     res.send({ 
-        //         success: 'error', 
-        //         titlemessage: 'Data kendraan tidak tersedia!',
-        //         message: 'Silahkan mengubungi Admin.',
-        //         data: err.message
-        //     });
-        // });
     }).catch((err) => {
         res.send({ 
             success: 'error', 
