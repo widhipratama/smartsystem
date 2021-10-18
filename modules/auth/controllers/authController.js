@@ -128,6 +128,7 @@ exports.login_account_customer_token = (req, res) => {
     const token = req.params.token;
     useraccount
       .findOne({
+        include: [{ model: customer }],
         where: {
           token: token,
         },
@@ -137,11 +138,18 @@ exports.login_account_customer_token = (req, res) => {
           res.redirect(process.env.URL + "/auth/login");
         }
 
-        let accessToken = jwt.sign({ loginId: q.id, username: q.username, kategori_user: "USER" }, process.env.ACCESS_TOKEN_SECRET, {
-          expiresIn: process.env.ACCESS_TOKEN_LIFE,
-        });
+        let accessToken = jwt.sign(
+          { loginId: q.id, username: q.username, kategori_user: "USER", id_user: q.id_user },
+          process.env.ACCESS_TOKEN_SECRET,
+          {
+            expiresIn: process.env.ACCESS_TOKEN_LIFE,
+          }
+        );
 
-        let refreshToken = jwt.sign({ loginId: q.id, username: q.username, kategori_user: "USER" }, process.env.REFRESH_TOKEN_SECRET);
+        let refreshToken = jwt.sign(
+          { loginId: q.id, username: q.username, kategori_user: "USER", id_user: q.id_user },
+          process.env.REFRESH_TOKEN_SECRET
+        );
 
         useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
         res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
@@ -166,6 +174,7 @@ exports.login_account_customer = (req, res) => {
 
     useraccount
       .findOne({
+        include: [{ model: customer }],
         where: {
           username: req.body.username,
         },
@@ -181,11 +190,18 @@ exports.login_account_customer = (req, res) => {
           res.json({ status: "401", message: "Password salah" });
         }
 
-        let accessToken = jwt.sign({ loginId: q.id, username: q.username, kategori_user: q.kategori_user }, process.env.ACCESS_TOKEN_SECRET, {
-          expiresIn: process.env.ACCESS_TOKEN_LIFE,
-        });
+        let accessToken = jwt.sign(
+          { loginId: q.id, username: q.username, kategori_user: "USER", id_user: q.id_user },
+          process.env.ACCESS_TOKEN_SECRET,
+          {
+            expiresIn: process.env.ACCESS_TOKEN_LIFE,
+          }
+        );
 
-        let refreshToken = jwt.sign({ loginId: q.id, username: q.username, kategori_user: q.kategori_user }, process.env.REFRESH_TOKEN_SECRET);
+        let refreshToken = jwt.sign(
+          { loginId: q.id, username: q.username, kategori_user: "USER", id_user: q.id_user },
+          process.env.REFRESH_TOKEN_SECRET
+        );
 
         useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
         res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
@@ -193,10 +209,10 @@ exports.login_account_customer = (req, res) => {
         res.json({ status: "200", loginId: useraccount.id, username: useraccount.username, accessToken: accessToken });
       })
       .catch((err) => {
-        res.json({ status: "500", message: "Server Error" });
+        res.json({ status: "500", message: "Server Error" + err });
       });
   } catch (err) {
-    res.json({ status: "500", message: "Server Error" });
+    res.json({ status: "500", message: "Server Error" + err });
   }
 };
 
@@ -225,11 +241,18 @@ exports.login_account_karyawan = (req, res) => {
           res.json({ status: "401", message: "Password salah" });
         }
 
-        let accessToken = jwt.sign({ loginId: q.id, username: q.username, kategori_user: q.kategori_user }, process.env.ACCESS_TOKEN_SECRET, {
-          expiresIn: process.env.ACCESS_TOKEN_LIFE,
-        });
+        let accessToken = jwt.sign(
+          { loginId: q.id, username: q.username, kategori_user: q.kategori_user, id_user: q.id_user },
+          process.env.ACCESS_TOKEN_SECRET,
+          {
+            expiresIn: process.env.ACCESS_TOKEN_LIFE,
+          }
+        );
 
-        let refreshToken = jwt.sign({ loginId: q.id, username: q.username, kategori_user: q.kategori_user }, process.env.REFRESH_TOKEN_SECRET);
+        let refreshToken = jwt.sign(
+          { loginId: q.id, username: q.username, kategori_user: q.kategori_user, id_user: q.id_user },
+          process.env.REFRESH_TOKEN_SECRET
+        );
 
         useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
         res.cookie("jwt", accessToken, { secure: true, httpOnly: true });

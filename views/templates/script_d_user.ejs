@@ -58,7 +58,7 @@
         var point = 0;
         res.data.forEach(element => {
           html += `<li class="media">`;
-          html += `<a href="#" data-toggle="modal" data-target="#exampleModal">`;
+          html += `<a href="#">`;
           html += `<img class="mr-3 mt-2 rounded" width="55"src="<%= process.env.URL %>/assets/img/cars/${element.master_kendaraan.image_mobil}" alt="product" />`;
           html += `</a>`;
           html += `<div class="media-body">`;
@@ -71,7 +71,7 @@
           html += `</div>`;
           html += `<div class="mt-1">`;
           html += `<div class="text-success text-small font-600-bold">`;
-          html += `<a href="https://wa.me/6287852646336" target="_blank"  class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i> Booking Now</a>`;
+          html += `<a href="https://wa.me/6287855925696" target="_blank"  class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i> Booking Now</a>`;
           html += `&ensp;<button class="btn btn-sm btn-primary open-jobhistory" onclick="get_job_history('${element.no_rangka}', '${element.master_kendaraan.image_mobil}')" data-toggle="modal" data-target="#carmodal"><i class="fas fa-history"></i> Histori</button>`;
           html += `</div>`;
           html += `</div>`;
