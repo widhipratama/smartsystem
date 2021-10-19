@@ -250,16 +250,21 @@ exports.createKendaraan = function (req, res) {
                     var rumusFS = selisih/dataCount.count;
 
                     //menghitung jumlah rata" omset
-                    var avg_omzet = dataSum/dataCount.count;
+                    var avg_omzet = parseInt(parseInt(dataSum)/parseInt(dataCount.count));
 
                     //point reward
                     let pointReward = (dataSum/10000).toFixed();
 
                     //memberikan status FS atau tidak
-                    if ((rumusFS<7)&&(avg_omzet>=1750000)) {
-                        firstClassStts = '1';
-                    }else{
-                        firstClassStts = '0';
+                    //memberikan status FS atau tidak
+                    if (parseInt(e.total_count) > 1) {
+                        if (rumusFS < 7 && avg_omzet >= 1750000) {
+                            firstClassStts = "1";
+                        } else {
+                            firstClassStts = "0";
+                        }
+                    } else {
+                        firstClassStts = "0";
                     }
                     
                     models.kendaraan.findOne({ where: { no_rangka: { [Op.eq]: id } } }).then((cars) => {

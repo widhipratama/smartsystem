@@ -3,14 +3,14 @@ const models = require("../../../models");
 const { sequelize, QueryTypes, Op } = require("sequelize");
 const kendaraan = require("../../cars/models/kendaraan");
 var htitle = [
-  { id: "police_np", label: "NoPol", width: "", typeInput: "text", onTable: "ON" },
-  { id: "no_rangka", label: "No Rangka", width: "", typeInput: "text", onTable: "ON" },
-  { id: "customer.nama", label: "Customer", width: "", typeInput: "text", onTable: "ON" },
-  { id: "first_class", label: "Qty Service", width: "", typeInput: "text", onTable: "ON" },
-  { id: "first_class", label: "Total Omzet", width: "", typeInput: "text", onTable: "ON" },
-  { id: "first_class", label: "Avg. Omzet", width: "", typeInput: "text", onTable: "ON" },
-  { id: "first_class", label: "Point", width: "", typeInput: "text", onTable: "ON" },
-  { id: "first_class", label: "Account", width: "", typeInput: "text", onTable: "OFF" },
+  { id: "police_np", label: "NoPol", width: "style='min-width:150px;'", typeInput: "text", onTable: "ON" },
+  { id: "no_rangka", label: "No Rangka", width: "style='min-width:250px;'", typeInput: "text", onTable: "ON" },
+  { id: "customer.nama", label: "Customer", width: "style='min-width:200px;'", typeInput: "text", onTable: "ON" },
+  { id: "first_class", label: "Qty Service", width: "style='min-width:80px;'", typeInput: "text", onTable: "ON" },
+  { id: "first_class", label: "Total Omzet", width: "style='min-width:120px;'", typeInput: "text", onTable: "ON" },
+  { id: "first_class", label: "Avg. Omzet", width: "style='min-width:120px;'", typeInput: "text", onTable: "ON" },
+  { id: "first_class", label: "Point", width: "style='min-width:120px;'", typeInput: "text", onTable: "ON" },
+  { id: "first_class", label: "Account", width: "style='min-width:120px;'", typeInput: "text", onTable: "OFF" },
 ];
 
 exports.index = function (req, res) {
@@ -73,12 +73,12 @@ exports.firstclass = function (req, res) {
   let page = req.query.page || 1;
   let offset = 0;
   if (page > 1) {
-      offset = ((page - 1) * 50) + 1;
+    offset = ((page - 1) * 50) + 1;
   }
   models.kendaraan
     .findAndCountAll({
       include: [
-        { model: models.customer, required:false },
+        { model: models.customer, required: false },
         {
           model: models.progressStatus,
           limit: 1,
@@ -135,6 +135,7 @@ exports.syncdataFristClass = async function (req, res) {
   }).then((cars) => {
     var i = 0;
     job.forEach(e => {
+      var firstClassStts = "0";
       //mendari selisih bulan
       var dateFrom = new Date(e.first_service);
       var dateTo = new Date(e.last_service);
@@ -142,20 +143,23 @@ exports.syncdataFristClass = async function (req, res) {
       var rumusFS = selisih / e.total_count;
 
       //menghitung jumlah rata" omset
-      let avg_omzet = e.total_omzet/ e.total_count;
+      let avg_omzet = parseInt(e.total_omzet) / parseInt(e.total_count);
 
       //memberikan status FS atau tidak
-      if (rumusFS < 7 && avg_omzet >= 1750000) {
-        firstClassStts = "1";
+      if (parseInt(e.total_count) > 1) {
+        if (rumusFS < 7 && avg_omzet >= 1750000) {
+          firstClassStts = "1";
+        } else {
+          firstClassStts = "0";
+        }
       } else {
         firstClassStts = "0";
       }
 
       //point reward
-      let pointReward = (e.total_omzet/10000).toFixed();
+      let pointReward = (e.total_omzet / 10000).toFixed();
 
       //simpan data
-
       models.kendaraan.findOne({ where: { no_rangka: { [Op.eq]: e.norangka } } }).then((cars) => {
         let data = {
           total_omzet: e.total_omzet,
@@ -166,8 +170,8 @@ exports.syncdataFristClass = async function (req, res) {
           first_service: e.first_service,
           point_reward: pointReward,
         };
-        return cars.update(data).then(() => {});
-      }).catch((err)=>{
+        return cars.update(data).then(() => { });
+      }).catch((err) => {
         let data = {
           no_rangka: e.norangka,
           total_omzet: e.total_omzet,
@@ -179,7 +183,7 @@ exports.syncdataFristClass = async function (req, res) {
           point_reward: pointReward,
           status_kendaraan: 'none'
         };
-        return models.kendaraan.create(data).then(() => {});
+        return models.kendaraan.create(data).then(() => { });
       });
     });
     res.send({
