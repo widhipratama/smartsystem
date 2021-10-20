@@ -31,55 +31,80 @@
                 <div class="card">
                   <div class="card-header">
                     <h4><%= tbtitle %></h4>
-                    <div class="float-right">
-                      <button class="btn btn-warning btn-sm" onclick="createFunction();"><i
-                          class="fas fa-sync-alt"></i> Update Data</button>
-                    </div>
                   </div>
-                  <div class="card-body table-responsive">
-                    <table class="table table-striped table-responsive" style="width:100%;">
+                  <div class="card-body">
+                    <table class="table table-striped table-responsive" id="tabledata" style="width:100%">
                       <thead>
                         <tr>
-                          <th scope="col" style="min-width: 80px;">No.</th>
+                          <th scope="col" width="5%">No.</th>
                           <% 
                             htitle.forEach(function(h) { 
                               if (h.onTable=="ON"){
                           %>
-                          <th <%= h.width %>><%= h.label %></th>
+                          <th><%= h.label %></th>
                           <% 
                               }
                             }) 
                           %>
-                          <th>Account</th>
-                          <th>First Class</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <% num=(parseInt(pagination.currentPage)*10)-9 %>
                         <% for (var i = 0; i < datarow.length; i++) { %>
                         <tr>
-                          <th scope="row"><%= num+i %></th>
+                          <th scope="row"><%= i+1 %></th>
                           <td><%= datarow[i].progress_statuses[0].police_no %></td>
                           <td><%= datarow[i].no_rangka %></td>
-                          <td><%= datarow[i].progress_statuses[0].customer %></td>
-                          <td><%= datarow[i].qty_service %></td>
-                          <td><%= datarow[i].total_omzet.toLocaleString(); %></td>
-                          <td><%= datarow[i].avg_omzet.toLocaleString() %></td>
-                          <td><%= (((datarow[i].total_omzet*1)/100000).toFixed(0)).toLocaleString() %></td>
-                          <td><%= datarow[i].status_kendaraan %></td>
-                          <td><%= (datarow[i].first_class==1 ? "Frist Class" : "None") %></td>
+                          <td><%= datarow[i].progress_statuses[0].model %></td>
+                          <td><%= datarow[i].customer.nama %></td>
+                          <td class="text-right"><%= datarow[i].total_omzet.toLocaleString(); %></td>
+                          <td><%= datarow[i].last_service %></td>
+                          <td><%= (datarow[i].first_class=='1' ? 'First Class' : 'None' )%></td>
                         </tr>
                         <% } %>
                       </tbody>
                     </table>
-                    <% var paginationFor = "custfirst/fs" %>
-                    <%- include ../../../views/templates/pagination.ejs %>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
+        <!-- modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
+          <div class="modal-dialog" role="document">
+            <form id="formData" method="POST" action="" enctype="multipart/form-data" class="needs-validation"
+              novalidate="" >
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Form Data <%= title %></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <% htitle.forEach(function(h) { %>
+                    <% if (h.typeInput=="textarea") { %>
+                      <div class="form-group">
+                        <label><%= h.label %></label>
+                        <textarea name="<%= h.id %>" id="<%= h.id %>" class="form-control" required=""></textarea>
+                      </div>
+                    <% }else{ %>
+                      <div class="form-group">
+                        <label><%= h.label %></label>
+                        <input type="<%= h.typeInput %>" id="<%= h.id %>" name="<%= h.id %>" class="form-control" required="">
+                      </div>
+                    <% } %>
+                  <% }) %>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-success">Save changes</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- END MODAL -->
       </div>
       <%- include ../../../views/templates/footer.ejs %>
     </div>
@@ -127,15 +152,8 @@
     });
 
     function createFunction(){
-      let url = '<%= process.env.URL %>/custfirst/fs/sync';
-      $.ajax({
-        type: 'GET',
-        url: url,
-        dataType: 'json',
-        success: function (res) {
-          swal('Behasil', res.message, res.success);
-        }
-      });
+      $('#formData').attr('action', '<%= process.env.URL %>/cars/adddata');
+      document.getElementById("formData").reset();
     };
     
     function delFunction(id) {

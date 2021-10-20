@@ -282,7 +282,7 @@ exports.createKendaraan = function (req, res) {
                 var rumusFS = selisih / dataCount.count;
 
                 //menghitung jumlah rata" omset
-                var avg_omzet = dataSum / dataCount.count;
+                var avg_omzet = parseInt(parseInt(dataSum) / parseInt(dataCount.count));
 
                 //point reward
                 let pointReward = (dataSum / 10000).toFixed();
