@@ -21,7 +21,7 @@ router.get("/login/onetaps/:token", authController.login_account_customer_token)
 router.get("/login", authController.view_login_account_customer);
 router.get("/daftar", authController.view_daftar_account_customer);
 router.get("/login/karyawan", authController.view_login_account_karyawan);
-router.get("/onetaps", authController.view_onetaps_customer);
+router.get("/onetaps", [authMiddleware.verifyToken], authController.view_onetaps_customer);
 
 router.get("/logout", (req, res, next) => {
   if (req.session) {

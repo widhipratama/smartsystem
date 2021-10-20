@@ -36,7 +36,7 @@
                 </div>
               </div>
               <div class="section-body">
-                <h2 class="section-title">Hi, <%- auth.nama %> !</h2>
+                <h2 class="section-title">Hi, <%= auth.nama_user %> !</h2>
                 <p class="section-lead">
                   Change information about yourself on this page.
                 </p>
@@ -60,11 +60,7 @@
                       </div>
                       <div class="profile-widget-description">
                         <div class="profile-widget-name">
-                          <%- auth.nama %>
-                            <div class="text-muted d-inline font-weight-normal">
-                              <div class="slash"></div>
-                              Cendrawasih
-                            </div>
+                          <%- auth.nama_user %>
                         </div>
                         <div class="text-left">
                           <a href="https://wa.me/6287855925696" target="_blank" class="btn btn-success">

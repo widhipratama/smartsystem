@@ -6,6 +6,7 @@ const { randomString } = require("../../../helpers/randomString");
 const useraccount = db.useraccount;
 const customer = db.customer;
 const karyawan = db.karyawan;
+const fleet_customer = db.fleet_customer;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -175,40 +176,80 @@ exports.login_account_customer = (req, res) => {
 
     useraccount
       .findOne({
-        include: [{ model: customer }],
         where: {
           username: req.body.username,
-          kategori_user: "USER",
         },
       })
-      .then((q) => {
+      .then(async (q) => {
         if (!q) {
           res.json({ status: "401", message: "User tidak terdaftar" });
-        }
+        } else {
+          if (q.kategori_user === "USER") {
+            const userdetail = await customer.findOne({
+              where: {
+                id_customer: q.id_user,
+              },
+            });
 
-        var passwordIsValid = bcrypt.compareSync(req.body.password, q.password);
+            var passwordIsValid = bcrypt.compareSync(req.body.password, q.password);
 
-        if (!passwordIsValid) {
-          res.json({ status: "401", message: "Password salah" });
-        }
+            if (!passwordIsValid) {
+              res.json({ status: "401", message: "Password salah" });
+            }
 
-        let accessToken = jwt.sign(
-          { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.kategori_user, nama: q.customer?.nama },
-          process.env.ACCESS_TOKEN_SECRET,
-          {
-            expiresIn: process.env.ACCESS_TOKEN_LIFE,
+            let accessToken = jwt.sign(
+              { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.id_user, nama_user: userdetail.nama },
+              process.env.ACCESS_TOKEN_SECRET,
+              {
+                expiresIn: process.env.ACCESS_TOKEN_LIFE,
+              }
+            );
+
+            let refreshToken = jwt.sign(
+              { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.id_user, nama_user: userdetail.nama },
+              process.env.REFRESH_TOKEN_SECRET
+            );
+
+            useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
+            res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
+
+            res.json({ status: "200", loginId: useraccount.id, username: useraccount.username, accessToken: accessToken });
+          } else if (q.kategori_user === "FLEET") {
+            const userdetail = await fleet_customer.findOne({
+              where: {
+                id: q.id_user,
+              },
+            });
+
+            console.log(userdetail);
+
+            var passwordIsValid = bcrypt.compareSync(req.body.password, q.password);
+
+            if (!passwordIsValid) {
+              res.json({ status: "401", message: "Password salah" });
+            }
+
+            let accessToken = jwt.sign(
+              { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.id_user, nama_user: userdetail.nama_fleet },
+              process.env.ACCESS_TOKEN_SECRET,
+              {
+                expiresIn: process.env.ACCESS_TOKEN_LIFE,
+              }
+            );
+
+            let refreshToken = jwt.sign(
+              { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.id_user, nama_user: userdetail.nama_fleet },
+              process.env.REFRESH_TOKEN_SECRET
+            );
+
+            useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
+            res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
+
+            res.json({ status: "200", loginId: useraccount.id, username: useraccount.username, accessToken: accessToken });
+          } else {
+            res.json({ status: "401", message: "Tidak ada akses" + err });
           }
-        );
-
-        let refreshToken = jwt.sign(
-          { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.kategori_user, nama: q.customer?.nama },
-          process.env.REFRESH_TOKEN_SECRET
-        );
-
-        useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
-        res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
-
-        res.json({ status: "200", loginId: useraccount.id, username: useraccount.username, accessToken: accessToken });
+        }
       })
       .catch((err) => {
         res.json({ status: "500", message: "Server Error" + err });
@@ -244,7 +285,7 @@ exports.login_account_karyawan = (req, res) => {
         }
 
         let accessToken = jwt.sign(
-          { loginId: q.id, username: q.username, kategori_user: q.kategori_user, id_user: q.id_user },
+          { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.kategori_user, nama: q.customer?.nama },
           process.env.ACCESS_TOKEN_SECRET,
           {
             expiresIn: process.env.ACCESS_TOKEN_LIFE,
@@ -252,7 +293,7 @@ exports.login_account_karyawan = (req, res) => {
         );
 
         let refreshToken = jwt.sign(
-          { loginId: q.id, username: q.username, kategori_user: q.kategori_user, id_user: q.id_user },
+          { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.kategori_user, nama: q.customer?.nama },
           process.env.REFRESH_TOKEN_SECRET
         );
 

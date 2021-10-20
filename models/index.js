@@ -28,8 +28,11 @@ db.whatsapp_blast = require("./whatsapp_blast")(sequelize, Sequelize);
 db.promotion = require("../modules/promotion/models/promotion")(sequelize, Sequelize);
 db.kendaraan = require("../modules/cars/models/kendaraan")(sequelize, Sequelize);
 
-db.useraccount.hasOne(db.customer, { foreignKey: "id_customer" });
-db.customer.hasOne(db.useraccount, { foreignKey: "id_user" });
+// db.useraccount.hasOne(db.customer, { foreignKey: "id_user" });
+// db.useraccount.hasOne(db.karyawan, { foreignKey: "id_user" });
+// db.customer.belongsTo(db.useraccount, { foreignKey: "id_user" });
+// db.karyawan.belongsTo(db.useraccount, { foreignKey: "id_user" });
+
 db.kendaraan.hasOne(db.master_kendaraan, { foreignKey: "id_mobil" });
 db.kendaraan.belongsTo(db.master_kendaraan, { foreignKey: "id_mobil" });
 db.kendaraan.hasMany(db.progressStatus, { foreignKey: "rangka" });

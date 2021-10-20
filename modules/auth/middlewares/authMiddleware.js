@@ -37,11 +37,11 @@ verifyToken = async (req, res, next) => {
 
     let newToken = jwt.sign(
       {
-        loginId: account.id,
-        nama: account.nama,
-        username: account.username,
-        level: account.kategori_user,
-        id_user: account.id_user,
+        loginId: payload.loginId,
+        nama_user: payload.nama_user,
+        username: payload.username,
+        level: payload.level,
+        id_user: payload.id_user,
       },
       process.env.ACCESS_TOKEN_SECRET,
       {

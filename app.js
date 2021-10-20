@@ -219,7 +219,7 @@ app.all("*", function (req, res, next) {
     app.locals = {
       auth: {
         username: payload.username,
-        nama: payload.nama,
+        nama_user: payload.nama_user,
         level: payload.level,
         id_user: payload.id_user,
       },
@@ -228,7 +228,7 @@ app.all("*", function (req, res, next) {
     app.locals = {
       auth: {
         username: "-",
-        nama: "-",
+        nama_user: "-",
         level: "-",
         id_user: "-",
       },
