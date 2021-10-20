@@ -73,12 +73,12 @@ exports.firstclass = function (req, res) {
   let page = req.query.page || 1;
   let offset = 0;
   if (page > 1) {
-      offset = ((page - 1) * 50) + 1;
+    offset = ((page - 1) * 50) + 1;
   }
   models.kendaraan
     .findAndCountAll({
       include: [
-        { model: models.customer, required:false },
+        { model: models.customer, required: false },
         {
           model: models.progressStatus,
           limit: 1,
@@ -142,7 +142,7 @@ exports.syncdataFristClass = async function (req, res) {
       var rumusFS = selisih / e.total_count;
 
       //menghitung jumlah rata" omset
-      let avg_omzet = e.total_omzet/ e.total_count;
+      let avg_omzet = e.total_omzet / e.total_count;
 
       //memberikan status FS atau tidak
       if (rumusFS < 7 && avg_omzet >= 1750000) {
@@ -152,7 +152,7 @@ exports.syncdataFristClass = async function (req, res) {
       }
 
       //point reward
-      let pointReward = (e.total_omzet/10000).toFixed();
+      let pointReward = (e.total_omzet / 10000).toFixed();
 
       //simpan data
 
@@ -166,8 +166,8 @@ exports.syncdataFristClass = async function (req, res) {
           first_service: e.first_service,
           point_reward: pointReward,
         };
-        return cars.update(data).then(() => {});
-      }).catch((err)=>{
+        return cars.update(data).then(() => { });
+      }).catch((err) => {
         let data = {
           no_rangka: e.norangka,
           total_omzet: e.total_omzet,
@@ -179,7 +179,7 @@ exports.syncdataFristClass = async function (req, res) {
           point_reward: pointReward,
           status_kendaraan: 'none'
         };
-        return models.kendaraan.create(data).then(() => {});
+        return models.kendaraan.create(data).then(() => { });
       });
     });
     res.send({
