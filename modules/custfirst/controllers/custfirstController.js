@@ -199,6 +199,94 @@ exports.syncdataFristClass = async function (req, res) {
     });
 };
 
+// CONTROLLER DASHBOARD
+exports.data_dashboard = async function (req, res) {
+  const tfirst = await models.kendaraan
+    .findAndCountAll({
+      where: [{ first_class: "1" }],
+    });
+  const tregisterd = await models.kendaraan
+    .findAndCountAll({
+      where: [{ status_kendaraan: "registred" }],
+    });
+  const tenews = await models.artikel_enews
+    .findAndCountAll({});
+  const thow = await models.toyota_how
+    .findAndCountAll({});
+  const alphard = await models.sequelize.query(
+    `SELECT 
+        model,
+				COUNT(job_history.norangka) total_count
+        FROM kendaraan
+        JOIN job_history
+        ON job_history.norangka = kendaraan.no_rangka
+        WHERE kendaraan.first_class = '1' 
+				AND model = 'ALPHARD'
+        GROUP BY job_history.model
+        AND job_history.norangka`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  const avanza = await models.sequelize.query(
+    `SELECT 
+        model,
+				COUNT(job_history.norangka) total_count
+        FROM kendaraan
+        JOIN job_history
+        ON job_history.norangka = kendaraan.no_rangka
+        WHERE kendaraan.first_class = '1' 
+				AND model = 'AVANZA'
+        GROUP BY job_history.model
+        AND job_history.norangka`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  const innova = await models.sequelize.query(
+    `SELECT 
+        model,
+				COUNT(job_history.norangka) total_count
+        FROM kendaraan
+        JOIN job_history
+        ON job_history.norangka = kendaraan.no_rangka
+        WHERE kendaraan.first_class = '1' 
+				AND model = 'INNOVA'
+        GROUP BY job_history.model
+        AND job_history.norangka`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  const fortuner = await models.sequelize.query(
+    `SELECT 
+        model,
+				COUNT(job_history.norangka) total_count
+        FROM kendaraan
+        JOIN job_history
+        ON job_history.norangka = kendaraan.no_rangka
+        WHERE kendaraan.first_class = '1' 
+				AND model = 'FORTUNER'
+        GROUP BY job_history.model
+        AND job_history.norangka`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  
+  res.send({
+    tfirst: tfirst.count,
+    tregisterd: tregisterd.count,
+    tenews: tenews.count,
+    thow: thow.count,
+    fortuner: fortuner[0].total_count,
+    avanza: avanza[0].total_count,
+    innova: innova[0].total_count,
+    alphard: alphard[0].total_count,
+    tcars: alphard[0].total_count + innova[0].total_count + avanza[0].total_count + fortuner[0].total_count
+  });
+};
+
 exports.notFound = function (req, res) {
   res.render("page/notfound");
 };

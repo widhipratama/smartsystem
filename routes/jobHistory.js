@@ -8,8 +8,8 @@ router.use(function (req, res, next) {
     next();
 });
 
-router.post("/upload", [authMiddleware.verifyToken], upload.single("file"), jobHistoryController.upload);
-router.get("/import", [authMiddleware.verifyToken], jobHistoryController.import);
+router.post("/upload", upload.single("file"), jobHistoryController.upload);
+router.get("/import", jobHistoryController.import);
 router.get("*", jobHistoryController.notFound);
 
 module.exports = router;

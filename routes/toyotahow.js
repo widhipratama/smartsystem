@@ -9,18 +9,18 @@ router.use(function (req, res, next) {
 });
 
 router.get("/", [authMiddleware.verifyToken], toyotahowController.index);
-router.get("/detail/:id", [authMiddleware.verifyToken], toyotahowController.indexdetail);
+router.get("/detail/:id", toyotahowController.indexdetail);
 router.get("/input", [authMiddleware.verifyToken], toyotahowController.input);
-router.post("/adddata", [authMiddleware.verifyToken], upload.fields([{
+router.post("/adddata", upload.fields([{
                 name: 'sampul_how', maxCount: 1
             }, {
                 name: 'location_how', maxCount: 1
             }]), toyotahowController.createData);
-router.post("/updatedatasampul", [authMiddleware.verifyToken], upload.single('sampul_how'), toyotahowController.updateDataSampul);
-router.get("/delete/:id", [authMiddleware.verifyToken], toyotahowController.hapusData);
-router.get("/edit/:id", [authMiddleware.verifyToken], toyotahowController.editData);
-router.post("/edit/save/:id", [authMiddleware.verifyToken], toyotahowController.updateData);
-router.get("/pdf", [authMiddleware.verifyToken], toyotahowController.pdf);
+router.post("/updatedatasampul", upload.single('sampul_how'), toyotahowController.updateDataSampul);
+router.get("/delete/:id", toyotahowController.hapusData);
+router.get("/edit/:id", toyotahowController.editData);
+router.post("/edit/save/:id", toyotahowController.updateData);
+router.get("/pdf", toyotahowController.pdf);
 router.get("*", toyotahowController.notFound);
 
 module.exports = router;

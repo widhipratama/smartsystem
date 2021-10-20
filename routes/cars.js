@@ -9,16 +9,16 @@ router.use(function (req, res, next) {
 });
 
 router.get("/", [authMiddleware.verifyToken], carsController.index);
-router.post("/adddata", [authMiddleware.verifyToken], upload.single('image_mobil'), carsController.createData);
-router.get("/delete/:id", [authMiddleware.verifyToken], carsController.hapusData);
-router.get("/edit/:id", [authMiddleware.verifyToken], carsController.editData);
-router.post("/edit/save/:id", [authMiddleware.verifyToken], carsController.updateData);
+router.post("/adddata", upload.single('image_mobil'), carsController.createData);
+router.get("/delete/:id", carsController.hapusData);
+router.get("/edit/:id", carsController.editData);
+router.post("/edit/save/:id", carsController.updateData);
 router.post("/ceknorangka/:id", carsController.cekNoRangka);
-router.post("/savekendaraan", [authMiddleware.verifyToken], carsController.createKendaraan);
-router.post("/listkendraan/:id/:h", [authMiddleware.verifyToken], carsController.getListKendaraan);
-router.post("/delkendaraan/:id", [authMiddleware.verifyToken], carsController.hapuskendaraan);
+router.post("/savekendaraan", carsController.createKendaraan);
+router.post("/listkendraan/:id/:h", carsController.getListKendaraan);
+router.post("/delkendaraan/:id", carsController.hapuskendaraan);
 router.get("/cekkendaraan/:id", carsController.cekKendaraan);
-router.get("/jobhistory/:id", [authMiddleware.verifyToken], carsController.get_job_history);
+router.get("/jobhistory/:id", carsController.get_job_history);
 router.get("*", carsController.notFound);
 
 module.exports = router;
