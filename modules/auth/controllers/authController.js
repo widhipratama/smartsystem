@@ -218,13 +218,15 @@ exports.login_account = (req, res) => {
             useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
             res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
 
-            res.json({
+            const response = {
               status: "200",
-              loginId: useraccount.id,
-              username: useraccount.username,
+              loginId: q.id,
+              username: q.username,
               accessToken: accessToken,
-              level: useraccount.kategori_user,
-            });
+              level: q.kategori_user,
+            };
+
+            res.json(response);
           } else if (q.kategori_user === "FLEET") {
             const userdetail = await fleet_customer.findOne({
               where: {
@@ -254,13 +256,15 @@ exports.login_account = (req, res) => {
             useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
             res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
 
-            res.json({
+            const response = {
               status: "200",
-              loginId: useraccount.id,
-              username: useraccount.username,
+              loginId: q.id,
+              username: q.username,
               accessToken: accessToken,
-              level: useraccount.kategori_user,
-            });
+              level: q.kategori_user,
+            };
+
+            res.json(response);
           } else if (q.kategori_user === "ADMIN" || q.kategori_user === "KANTIN" || q.kategori_user === "SA") {
             const userdetail = await karyawan.findOne({
               where: {
@@ -290,13 +294,15 @@ exports.login_account = (req, res) => {
             useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
             res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
 
-            res.json({
+            const response = {
               status: "200",
-              loginId: useraccount.id,
-              username: useraccount.username,
+              loginId: q.id,
+              username: q.username,
               accessToken: accessToken,
-              level: useraccount.kategori_user,
-            });
+              level: q.kategori_user,
+            };
+
+            res.json(response);
           } else {
             res.json({ status: "401", message: "Tidak ada akses" + err });
           }
