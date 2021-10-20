@@ -298,12 +298,13 @@
         function editFunction(id) {
           let idData = id;
           let url = '<%= process.env.URL %>/customer/edit/' + idData;
-
+          console.log(url)
           $.ajax({
             type: 'GET',
             url: url,
             dataType: 'json',
             success: function (res) {
+              console.log(res)
               document.getElementById("urlsubmit").value = '<%= process.env.URL %>/customer/edit/save/' + idData;
               document.getElementById("nama").value = res.data.nama;
               document.getElementById("no_telp").value = res.data.no_telp;

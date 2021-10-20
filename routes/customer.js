@@ -8,10 +8,10 @@ router.use(function (req, res, next) {
 });
 
 router.get("/", [authMiddleware.verifyToken], customerController.index);
-router.post("/addcustomer", [authMiddleware.verifyToken], customerController.createCustomer);
-router.get("/delete/:id", [authMiddleware.verifyToken], customerController.hapusCustomer);
-router.get("/edit/:id", [authMiddleware.verifyToken], customerController.editCustomer);
-router.post("/edit/save/:id", [authMiddleware.verifyToken], customerController.updateCustomer);
+router.post("/addcustomer", customerController.createCustomer);
+router.get("/delete/:id", customerController.hapusCustomer);
+router.get("/edit/:id", customerController.editCustomer);
+router.post("/edit/save/:id", customerController.updateCustomer);
 router.get("*", customerController.notFound);
 
 module.exports = router;

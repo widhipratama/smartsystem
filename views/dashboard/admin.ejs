@@ -30,11 +30,9 @@
                     </div>
                     <div class="card-wrap">
                       <div class="card-header">
-                        <h4>Total Fist Class</h4>
+                        <h4>Fist Class</h4>
                       </div>
-                      <div class="card-body">
-                        1231
-                      </div>
+                      <div class="card-body" id="tfirst"></div>
                     </div>
                   </div>
                 </div>
@@ -47,9 +45,7 @@
                       <div class="card-header">
                         <h4>Registred</h4>
                       </div>
-                      <div class="card-body">
-                        42
-                      </div>
+                      <div class="card-body" id="tregistred"></div>
                     </div>
                   </div>
                 </div>
@@ -62,9 +58,7 @@
                       <div class="card-header">
                         <h4>Toyota How</h4>
                       </div>
-                      <div class="card-body">
-                        1,201
-                      </div>
+                      <div class="card-body" id="thow"></div>
                     </div>
                   </div>
                 </div>
@@ -77,9 +71,7 @@
                       <div class="card-header">
                         <h4>Enews</h4>
                       </div>
-                      <div class="card-body">
-                        47
-                      </div>
+                      <div class="card-body" id="tenews"></div>
                     </div>
                   </div>
                 </div>
@@ -87,7 +79,7 @@
             </div>
             <!-- GRAFIKK -->
             <div class="row">
-            <div class="col-lg-8 col-md-12 col-12 col-sm-12">
+            <!-- <div class="col-lg-8 col-md-12 col-12 col-sm-12">
               <div class="card">
                 <div class="card-header">
                   <h4>Last Week's Booking</h4>
@@ -118,60 +110,45 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-lg-4 col-md-12 col-12 col-sm-12">
+            </div> -->
+            <div class="col-lg-8 col-md-12 col-12 col-sm-12">
               <div class="card">
                 <div class="card-header">
                   <h4>Registered Car</h4>
                 </div>
                 <div class="card-body">
                   <div class="mb-4">
-                    <div class="text-small float-right font-weight-bold text-muted">2,100</div>
+                    <div class="text-small float-right font-weight-bold text-muted" id="talphrad"></div>
                     <div class="font-weight-bold mb-1">Alphard</div>
                     <div class="progress" data-height="3">
-                      <div class="progress-bar" role="progressbar" data-width="80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar" role="progressbar" id="alphrad" data-width="" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
 
                   <div class="mb-4">
-                    <div class="text-small float-right font-weight-bold text-muted">1,880</div>
+                    <div class="text-small float-right font-weight-bold text-muted" id="tfortuner"></div>
                     <div class="font-weight-bold mb-1">Fortuner</div>
                     <div class="progress" data-height="3">
-                      <div class="progress-bar" role="progressbar" data-width="67%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar" role="progressbar" id="fortuner" data-width="" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
 
                   <div class="mb-4">
-                    <div class="text-small float-right font-weight-bold text-muted">1,521</div>
+                    <div class="text-small float-right font-weight-bold text-muted" id="tinnova"></div>
+                    <div class="font-weight-bold mb-1">INNOVA</div>
+                    <div class="progress" data-height="3">
+                      <div class="progress-bar" role="progressbar" id="innova" data-width="" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <div class="text-small float-right font-weight-bold text-muted" id="tavanza"></div>
                     <div class="font-weight-bold mb-1">Avanza</div>
                     <div class="progress" data-height="3">
-                      <div class="progress-bar" role="progressbar" data-width="58%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar" role="progressbar" id="avanza" data-width="" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
 
-                  <div class="mb-4">
-                    <div class="text-small float-right font-weight-bold text-muted">884</div>
-                    <div class="font-weight-bold mb-1">Agya</div>
-                    <div class="progress" data-height="3">
-                      <div class="progress-bar" role="progressbar" data-width="36%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-
-                  <div class="mb-4">
-                    <div class="text-small float-right font-weight-bold text-muted">473</div>
-                    <div class="font-weight-bold mb-1">Innova</div>
-                    <div class="progress" data-height="3">
-                      <div class="progress-bar" role="progressbar" data-width="28%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-
-                  <div class="mb-4">
-                    <div class="text-small float-right font-weight-bold text-muted">418</div>
-                    <div class="font-weight-bold mb-1">Yaris</div>
-                    <div class="progress" data-height="3">
-                      <div class="progress-bar" role="progressbar" data-width="20%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -183,5 +160,37 @@
       </div>
     </div>
     <%- include ../templates/script.ejs %>
+    <script src="<%= process.env.URL %>/script-stisla/assets/js/page/modules-chartjs.js"></script>
+    <script>
+      $(document).ready(function () {
+        getDatadashboard();
+      });
+      function getDatadashboard() {
+        let url = '<%= process.env.URL %>/custfirst/dashboard';
+        console.log('sasa')
+        $.ajax({
+          type: 'GET',
+          url: url,
+          dataType: 'json',
+          success: function (res) {
+            console.log(res)
+            $('#tfirst').html(res.tfirst.toLocaleString());
+            $('#tregistred').html(res.tregisterd.toLocaleString());
+            $('#tenews').html(res.tenews.toLocaleString());
+            $('#thow').html(res.thow.toLocaleString());
+            $('#talphrad').html(res.alphard.toLocaleString());
+            $('#tfortuner').html(res.fortuner.toLocaleString());
+            $('#tinnova').html(res.innova.toLocaleString());
+            $('#tavanza').html(res.avanza.toLocaleString());
+
+            console.log((res.alphard/res.tcars)*100);
+            $('#alphrad').attr("data-width",((res.alphard/res.tcars)*100).toFixed()+"%");
+            $('#fortuner').attr("data-width",((res.fortuner/res.tcars)*100).toFixed()+"%");
+            $('#innova').attr("data-width",((res.innova/res.tcars)*100).toFixed()+"%");
+            $('#avanza').attr("data-width",((res.avanza/res.tcars)*100).toFixed()+"%");
+          }
+        });
+      }
+    </script>
   </body>
 </html>

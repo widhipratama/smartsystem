@@ -8,8 +8,8 @@ router.use(function (req, res, next) {
     next();
 });
 
-router.post("/upload", [authMiddleware.verifyToken], upload.single("file"), progressStatusController.upload);
-router.get("/import", [authMiddleware.verifyToken], progressStatusController.import);
+router.post("/upload", upload.single("file"), progressStatusController.upload);
+router.get("/import", progressStatusController.import);
 router.get("*", progressStatusController.notFound);
 
 module.exports = router;

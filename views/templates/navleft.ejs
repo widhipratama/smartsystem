@@ -32,16 +32,22 @@
           </a>
         </li>
         <% } %>
-          <% if(auth.level=='ADMIN' ){ %>
-            <li class="menu-header">Dashboard</li>
+        <% if(auth.level=='ADMIN' ){ %>
+          <li class="menu-header">MENU</li>
+            <li class="">
+              <a class="nav-link" href="/admin/dashboard">
+                <i class="fas fa-fire"></i> <span>Dashboard</span>
+              </a>
+            </li>
+            <!-- <li class="menu-header">Dashboard</li>
             <li class="nav-item dropdown">
               <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Dashboard</span></a>
               <ul class="dropdown-menu">
-                <li><a class="nav-link" href="/admin/dashboard">Blank Page</a></li>
+                <li><a class="nav-link" href="/admin/dashboard">Dashboard Page</a></li>
                 <li><a class="nav-link" href="/dashboard">Customer Page</a></li>
-                <!-- <li><a class="nav-link" href="index.html">Ecommerce Dashboard</a></li> -->
+                <li><a class="nav-link" href="index.html">Ecommerce Dashboard</a></li>
               </ul>
-            </li>
+            </li> -->
             <li class="menu-header">Renata</li>
             <li class="">
               <a class="nav-link" href="/custfirst/customer">
