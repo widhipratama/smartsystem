@@ -131,6 +131,7 @@ exports.login_account_customer_token = (req, res) => {
         include: [{ model: customer }],
         where: {
           token: token,
+          kategori_user: "USER",
         },
       })
       .then((q) => {
@@ -139,7 +140,7 @@ exports.login_account_customer_token = (req, res) => {
         }
 
         let accessToken = jwt.sign(
-          { loginId: q.id, username: q.username, kategori_user: "USER", id_user: q.id_user },
+          { loginId: q.id, username: q.username, kategori_user: q.kategori_user, id_user: q.id_user },
           process.env.ACCESS_TOKEN_SECRET,
           {
             expiresIn: process.env.ACCESS_TOKEN_LIFE,
@@ -147,7 +148,7 @@ exports.login_account_customer_token = (req, res) => {
         );
 
         let refreshToken = jwt.sign(
-          { loginId: q.id, username: q.username, kategori_user: "USER", id_user: q.id_user },
+          { loginId: q.id, username: q.username, kategori_user: q.kategori_user, id_user: q.id_user },
           process.env.REFRESH_TOKEN_SECRET
         );
 
@@ -177,6 +178,7 @@ exports.login_account_customer = (req, res) => {
         include: [{ model: customer }],
         where: {
           username: req.body.username,
+          kategori_user: "USER",
         },
       })
       .then((q) => {
@@ -191,7 +193,7 @@ exports.login_account_customer = (req, res) => {
         }
 
         let accessToken = jwt.sign(
-          { loginId: q.id, username: q.username, kategori_user: "USER", id_user: q.id_user },
+          { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.kategori_user, nama: q.customer?.nama },
           process.env.ACCESS_TOKEN_SECRET,
           {
             expiresIn: process.env.ACCESS_TOKEN_LIFE,
@@ -199,7 +201,7 @@ exports.login_account_customer = (req, res) => {
         );
 
         let refreshToken = jwt.sign(
-          { loginId: q.id, username: q.username, kategori_user: "USER", id_user: q.id_user },
+          { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.kategori_user, nama: q.customer?.nama },
           process.env.REFRESH_TOKEN_SECRET
         );
 
