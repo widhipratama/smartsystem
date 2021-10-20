@@ -113,14 +113,18 @@
             dataType: 'json',
           })
             .done(function (data) {
-              const { status, message } = data
+              const { status, message, level } = data
               if (status === "200") {
                 iziToast.show({
                   title: 'Login berhasil!',
                   message: 'Sedang mengalihkan ke halaman dashboard',
                   position: 'topCenter',
                   onClosing: function () {
-                    location.href = '/auth/onetaps';
+                    if (level === 'USER' || level === 'FLEET') {
+                      location.href = '/auth/onetaps';
+                    } else {
+                      location.href = '/admin/dashboard/';
+                    }
                   },
                   close: false,
                   timeout: 1000,

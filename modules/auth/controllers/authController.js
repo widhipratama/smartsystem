@@ -27,7 +27,7 @@ exports.validate = (method) => {
         body("level_karyawan", "level tidak boleh kosong").exists(),
       ];
     }
-    case "login_account_customer": {
+    case "login_account": {
       return [body("username", "username tidak boleh kosong").exists(), body("password", "password tidak boleh kosong").exists()];
     }
     case "login_account_karyawan": {
@@ -107,6 +107,7 @@ exports.daftar_account_customer = (req, res) => {
             password: bcrypt.hashSync(req.body.password, 8),
             id_user: q.id_customer,
             kategori_user: "USER",
+            token: randomString(),
             status: 1,
           })
           .then(() => {
@@ -129,19 +130,23 @@ exports.login_account_customer_token = (req, res) => {
     const token = req.params.token;
     useraccount
       .findOne({
-        include: [{ model: customer }],
         where: {
           token: token,
-          kategori_user: "USER",
         },
       })
-      .then((q) => {
+      .then(async (q) => {
         if (!q) {
           res.redirect(process.env.URL + "/auth/login");
         }
 
+        const userdetail = await customer.findOne({
+          where: {
+            id_customer: q.id_user,
+          },
+        });
+
         let accessToken = jwt.sign(
-          { loginId: q.id, username: q.username, kategori_user: q.kategori_user, id_user: q.id_user },
+          { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.id_user, nama_user: userdetail.nama },
           process.env.ACCESS_TOKEN_SECRET,
           {
             expiresIn: process.env.ACCESS_TOKEN_LIFE,
@@ -149,7 +154,7 @@ exports.login_account_customer_token = (req, res) => {
         );
 
         let refreshToken = jwt.sign(
-          { loginId: q.id, username: q.username, kategori_user: q.kategori_user, id_user: q.id_user },
+          { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.id_user, nama_user: userdetail.nama },
           process.env.REFRESH_TOKEN_SECRET
         );
 
@@ -166,7 +171,7 @@ exports.login_account_customer_token = (req, res) => {
   }
 };
 
-exports.login_account_customer = (req, res) => {
+exports.login_account = (req, res) => {
   try {
     const errors = validationResult(req);
 
@@ -213,15 +218,19 @@ exports.login_account_customer = (req, res) => {
             useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
             res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
 
-            res.json({ status: "200", loginId: useraccount.id, username: useraccount.username, accessToken: accessToken });
+            res.json({
+              status: "200",
+              loginId: useraccount.id,
+              username: useraccount.username,
+              accessToken: accessToken,
+              level: useraccount.kategori_user,
+            });
           } else if (q.kategori_user === "FLEET") {
             const userdetail = await fleet_customer.findOne({
               where: {
                 id: q.id_user,
               },
             });
-
-            console.log(userdetail);
 
             var passwordIsValid = bcrypt.compareSync(req.body.password, q.password);
 
@@ -245,7 +254,49 @@ exports.login_account_customer = (req, res) => {
             useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
             res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
 
-            res.json({ status: "200", loginId: useraccount.id, username: useraccount.username, accessToken: accessToken });
+            res.json({
+              status: "200",
+              loginId: useraccount.id,
+              username: useraccount.username,
+              accessToken: accessToken,
+              level: useraccount.kategori_user,
+            });
+          } else if (q.kategori_user === "ADMIN" || q.kategori_user === "KANTIN" || q.kategori_user === "SA") {
+            const userdetail = await karyawan.findOne({
+              where: {
+                id_karyawan: q.id_user,
+              },
+            });
+
+            var passwordIsValid = bcrypt.compareSync(req.body.password, q.password);
+
+            if (!passwordIsValid) {
+              res.json({ status: "401", message: "Password salah" });
+            }
+
+            let accessToken = jwt.sign(
+              { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.id_user, nama_user: userdetail.nama_karyawan },
+              process.env.ACCESS_TOKEN_SECRET,
+              {
+                expiresIn: process.env.ACCESS_TOKEN_LIFE,
+              }
+            );
+
+            let refreshToken = jwt.sign(
+              { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.id_user, nama_user: userdetail.nama_karyawan },
+              process.env.REFRESH_TOKEN_SECRET
+            );
+
+            useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
+            res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
+
+            res.json({
+              status: "200",
+              loginId: useraccount.id,
+              username: useraccount.username,
+              accessToken: accessToken,
+              level: useraccount.kategori_user,
+            });
           } else {
             res.json({ status: "401", message: "Tidak ada akses" + err });
           }
