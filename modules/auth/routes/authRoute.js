@@ -13,7 +13,7 @@ router.post(
   [authMiddleware.checkUsername, authController.validate("daftar_account_karyawan")],
   authController.daftar_account_karyawan
 );
-router.post("/login", [authController.validate("login_account_customer")], authController.login_account_customer);
+router.post("/login", [authController.validate("login_account")], authController.login_account);
 router.post("/login/karyawan", [authController.validate("login_account_karyawan")], authController.login_account_karyawan);
 router.get("/login/onetaps/:token", authController.login_account_customer_token);
 

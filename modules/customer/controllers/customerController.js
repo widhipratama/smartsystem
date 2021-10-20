@@ -60,10 +60,12 @@ exports.createCustomer = function (req, res) {
 exports.hapusCustomer = function (req, res) {
   let id = req.params.id;
   let customerFound;
-  models.useraccount.findOne({ where: { id_user: { [Op.eq]: id } } })
+  models.useraccount
+    .findOne({ where: { id_user: { [Op.eq]: id } } })
     .then((account) => {
       return account.destroy().then(() => {
-        models.customer.findOne({ where: { id_customer: { [Op.eq]: id } } })
+        models.customer
+          .findOne({ where: { id_customer: { [Op.eq]: id } } })
           .then((customer) => {
             customerFound = customer;
             return customer.destroy().then(() => {
@@ -78,12 +80,12 @@ exports.hapusCustomer = function (req, res) {
             res.redirect("/customer");
           });
       });
-  })
-  .catch((err) => {
-    req.flash("alertMessage", err.message);
-    req.flash("alertStatus", "danger");
-    res.redirect("/customer");
-  });
+    })
+    .catch((err) => {
+      req.flash("alertMessage", err.message);
+      req.flash("alertStatus", "danger");
+      res.redirect("/customer");
+    });
 };
 exports.editCustomer = function (req, res) {
   const alertMessage = req.flash("alertMessage");
@@ -91,62 +93,67 @@ exports.editCustomer = function (req, res) {
   const alert = { message: alertMessage, status: alertStatus };
 
   const id = req.params.id;
-  models.customer.findOne({
-    include: [
-      { model: models.useraccount }
-    ],
-    where: { id_customer: { [Op.eq]: id } }
-  }).then((customer) => {
-    res.send({
-      success: true,
-      message: "Berhasil ambil data!",
-      data: customer,
+  models.customer
+    .findOne({
+      include: [{ model: models.useraccount }],
+      where: { id_customer: { [Op.eq]: id } },
+    })
+    .then((customer) => {
+      res.send({
+        success: true,
+        message: "Berhasil ambil data!",
+        data: customer,
+      });
     });
-  });
 };
 exports.updateCustomer = (req, res) => {
   const id = req.params.id;
   let dataFound;
   let data;
   const { nama, no_telp, ig, facebook, wa, alamat, alamat_dati2, alamat_dati3 } = req.body;
-  models.customer.findOne({ where: { id_customer: { [Op.eq]: id } } }).then((customer) => {
-    dataFound = customer;
-    data = {
-      nama: nama,
-      no_telp: no_telp,
-      ig: ig || null,
-      facebook: facebook || null,
-      wa: wa || null,
-      alamat: alamat || null,
-      alamat_dati2: alamat_dati2 || null,
-      alamat_dati3: alamat_dati3 || null,
-      status: 1,
-    }
-    return customer.update(data).then(() => {
-      models.useraccount.findOne({ where: { id_user: { [Op.eq]: id } } }).then((user) => {
-        dataFound = user;
-        data = {
-        }
-        if (req.body.password != '' && req.body.password != null) {
-          data = {
-            username: req.body.username,
-            password: bcrypt.hashSync(req.body.password, 8),
-          };
-        } else {
-          data = {
-            username: req.body.username,
-          };
-        }
-        return user.update(data).then(() => {
-          res.json({ status: "200", message: "Customer berhasil terupdate" });
-        })
-      }).catch((err) => {
-        res.json({ status: "500", message: err.message });
+  models.customer
+    .findOne({ where: { id_customer: { [Op.eq]: id } } })
+    .then((customer) => {
+      dataFound = customer;
+      data = {
+        nama: nama,
+        no_telp: no_telp,
+        ig: ig || null,
+        facebook: facebook || null,
+        wa: wa || null,
+        alamat: alamat || null,
+        alamat_dati2: alamat_dati2 || null,
+        alamat_dati3: alamat_dati3 || null,
+        status: 1,
+      };
+      return customer.update(data).then(() => {
+        models.useraccount
+          .findOne({ where: { id_user: { [Op.eq]: id } } })
+          .then((user) => {
+            dataFound = user;
+            data = {};
+            if (req.body.password != "" && req.body.password != null) {
+              data = {
+                username: req.body.username,
+                password: bcrypt.hashSync(req.body.password, 8),
+              };
+            } else {
+              data = {
+                username: req.body.username,
+              };
+            }
+            return user.update(data).then(() => {
+              res.json({ status: "200", message: "Customer berhasil terupdate" });
+            });
+          })
+          .catch((err) => {
+            res.json({ status: "500", message: err.message });
+          });
       });
     })
-  }).catch((err) => {
-    res.json({ status: "500", message: err.message });
-  });
+    .catch((err) => {
+      res.json({ status: "500", message: err.message });
+    });
 };
 exports.notFound = function (req, res) {
   res.render("page/notfound");
