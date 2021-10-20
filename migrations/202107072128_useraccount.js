@@ -10,6 +10,7 @@ module.exports = {
       },
       username: {
         type: Sequelize.STRING(30),
+        unique: true,
       },
       password: {
         type: Sequelize.STRING(100),
@@ -17,7 +18,7 @@ module.exports = {
       id_user: {
         type: Sequelize.STRING(100),
       },
-      kategori: {
+      kategori_user: {
         type: Sequelize.STRING(30),
       },
       token: {
