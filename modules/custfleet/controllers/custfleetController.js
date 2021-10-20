@@ -1,6 +1,10 @@
 var exports = (module.exports = {});
 const models = require("../../../models");
 let Op = require("sequelize").Op;
+const useraccount = models.useraccount;
+const fleet_customer = models.fleet_customer;
+var bcrypt = require("bcryptjs");
+
 var title = "Customer Fleet";
 var tbtitle = "List Customer Fleet";
 var menu = "fleet";
@@ -33,35 +37,70 @@ exports.index = function (req, res) {
     });
 }
 exports.createCustomer = function (req, res) {
-    let customerFound;
-    models.fleet_customer.create(req.body).then((custfleet) => {
-        customerFound = custfleet;
-        req.flash('alertMessage', `Sukses Menambahkan Data ${title} dengan nama : ${customerFound.nama_fleet}`);
-        req.flash('alertStatus', 'success');
-        res.redirect('/custfleet');
-    }).catch((err) => {
-        req.flash('alertMessage', err.message);
-        req.flash('alertStatus', 'danger');
-        htitle.forEach(h => {
-            req.flash(h.id, req.body.h.id);
+    const { username, nama_fleet, contact_person, no_telp_cust, total_omzet_14bln, alamat, alamat_dati2, alamat_dati3 } = req.body;
+
+    fleet_customer
+    .create({
+        nama_fleet: nama_fleet,
+        contact_person: contact_person,
+        no_telp_cust: no_telp_cust,
+        total_omzet_14bln: total_omzet_14bln || null,
+        alamat: alamat || null,
+        alamat_dati2: alamat_dati2 || null,
+        alamat_dati3: alamat_dati3 || null,
+    })
+    .then((q) => {
+        useraccount
+        .create({
+            username: req.body.username,
+            password: bcrypt.hashSync(req.body.password, 8),
+            id_user: q.id,
+            kategori_user: "FLEET",
+            status: 1,
+        })
+        .then(() => {
+            req.flash('alertMessage', `Customer berhasil terdaftar`);
+            req.flash('alertStatus', 'success');
+            res.redirect('/custfleet');
+        })
+        .catch((err) => {
+            req.flash('alertMessage', err.message);
+            req.flash('alertStatus', 'error');
+            res.redirect('/custfleet');
         });
+    })
+    .catch((err) => {
+        req.flash('alertMessage', err.message);
+        req.flash('alertStatus', 'error');
         res.redirect('/custfleet');
     });
 }
 exports.hapusCustomer = function (req, res) {
     let id = req.params.id;
     let customerFound;
-    models.fleet_customer.findOne({ where: { id: { [Op.eq]: id } } }).then((custfleet) => {
-        customerFound = custfleet;
-        return custfleet.destroy().then(() => {
-        req.flash('alertMessage', `Sukses Menghapus Data ${title} dengan nama : ${customerFound.nama_fleet}`);
-            req.flash('alertStatus', 'success');
-            res.redirect('/custfleet');
-        })
-    }).catch((err) => {
-        req.flash('alertMessage', err.message);
-        req.flash('alertStatus', 'danger');
-        res.redirect('/custfleet');
+    models.useraccount.findOne({ where: { id_user: { [Op.eq]: id } } })
+        .then((account) => {
+        return account.destroy().then(() => {
+            models.fleet_customer.findOne({ where: { id: { [Op.eq]: id } } })
+            .then((customer) => {
+                customerFound = customer;
+                return customer.destroy().then(() => {
+                req.flash("alertMessage", `Sukses Menghapus Data Customer dengan nama : ${customerFound.nama_fleet}`);
+                req.flash("alertStatus", "success");
+                res.redirect("/custfleet");
+                });
+            })
+            .catch((err) => {
+                req.flash("alertMessage", err.message);
+                req.flash("alertStatus", "danger");
+                res.redirect("/custfleet");
+            });
+        });
+    })
+    .catch((err) => {
+        req.flash("alertMessage", err.message);
+        req.flash("alertStatus", "danger");
+        res.redirect("/custfleet");
     });
 }
 exports.editCustomer = function (req, res) {

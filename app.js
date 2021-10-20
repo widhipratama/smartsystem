@@ -220,7 +220,7 @@ app.all("*", function (req, res, next) {
       auth: {
         username: payload.username,
         nama: payload.nama,
-        kategori_user: payload.ketegori_user,
+        nama_user: payload.nama_user,
         id_user: payload.id_user,
       },
     };
@@ -229,7 +229,7 @@ app.all("*", function (req, res, next) {
       auth: {
         username: "-",
         nama: "-",
-        kategori_user: "-",
+        nama_user: "-",
         id_user: "-",
       },
     };

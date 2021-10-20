@@ -79,11 +79,11 @@ exports.hapusCustomer = function (req, res) {
           });
       });
   })
-    .catch((err) => {
-      req.flash("alertMessage", err.message);
-      req.flash("alertStatus", "danger");
-      res.redirect("/customer");
-    });
+  .catch((err) => {
+    req.flash("alertMessage", err.message);
+    req.flash("alertStatus", "danger");
+    res.redirect("/customer");
+  });
 };
 exports.editCustomer = function (req, res) {
   const alertMessage = req.flash("alertMessage");
