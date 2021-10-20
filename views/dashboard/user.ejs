@@ -36,7 +36,7 @@
                 </div>
               </div>
               <div class="section-body">
-                <h2 class="section-title">Hi, <%- auth.nama %> !</h2>
+                <h2 class="section-title">Hi, <%- auth.level %> !</h2>
                 <p class="section-lead">
                   Change information about yourself on this page.
                 </p>
@@ -60,14 +60,14 @@
                       </div>
                       <div class="profile-widget-description">
                         <div class="profile-widget-name">
-                          <%- auth.nama %>
+                          <%- auth.id_user %>
                             <div class="text-muted d-inline font-weight-normal">
                               <div class="slash"></div>
                               Cendrawasih
                             </div>
                         </div>
                         <div class="text-left">
-                          <a href="https://wa.me/6287855925696" target="_blank"  class="btn btn-success">
+                          <a href="https://wa.me/6287855925696" target="_blank" class="btn btn-success">
                             <i class="fab fa-whatsapp"></i> Chat Me!
                           </a>
                           <a href="https://wa.me/628123811077" target="_blank" class="btn btn-danger">
@@ -173,7 +173,10 @@
     </div>
   </div>
   <%- include ../templates/script.ejs %>
-  <%- include ../templates/script_d_user.ejs %>
+    <%- include ../templates/script_d_user.ejs %>
+      <script>
+        console.log(JSON.stringify(`<%= auth %>`))
+      </script>
 </body>
 
 </html>

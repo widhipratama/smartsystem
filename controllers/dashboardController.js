@@ -1,5 +1,5 @@
 exports.user = function (req, res) {
-  const session = req.user;
+  const session = req.useraccount;
 
   res.render("dashboard/user", {
     session: session,
@@ -7,7 +7,7 @@ exports.user = function (req, res) {
 };
 
 exports.admin = function (req, res) {
-  const session = req.user;
+  const session = req.useraccount;
 
   res.render("dashboard/admin", {
     session: session,

@@ -17,7 +17,7 @@ module.exports = {
       id_user: {
         type: Sequelize.STRING(100),
       },
-      kategori_user: {
+      kategori: {
         type: Sequelize.STRING(30),
       },
       token: {

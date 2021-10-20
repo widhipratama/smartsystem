@@ -9,7 +9,7 @@ module.exports = (sequelize, Sequelize) => {
       username: Sequelize.DataTypes.STRING,
       password: Sequelize.DataTypes.STRING,
       id_user: Sequelize.DataTypes.INTEGER,
-      kategori_user: Sequelize.DataTypes.STRING,
+      kategori: Sequelize.DataTypes.STRING,
       last_login: Sequelize.DataTypes.STRING,
       token: Sequelize.DataTypes.STRING,
       refresh_token: Sequelize.DataTypes.STRING,
