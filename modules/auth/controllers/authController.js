@@ -101,13 +101,14 @@ exports.daftar_account_customer = (req, res) => {
         status: 1,
       })
       .then((q) => {
+        console.log(randomString(60))
         useraccount
           .create({
             username: req.body.username,
             password: bcrypt.hashSync(req.body.password, 8),
             id_user: q.id_customer,
             kategori_user: "USER",
-            token: randomString(),
+            token: randomString(60),
             status: 1,
           })
           .then(() => {

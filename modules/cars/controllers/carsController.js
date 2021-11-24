@@ -219,16 +219,21 @@ exports.cekKendaraan = function (req, res) {
           });
       } else {
         if (kendraanrangka.kendaraan.first_class != "" && kendraanrangka.kendaraan.first_class != null) {
-          data = { first_class: kendraanrangka.kendaraan.first_class };
+          data = {
+            success: "error",
+            titlemessage: "Data customer tidak tersedia!",
+            message: "Silahkan mengubungi Admin.",
+            data: { first_class: kendraanrangka.kendaraan.first_class },
+          };
         } else {
-          data = { first_class: 0 };
+          data = {
+            success: "error",
+            titlemessage: "Data customer tidak tersedia!",
+            message: "Silahkan mengubungi Admin.",
+            data: { first_class: 0 },
+          };
         }
-        res.send({
-          success: "success",
-          titlemessage: "Data kendraan tersedia!",
-          message: "Silahkan mengubungi Admin.",
-          data: data,
-        });
+        res.send(data);
       }
     })
     .catch((err) => {
