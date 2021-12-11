@@ -5,6 +5,9 @@ const { randomString } = require("../../../helpers/randomString");
 var bcrypt = require("bcryptjs");
 const sequelize = require('sequelize');
 
+models.useraccount.hasOne(models.customer, { foreignKey: "id_customer" });
+models.customer.belongsTo(models.useraccount, { foreignKey: "id_customer" });
+
 var title = "Customer Account";
 var tbtitle = "List Customer Account";
 var menu = "customer";

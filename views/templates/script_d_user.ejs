@@ -1,4 +1,5 @@
 <!-- modal -->
+<input type="hidden" id="idcust" value="<%= auth.id_user %>">
 <div class="modal fade" tabindex="-1" role="dialog" id="carmodal">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -42,7 +43,7 @@
 <!-- END MODAL -->
 <script>
   $(document).ready(function () {
-    let idcust = '234';
+    let idcust = document.getElementById('idcust').value;
     let kategori = 'customer';
     promotion();
     get_data_kendaraan(idcust, kategori);
