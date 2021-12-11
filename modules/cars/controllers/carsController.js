@@ -205,30 +205,26 @@ exports.cekKendaraan = function (req, res) {
             res.send({
               success: "success",
               titlemessage: "Data kendraan tersedia!",
-              message: "Silahkan mengubungi Admins.",
+              message: "Silahkan mengubungi Admin.",
               data: kendaraan,
             });
           })
-          .catch((err) => {
-            res.send({});
-          });
+          .catch((err) => {});
       } else {
         if (kendraanrangka.kendaraan.first_class != "" && kendraanrangka.kendaraan.first_class != null) {
-          data = {
-            success: "success",
-            titlemessage: "Data customer tersedia!",
-            message: "Silahkan mengubungi Adminz.",
-            data: { first_class: kendraanrangka.kendaraan.first_class },
-          };
+          data = { first_class: kendraanrangka.kendaraan.first_class };
         } else {
-          data = {};
+          data = { first_class: 0 };
         }
-        res.send(data);
+        res.send({
+          success: "success",
+          titlemessage: "Data kendraan tersedia!",
+          message: "Silahkan mengubungi Admin.",
+          data: data,
+        });
       }
     })
-    .catch((err) => {
-      res.send({});
-    });
+    .catch((err) => {});
 };
 exports.createKendaraan = function (req, res) {
   let dataFound;
