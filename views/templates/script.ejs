@@ -24,20 +24,22 @@
 <script src="<%= process.env.URL %>/script-stisla/node_modules/summernote/dist/summernote-bs4.js"></script>
 <script src="<%= process.env.URL %>/script-stisla/node_modules/chocolat/dist/js/jquery.chocolat.min.js"></script>
 <script src="<%= process.env.URL %>/script-stisla/node_modules/sweetalert/dist/sweetalert.min.js"></script>
-  <script src="<%= process.env.URL %>/script-stisla/node_modules/chart.js/dist/Chart.min.js"></script>
+<script src="<%= process.env.URL %>/script-stisla/node_modules/chart.js/dist/Chart.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
 <!-- jquery-validation -->
-<script src="<%= process.env.URL %>/script-stisla/assets/js/jquery-validation/jquery.validate.min.js"></script>
-<script src="<%= process.env.URL %>/script-stisla/assets/js/jquery-validation/additional-methods.min.js"></script>
-<script src="<%= process.env.URL %>/script-stisla/assets/js/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="<%= process.env.URL %>/script-stisla/assets/js/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="<%= process.env.URL %>/script-stisla/assets/js/datatables-buttons/js/buttons.flash.min.js"></script>
-<script src="<%= process.env.URL %>/script-stisla/assets/js/datatables-buttons/js/buttons.colVis.min.js"></script>
-<script src="<%= process.env.URL %>/script-stisla/assets/js/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="<%= process.env.URL %>/script-stisla/assets/js/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
 
 <!-- Template JS File -->
 <script src="<%= process.env.URL %>/script-stisla/assets/js/scripts.js"></script>
@@ -67,5 +69,11 @@
 
     rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
     return prefix == undefined ? rupiah : rupiah;
+  }
+  if ($(".datepicker").length) {
+    $('.datepicker').daterangepicker({
+      locale: { format: 'YYYY-MM-DD' },
+      singleDatePicker: true,
+    });
   }
 </script>

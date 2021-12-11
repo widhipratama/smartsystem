@@ -101,7 +101,7 @@ exports.daftar_account_customer = (req, res) => {
         status: 1,
       })
       .then((q) => {
-        console.log(randomString(60))
+        console.log(randomString(60));
         useraccount
           .create({
             username: req.body.username,
@@ -179,8 +179,6 @@ exports.login_account = (req, res) => {
     if (!errors.isEmpty()) {
       res.json({ status: "422", message: errors.array() });
     }
-
-    
 
     useraccount
       .findOne({
@@ -269,7 +267,7 @@ exports.login_account = (req, res) => {
 
             res.json(response);
           } else if (q.kategori_user === "ADMIN" || q.kategori_user === "KANTIN" || q.kategori_user === "SA") {
-            const userdetail =  karyawan.findOne({
+            const userdetail = karyawan.findOne({
               where: {
                 id_karyawan: q.id_user,
               },
@@ -319,56 +317,56 @@ exports.login_account = (req, res) => {
   }
 };
 
-exports.login_account_karyawan = (req, res) => {
-  try {
-    const errors = validationResult(req);
+// exports.login_account_karyawan = (req, res) => {
+//   try {
+//     const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-      res.json({ status: "422", message: errors.array() });
-    }
+//     if (!errors.isEmpty()) {
+//       res.json({ status: "422", message: errors.array() });
+//     }
 
-    useraccount
-      .findOne({
-        where: {
-          username: req.body.username,
-        },
-      })
-      .then((q) => {
-        if (!q) {
-          res.json({ status: "401", message: "User tidak terdaftar" });
-        }
+//     useraccount
+//       .findOne({
+//         where: {
+//           username: req.body.username,
+//         },
+//       })
+//       .then((q) => {
+//         if (!q) {
+//           res.json({ status: "401", message: "User tidak terdaftar" });
+//         }
 
-        var passwordIsValid = bcrypt.compareSync(req.body.password, q.password);
+//         var passwordIsValid = bcrypt.compareSync(req.body.password, q.password);
 
-        if (!passwordIsValid) {
-          res.json({ status: "401", message: "Password salah" });
-        }
+//         if (!passwordIsValid) {
+//           res.json({ status: "401", message: "Password salah" });
+//         }
 
-        let accessToken = jwt.sign(
-          { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.kategori_user, nama: q.customer?.nama },
-          process.env.ACCESS_TOKEN_SECRET,
-          {
-            expiresIn: process.env.ACCESS_TOKEN_LIFE,
-          }
-        );
+//         let accessToken = jwt.sign(
+//           { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.kategori_user, nama: q.customer?.nama },
+//           process.env.ACCESS_TOKEN_SECRET,
+//           {
+//             expiresIn: process.env.ACCESS_TOKEN_LIFE,
+//           }
+//         );
 
-        let refreshToken = jwt.sign(
-          { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.kategori_user, nama: q.customer?.nama },
-          process.env.REFRESH_TOKEN_SECRET
-        );
+//         let refreshToken = jwt.sign(
+//           { loginId: q.id, username: q.username, level: q.kategori_user, id_user: q.kategori_user, nama: q.customer?.nama },
+//           process.env.REFRESH_TOKEN_SECRET
+//         );
 
-        useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
-        res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
+//         useraccount.update({ refresh_token: refreshToken }, { where: { id: q.id } });
+//         res.cookie("jwt", accessToken, { secure: true, httpOnly: true });
 
-        res.json({ status: "200", loginId: useraccount.id, username: useraccount.username, accessToken: accessToken });
-      })
-      .catch((err) => {
-        res.json({ status: "500", message: "Server Error" });
-      });
-  } catch (err) {
-    res.json({ status: "500", message: "Server Error" });
-  }
-};
+//         res.json({ status: "200", loginId: useraccount.id, username: useraccount.username, accessToken: accessToken });
+//       })
+//       .catch((err) => {
+//         res.json({ status: "500", message: "Server Error" });
+//       });
+//   } catch (err) {
+//     res.json({ status: "500", message: "Server Error" });
+//   }
+// };
 
 exports.view_login_account_karyawan = function (req, res) {
   res.render("../modules/auth/views/login_karyawan");
