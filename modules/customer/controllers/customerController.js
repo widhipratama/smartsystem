@@ -3,6 +3,7 @@ const models = require("../../../models");
 let Op = require("sequelize").Op;
 const { randomString } = require("../../../helpers/randomString");
 var bcrypt = require("bcryptjs");
+const sequelize = require('sequelize');
 
 var title = "Customer Account";
 var tbtitle = "List Customer Account";
@@ -93,12 +94,8 @@ exports.editCustomer = function (req, res) {
   const alert = { message: alertMessage, status: alertStatus };
 
   const id = req.params.id;
-  models.customer
-    .findOne({
-      include: [{ model: models.useraccount }],
-      where: { id_customer: { [Op.eq]: id } },
-    })
-    .then((customer) => {
+  db.sequelize
+    .query('SELECT * FROM customer JOIN useraccount ON customer.id_customer = useraccount.id_customer WHERE customer.id_customer = {{ id }}').success(function(rows){
       res.send({
         success: true,
         message: "Berhasil ambil data!",

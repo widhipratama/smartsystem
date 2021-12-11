@@ -46,7 +46,10 @@ exports.indexfleet = function (req, res) {
   models.kendaraan
     .findAndCountAll({
       include: [
-        { model: models.fleet_customer },
+        { 
+          model: models.fleet_customer,
+          required: true 
+        },
         {
           model: models.progressStatus,
           limit: 1,

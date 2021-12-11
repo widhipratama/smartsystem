@@ -113,6 +113,7 @@
             dataType: 'json',
           })
             .done(function (data) {
+              console.log(data)
               const { status, message, level } = data
               if (status === "200") {
                 iziToast.show({
@@ -132,7 +133,7 @@
               } else {
                 swal({
                   title: "Gagal login",
-                  text: "Anda tidak memiliki akses.",
+                  text: "Anda tidak memiliki aksess.",
                   icon: 'error',
                   showConfirmButton: false,
                 })

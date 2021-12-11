@@ -58,6 +58,7 @@
                           <td><%= datarow[i].qty_service %></td>
                           <td><%= Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(datarow[i].total_omzet); %></td>
                           <td><%= Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(datarow[i].avg_omzet); %></td>
+                          <td><%= datarow[i].point_reward %></td>
                         </tr>
                         <% } %>
                       </tbody>

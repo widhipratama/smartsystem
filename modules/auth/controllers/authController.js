@@ -179,6 +179,8 @@ exports.login_account = (req, res) => {
       res.json({ status: "422", message: errors.array() });
     }
 
+    
+
     useraccount
       .findOne({
         where: {
@@ -266,7 +268,7 @@ exports.login_account = (req, res) => {
 
             res.json(response);
           } else if (q.kategori_user === "ADMIN" || q.kategori_user === "KANTIN" || q.kategori_user === "SA") {
-            const userdetail = await karyawan.findOne({
+            const userdetail =  karyawan.findOne({
               where: {
                 id_karyawan: q.id_user,
               },
