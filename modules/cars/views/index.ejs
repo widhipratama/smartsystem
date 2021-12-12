@@ -3,182 +3,195 @@
 
 <head>
   <%- include ../../../views/templates/header.ejs %>
-  <!-- Template CSS -->
-  <link rel="stylesheet" href="script-stisla/assets/css/style.css" />
-  <link rel="stylesheet" href="script-stisla/assets/css/components.css" />
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="script-stisla/assets/css/style.css" />
+    <link rel="stylesheet" href="script-stisla/assets/css/components.css" />
 </head>
 
 <body>
   <div id="app">
     <div class="main-wrapper">
-      <%- include ../../../views/templates/navtop.ejs %> <%- include
-        ../../../views/templates/navleft.ejs %>
-      <div class="main-content">
-        <section class="section">
-          <div class="section-header">
-            <h1><%= title %></h1>
-            <div class="section-header-breadcrumb">
-              <div class="breadcrumb-item active">
-                <a href="#">Dashboard</a>
+      <%- include ../../../views/templates/navtop.ejs %>
+        <%- include ../../../views/templates/navleft.ejs %>
+          <div class="main-content">
+            <section class="section">
+              <div class="section-header">
+                <h1>
+                  <%= title %>
+                </h1>
+                <div class="section-header-breadcrumb">
+                  <div class="breadcrumb-item active">
+                    <a href="#">Dashboard</a>
+                  </div>
+                  <div class="breadcrumb-item">
+                    <%= title %>
+                  </div>
+                </div>
               </div>
-              <div class="breadcrumb-item"><%= title %></div>
-            </div>
-          </div>
 
-          <div class="section-body">
-            <div class="row">
-              <div class="col-12 col-md-12 col-lg-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h4><%= tbtitle %></h4>
-                    <div class="float-right">
-                      <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal" onclick="createFunction();"><i
-                          class="fas fa-plus"></i> Tambah Data</button>
+              <div class="section-body">
+                <div class="row">
+                  <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <h4>
+                          <%= tbtitle %>
+                        </h4>
+                        <div class="float-right">
+                          <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal"
+                            onclick="createFunction();"><i class="fas fa-plus"></i> Tambah Data</button>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <% if(alert.message !='' ) { %>
+                          <br>
+                          <div class="alert alert-<%= alert.status %> alert-autoclose" style="text-align: center;">
+                            <strong>
+                              <%= alert.message %>
+                            </strong>
+                          </div>
+                          <% } %>
+                            <table class="table table-striped table-responsive" id="table-1" style="width:100%">
+                              <thead>
+                                <tr>
+                                  <th scope="col" width="5%">No.</th>
+                                  <% htitle.forEach(function(h) { if (h.onTable=="ON" ){ %>
+                                    <th>
+                                      <%= h.label %>
+                                    </th>
+                                    <% } }) %>
+                                      <th scope="col" width="15%">Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <% for (var i=0; i < datarow.length; i++) { %>
+                                  <tr>
+                                    <th scope="row">
+                                      <%= i+1 %>
+                                    </th>
+                                    <% htitle.forEach(function(h) { if (([h.onTable]=="ON" )&&([h.typeInput]=="file" )){
+                                      %>
+                                      <td><img src="/assets/img/cars/<%= datarow[i][h.id] %>" alt=""
+                                          class="img-responsive" height="50px"></td>
+                                      <% } else if ([h.onTable]=="ON" ){ %>
+                                        <td>
+                                          <%= datarow[i][h.id] %>
+                                        </td>
+                                        <% } }) %>
+                                          <td>
+                                            <button class="btn btn-warning btn-sm"
+                                              onclick="editFunction('<%= datarow[i].id_mobil %>')"
+                                              data-id="<%= datarow[i].id_mobil %>" data-toggle="modal"
+                                              data-target="#exampleModal"><i class="fas fa-pen"></i></button>
+                                            <button class="btn btn-danger btn-sm"
+                                              onclick="delFunction('<%= datarow[i].id_mobil %>')"
+                                              data-id="<%= datarow[i].id_mobil %>"><i class="fas fa-trash"></i></button>
+                                          </td>
+                                  </tr>
+                                  <% } %>
+                              </tbody>
+                            </table>
+                      </div>
                     </div>
-                  </div>
-                  <div class="card-body">
-                    <% if(alert.message != '') { %>
-                    <br>
-                    <div class="alert alert-<%= alert.status %> alert-autoclose" style="text-align: center;">
-                      <strong><%= alert.message %></strong>
-                    </div>
-                    <% } %>
-                    <table class="table table-striped table-responsive" id="table-1" style="width:100%">
-                      <thead>
-                        <tr>
-                          <th scope="col" width="5%">No.</th>
-                          <% 
-                            htitle.forEach(function(h) { 
-                              if (h.onTable=="ON"){
-                          %>
-                          <th><%= h.label %></th>
-                          <% 
-                              }
-                            }) 
-                          %>
-                          <th scope="col" width="15%">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% for (var i = 0; i < datarow.length; i++) { %>
-                        <tr>
-                          <th scope="row"><%= i+1 %></th>
-                          <% 
-                            htitle.forEach(function(h) { 
-                              if (([h.onTable]=="ON")&&([h.typeInput]=="file")){
-                          %>
-                          <td><img src="/assets/img/cars/<%= datarow[i][h.id] %>" alt="" class="img-responsive" height="50px"></td>
-                          <% 
-                              } else if ([h.onTable]=="ON"){
-                          %>
-                          <td><%= datarow[i][h.id] %></td>
-                          <%
-                              }
-                            }) 
-                          %>
-                          <td>
-                            <button class="btn btn-warning btn-sm"
-                              onclick="editFunction('<%= datarow[i].id_mobil %>')" data-id="<%= datarow[i].id_mobil %>"
-                              data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"></i></button>
-                            <button class="btn btn-danger btn-sm" onclick="delFunction('<%= datarow[i].id_mobil %>')"
-                              data-id="<%= datarow[i].id_mobil %>"><i class="fas fa-trash"></i></button>
-                          </td>
-                        </tr>
-                        <% } %>
-                      </tbody>
-                    </table>
                   </div>
                 </div>
+              </div>
+            </section>
+            <!-- modal -->
+            <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
+              <div class="modal-dialog" role="document">
+                <form id="formData" method="POST" action="" enctype="multipart/form-data" class="needs-validation"
+                  novalidate="">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Form Data <%= title %>
+                      </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <% htitle.forEach(function(h) { %>
+                        <% if (h.typeInput=="textarea" ) { %>
+                          <div class="form-group">
+                            <label>
+                              <%= h.label %>
+                            </label>
+                            <textarea name="<%= h.id %>" id="<%= h.id %>" class="form-control" required=""></textarea>
+                          </div>
+                          <% }else{ %>
+                            <div class="form-group">
+                              <label>
+                                <%= h.label %>
+                              </label>
+                              <input type="<%= h.typeInput %>" id="<%= h.id %>" name="<%= h.id %>" class="form-control"
+                                required="required">
+                            </div>
+                            <% } %>
+                              <% }) %>
+                    </div>
+                    <div class="modal-footer bg-whitesmoke br">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-success">Save changes</button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
+            <!-- END MODAL -->
           </div>
-        </section>
-        <!-- modal -->
-        <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
-          <div class="modal-dialog" role="document">
-            <form id="formData" method="POST" action="" enctype="multipart/form-data" class="needs-validation"
-              novalidate="" >
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Form Data <%= title %></h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <% htitle.forEach(function(h) { %>
-                    <% if (h.typeInput=="textarea") { %>
-                      <div class="form-group">
-                        <label><%= h.label %></label>
-                        <textarea name="<%= h.id %>" id="<%= h.id %>" class="form-control" required=""></textarea>
-                      </div>
-                    <% }else{ %>
-                      <div class="form-group">
-                        <label><%= h.label %></label>
-                        <input type="<%= h.typeInput %>" id="<%= h.id %>" name="<%= h.id %>" class="form-control" required="required">
-                      </div>
-                    <% } %>
-                  <% }) %>
-                </div>
-                <div class="modal-footer bg-whitesmoke br">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-success">Save changes</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-        <!-- END MODAL -->
-      </div>
-      <%- include ../../../views/templates/footer.ejs %>
+          <%- include ../../../views/templates/footer.ejs %>
     </div>
   </div>
   <%- include ../../../views/templates/script.ejs %>
-  <script type="text/javascript">
-    window.setTimeout(function() {
-      $(".alert-autoclose").fadeTo(500, 0).slideUp(500, function(){
-        $(this).remove(); 
-      });
-    }, 5000);
+    <script type="text/javascript">
+      window.setTimeout(function () {
+        $(".alert-autoclose").fadeTo(500, 0).slideUp(500, function () {
+          $(this).remove();
+        });
+      }, 5000);
 
-    function createFunction(){
-      $('#image_mobil').attr('required', 'required');
-      $('#formData').attr('action', '<%= process.env.URL %>/cars/adddata');
-      document.getElementById("formData").reset();
-    };
-    
-    function delFunction(id) {
-      let idData = id;
-      swal({
+      function createFunction() {
+        $('#image_mobil').attr('required', 'required');
+        $('#formData').attr('action', '<%= process.env.URL %>/cars/adddata');
+        document.getElementById("formData").reset();
+      };
+
+      function delFunction(id) {
+        let idData = id;
+        swal({
           title: "Yakin Ingin Menghapus Data Kendaraan ini?",
           text: "Data yang dihapus, tidak bisa kembali lagi.",
           icon: "warning",
           buttons: true,
           dangerMode: true,
         })
-        .then((willDelete) => {
-          if (willDelete) {
-            window.location.assign(`/cars/delete/${idData}`);
+          .then((willDelete) => {
+            if (willDelete) {
+              window.location.assign(`/cars/delete/${idData}`);
+            }
+          });
+      };
+
+      function editFunction(id) {
+        let idData = id;
+        let url = '<%= process.env.URL %>/cars/edit/' + idData;
+        $.ajax({
+          type: 'GET',
+          url: url,
+          dataType: 'json',
+          success: function (res) {
+            $('#image_mobil').removeAttr('required');
+            $('#formData').attr('action', '<%= process.env.URL %>/cars/edit/save/' + idData);
+            res.htitle.forEach(h => {
+              if (h.typeInput != "file") {
+                document.getElementById(h.id).value = res.data[h.id];
+              }
+            });
           }
         });
-    };
-
-    function editFunction(id) {
-      let idData = id;
-      let url = '<%= process.env.URL %>/cars/edit/' + idData;
-      $.ajax({
-        type: 'GET',
-        url: url,
-        dataType: 'json',
-        success: function (res) {
-          $('#image_mobil').removeAttr('required');
-          $('#formData').attr('action', '<%= process.env.URL %>/cars/edit/save/'+idData);
-          res.htitle.forEach(h => {
-            document.getElementById(h.id).value = res.data[h.id];
-          });
-        }
-      });
-    };
-  </script>
+      };
+    </script>
 </body>
+
 </html>

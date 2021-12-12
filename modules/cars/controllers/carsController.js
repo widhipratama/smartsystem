@@ -103,11 +103,20 @@ exports.editData = function (req, res) {
 exports.updateData = function (req, res) {
   const id = req.params.id;
   let customerFound;
+  let data = {
+    model_mobil: req.body.model_mobil,
+    warna_mobil: req.body.warna_mobil,
+    image_mobil: req.file.filename,
+  };
+
+  console.log(data);
+
   models.master_kendaraan
     .findOne({ where: { id_mobil: { [Op.eq]: id } } })
     .then((cars) => {
       customerFound = cars;
-      return cars.update(req.body).then(() => {
+
+      return cars.update(data).then(() => {
         req.flash("alertMessage", `Sukses Mengubah Data ${title} dengan nama : ${customerFound.model_mobil} ${customerFound.warna_mobil}`);
         req.flash("alertStatus", "success");
         res.redirect("/cars");
