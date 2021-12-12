@@ -8,7 +8,7 @@ var tbtitle = "List Master Toyota How";
 var htitle = [
     {id:'judul_how', label:'Judul', width:"", typeInput:"text", onTable:"ON"},
     {id:'sampul_how', label:'Sampul', width:"", typeInput:"file", onTable:"ON"},
-    {id:'location_how', label:'File', width:"", typeInput:"file", onTable:"OFF"},
+    {id:'location_how', label:'Deskripsi', width:"", typeInput:"textarea", onTable:"OFF"},
     {id:'status', label:'Status', width:"", typeInput:"status", onTable:"OFF"},
 ];
 
