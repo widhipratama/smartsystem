@@ -1,7 +1,7 @@
 var exports = (module.exports = {});
 const models = require("../../../models");
-let Op = require("sequelize").Op;
-let sequelize = require("sequelize");
+const { sequelize, QueryTypes, Op } = require("sequelize");
+
 var title = "Master Kendaraan";
 var tbtitle = "List Master Kendaraan";
 var htitle = [
@@ -136,9 +136,9 @@ exports.getListKendaraan = function (req, res) {
   models.kendaraan
     .findAll({
       include: [
-        { 
+        {
           model: models.master_kendaraan,
-          require: true
+          require: true,
         },
         {
           model: models.progressStatus,
@@ -162,31 +162,63 @@ exports.getListKendaraan = function (req, res) {
       });
     });
 };
+exports.cekWarna = (req, res) => {
+  const model_mobil = req.params.model_mobil;
+
+  models.master_kendaraan.findAll({ where: { model_mobil: { [Op.eq]: model_mobil } } }).then((q) => {
+    res.send({
+      success: "success",
+      data: q,
+    });
+  });
+};
+
+exports.cekModel = async (req, res) => {
+  const q = await models.sequelize.query(
+    `SELECT 
+      MAX(id_mobil) id_mobil,
+      UPPER(model_mobil) model_mobil
+    FROM 
+      master_kendaraan
+    GROUP BY model_mobil`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  if (q) {
+    res.send({
+      success: "success",
+      data: q,
+    });
+  } else {
+    res.send({
+      success: "error",
+      data: null,
+    });
+  }
+};
+
 exports.cekNoRangka = function (req, res) {
-  const id = req.params.id;
+  const norangka = req.params.norangka;
   models.kendaraan
-    .findOne({ where: [{ no_rangka: { [Op.eq]: id } }, { status_kendaraan: "none" }] })
+    .findOne({ where: [{ no_rangka: { [Op.eq]: norangka } }, { status_kendaraan: "none" }] })
     .then((kendraanrangka) => {
       models.progressStatus
-        .findOne({ where: { rangka: { [Op.eq]: id } } })
-        .then((rangka) => {
-          models.master_kendaraan.findAll({ where: { model_mobil: { [Op.eq]: rangka.model } } }).then((warna) => {
+        .findOne({ where: { rangka: { [Op.eq]: norangka } } })
+        .then((q) => {
+          if (q) {
             res.send({
               success: "success",
-              titlemessage: "No Rangka Tersedia!",
-              message: "Silahkan lanjutkan pilih warna!",
-              data: rangka,
-              warna: warna,
+              data: q,
             });
-          });
+          } else {
+            res.send({
+              success: "error",
+              data: null,
+            });
+          }
         })
-        .catch((err) => {
-          res.send({
-            success: "error",
-            titlemessage: "Data kendraan tidak tersedia!",
-            message: "Silahkan mengubungi Admin.",
-          });
-        });
+        .catch((err) => {});
     })
     .catch((err) => {
       res.send({

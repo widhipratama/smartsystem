@@ -74,8 +74,10 @@
                                       <% } }) %>
                                         <td>
                                           <button class="btn btn-primary btn-sm open-addCarsCustomer"
-                                            data-id="<%= datarow[i].id %>" onclick="getDataKendaraan('<%= datarow[i].id %>', 'customer')" data-kategori="fleet" data-toggle="modal"
-                                            data-target="#carmodal"><i class="fas fa-car"></i></button>
+                                            data-id="<%= datarow[i].id %>"
+                                            onclick="getDataKendaraan('<%= datarow[i].id %>', 'fleet')"
+                                            data-kategori="fleet" data-toggle="modal" data-target="#carmodal"><i
+                                              class="fas fa-car"></i></button>
                                           <button class="btn btn-sm btn-info"><i class="fas fa-link"></i></button>
                                           <button class="btn btn-warning btn-sm"
                                             onclick="editFunction('<%= datarow[i].id %>')"

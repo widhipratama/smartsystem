@@ -14,18 +14,16 @@
           <input type="hidden" id="kategoricust" name="kategoricust" value="<%= menu %>">
           <div class="form-group col-md-3">
             <label>No Rangka</label>
-            <input type="text" id="norangka" name="norangka" onchange="ceknorangka()" class="form-control"
-              required="">
+            <input type="text" id="norangka" name="norangka" onchange="ceknorangka()" class="form-control" required="">
           </div>
           <div class="form-group col-md-3">
             <label>No Polisi</label>
-            <input type="text" id="norangka" name="norangka" onchange="ceknorangka()" class="form-control"
-              required="">
+            <input type="text" id="police_no" name="police_no" class="form-control" required="">
           </div>
           <div class="form-group col-md-3">
             <label>Model</label>
-            <select name="warna" id="warna" class="form-control">
-              <option value="" id="warnaid">-- pilih warna --</option>
+            <select name="model" id="model" class="form-control">
+              <option value="" id="modelid">-- pilih model --</option>
             </select>
           </div>
           <div class="form-group col-md-3">
@@ -100,33 +98,61 @@
       }
     });
   });
-  function ceknorangka() {
-    let idData = document.getElementById('norangka').value;
-    let url = '<%= process.env.URL %>/cars/ceknorangka/' + idData;
-    var alertstatus = false;
+  function cekModel() {
+    console.log("COBA COBA")
+    let url_cek_model = '<%= process.env.URL %>/cars/cekmodel/';
+
     $.ajax({
       type: 'POST',
-      url: url,
+      url: url_cek_model,
       dataType: 'json',
       success: function (res) {
-        swal(res.titlemessage, res.message, res.success);
+        console.log(res)
         if (res.success == 'success') {
           var html = "";
-          res.warna.forEach(element => {
-            html += "<option class=\"data-warna\" value=\"" + element.id_mobil + "\" >" + element.warna_mobil + "</option>";
+          res.data.forEach(element => {
+            html += "<option class=\"data-model\" id=\"model" + element.model_mobil.substring(0, 3) + "\" value =\"" + element.model_mobil.substring(0, 3) + "\" >" + element.model_mobil + "</option>";
           });
-          $('.data-warna').remove();
-          $("#warnaid").after(html);
+          $('.data-model').remove();
+          $("#modelid").after(html);
+        } else {
+          console.log("anda kurang beruntung")
+        }
+      }
+    });
+  }
+
+  function ceknorangka() {
+    let idNorangka = document.getElementById('norangka').value;
+    let idModel = document.getElementById('model').value;
+
+    let url_cek_norangka = '<%= process.env.URL %>/cars/ceknorangka/' + idNorangka;
+
+    let url_cek_warna = '<%= process.env.URL %>/cars/cekwarna/' + idModel;
+
+    var alertstatus = false;
+
+    $.ajax({
+      type: 'POST',
+      url: url_cek_norangka,
+      dataType: 'json',
+      success: function (res) {
+
+        if (res.success == 'success') {
+          document.getElementById('police_no').value = res.data.police_no
+          cekModel()
+
         } else {
           document.getElementById('norangka').value = '';
         }
+
+        document.getElementById("model" + res.data.model.substring(0, 3)).selected = true;
       }
     });
   };
   function getDataKendaraan(id, ketegori) {
     let idData = id;
     let url = '<%= process.env.URL %>/cars/listkendraan/' + idData + '/' + ketegori;
-    console.log(url)
     var alertstatus = false;
     $.ajax({
       type: 'POST',
@@ -134,7 +160,6 @@
       dataType: 'json',
       success: function (res) {
         var html = "";
-        console.log(res)
         res.data.forEach(element => {
           if (element.first_class == 0) {
             var fs = '<span class="badge badge-default text-bold">None</span>';
