@@ -87,8 +87,7 @@
                                             data-id="<%= datarow[i].id_customer %>" data-kategori="customer"
                                             data-toggle="modal" onclick="getDataKendaraan('<%= datarow[i].id_customer %>', 'customer')" data-target="#carmodal"><i
                                               class="fas fa-car"></i></button>
-                                          <button class="btn btn-sm btn-info" data-id="<%= datarow[i].id_customer %>" data-kategori="customer"
-                                            data-toggle="modal" data-target="#copylink" onclick="generatetoken('<%= datarow[i].token %>')"><i class="fas fa-link"></i></button>
+                                          <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#copylink" onclick="generatetoken('<%= datarow[i].token %>')"><i class="fas fa-link"></i></button>
                                           <button class="btn btn-warning btn-sm"
                                             onclick="editFunction('<%= datarow[i].id_customer %>')"
                                             data-id="<%= datarow[i].id %>" data-toggle="modal"
@@ -209,29 +208,7 @@
               </div>
             </div>
             <!-- END MODAL -->
-
-            <!-- modal -->
-            <div class="modal fade" tabindex="-1" role="dialog" id="copylink">
-              <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">Generate Token
-                      </h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      <input type="text" class="form-control" id="textcopy" value="https://renata.agungtoyotakuta.com/auth/login/onetaps/" readonly>
-                    </div>
-                    <div class="modal-footer bg-whitesmoke br">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" onclick="copyTeks()" class="btn btn-success"><i class="fa fa-copy"></i> Copy Link</button>
-                    </div>
-                  </div>
-              </div>
-            </div>
-            <!-- END MODAL -->
+            <%- include ../../../modules/customer/views/generatetoken.ejs %>
           </div>
           <%- include ../../../views/templates/footer.ejs %>
     </div>
@@ -330,17 +307,17 @@
             success: function (res) {
               console.log(res)
               document.getElementById("urlsubmit").value = '<%= process.env.URL %>/customer/edit/save/' + idData;
-              document.getElementById("nama").value = res.data.nama;
-              document.getElementById("no_telp").value = res.data.no_telp;
-              document.getElementById("wa").value = res.data.wa;
-              document.getElementById("facebook").value = res.data.facebook;
-              document.getElementById("ig").value = res.data.ig;
-              document.getElementById("alamat").value = res.data.alamat;
-              document.getElementById("alamat_dati2").value = res.data.alamat_dati2;
-              document.getElementById("alamat_dati3").value = res.data.alamat_dati3;
-              document.getElementById("username").value = (res.data.useraccount ? res.data.useraccount.username : '');
+              document.getElementById("nama").value = res.data[0].nama;
+              document.getElementById("no_telp").value = res.data[0].no_telp;
+              document.getElementById("wa").value = res.data[0].wa;
+              document.getElementById("facebook").value = res.data[0].facebook;
+              document.getElementById("ig").value = res.data[0].ig;
+              document.getElementById("alamat").value = res.data[0].alamat;
+              document.getElementById("alamat_dati2").value = res.data[0].alamat_dati2;
+              document.getElementById("alamat_dati3").value = res.data[0].alamat_dati3;
+              document.getElementById("username").value = (res.data[0].username ? res.data[0].username : '');
               document.getElementById("password").value = '';
-              document.getElementById("option" + res.data.status).selected = true;
+              document.getElementById("option" + res.data[0].status).selected = true;
               $('#password').removeAttr('required', 'required');
             }
           });
