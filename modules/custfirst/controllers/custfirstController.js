@@ -3,14 +3,14 @@ const models = require("../../../models");
 const { sequelize, QueryTypes, Op } = require("sequelize");
 const kendaraan = require("../../cars/models/kendaraan");
 var htitle = [
-  { id: "police_np", label: "NoPol", width: "style='min-width:150px;'", typeInput: "text", onTable: "ON" },
-  { id: "no_rangka", label: "No Rangka", width: "style='min-width:250px;'", typeInput: "text", onTable: "ON" },
-  { id: "customer.nama", label: "Customer", width: "style='min-width:200px;'", typeInput: "text", onTable: "ON" },
-  { id: "first_class", label: "Qty Service", width: "style='min-width:80px;'", typeInput: "text", onTable: "ON" },
-  { id: "first_class", label: "Total Omzet", width: "style='min-width:120px;'", typeInput: "text", onTable: "ON" },
-  { id: "first_class", label: "Avg. Omzet", width: "style='min-width:120px;'", typeInput: "text", onTable: "ON" },
-  { id: "first_class", label: "Point", width: "style='min-width:120px;'", typeInput: "text", onTable: "ON" },
-  { id: "first_class", label: "Account", width: "style='min-width:120px;'", typeInput: "text", onTable: "OFF" },
+  { id: "police_np", label: "NoPol", width: "style='width:500px;'", typeInput: "text", onTable: "ON" },
+  { id: "no_rangka", label: "No Rangka", width: "style='width:250px;'", typeInput: "text", onTable: "ON" },
+  { id: "customer.nama", label: "Customer", width: "style='width:200px;'", typeInput: "text", onTable: "ON" },
+  { id: "first_class", label: "Qty Service", width: "style='width:80px;'", typeInput: "text", onTable: "ON" },
+  { id: "first_class", label: "Total Omzet", width: "style='width:120px;'", typeInput: "text", onTable: "ON" },
+  { id: "first_class", label: "Avg. Omzet", width: "style='width:120px;'", typeInput: "text", onTable: "ON" },
+  { id: "first_class", label: "Point", width: "style='width:120px;'", typeInput: "text", onTable: "ON" },
+  { id: "first_class", label: "Account", width: "style='width:120px;'", typeInput: "text", onTable: "OFF" },
 ];
 
 exports.index = function (req, res) {
@@ -20,7 +20,9 @@ exports.index = function (req, res) {
   models.kendaraan
     .findAndCountAll({
       include: [
-        { model: models.customer },
+        { model: models.customer,
+          required: true  
+        },
         {
           model: models.progressStatus,
           limit: 1,
@@ -113,25 +115,28 @@ exports.firstclass = function (req, res) {
 exports.syncdataFristClass = async function (req, res) {
   const job = await models.sequelize.query(
     `SELECT 
-        job.norangka,
-        MAX(job.customer) customer,
-        MIN(DATE(job.invoice_date)) first_service,
-        MAX(DATE(job.invoice_date)) last_service,
-        COUNT(job.norangka) total_count,
-        SUM(job.total) total_omzet,
-        (SUM(job.total)/COUNT(job.norangka)) average_omzet
-        from job_history AS job
-        WHERE 
-        job.norangka != '' AND 
-        job.REPAIR_TYPE = 'SBE'
-        GROUP BY job.norangka`,
+      job.norangka,
+      MAX(job.model) AS model,
+      MAX(job.police_no) AS police_no,
+      MAX(job.customer) AS customer,
+      MIN(DATE(job.invoice_date)) AS first_service,
+      MAX(DATE(job.invoice_date)) AS last_service,
+      COUNT(IF(repair_type = 'SBE' OR repair_type = 'SBI' OR repair_type = 'GRP', 1,0)) AS total_count,
+      SUM(job.total) AS total_omzet,
+      (SUM(job.total)/COUNT(job.norangka)) AS average_omzet
+    FROM 
+      job_history AS job
+    WHERE 
+      job.norangka != '' 
+    GROUP BY job.norangka`,
     {
       type: QueryTypes.SELECT,
     }
   );
 
   //hapus data kendaraan berdasarkan no id_customer = kosong
-  models.kendaraan
+  
+  await models.kendaraan
     .destroy({
       where: {
         status_kendaraan: "none",
@@ -139,7 +144,7 @@ exports.syncdataFristClass = async function (req, res) {
     })
     .then((cars) => {
       var i = 0;
-      job.forEach((e) => {
+      job.forEach(async (e) => {
         var firstClassStts = "0";
         //mendari selisih bulan
         var dateFrom = new Date(e.first_service);
@@ -165,10 +170,13 @@ exports.syncdataFristClass = async function (req, res) {
         let pointReward = (e.total_omzet / 10000).toFixed();
 
         //simpan data
-        models.kendaraan
+        if(firstClassStts=="1"){
+          await models.kendaraan
           .findOne({ where: { no_rangka: { [Op.eq]: e.norangka } } })
           .then((cars) => {
             let data = {
+              police_no: e.police_no,
+              model: e.model,
               total_omzet: e.total_omzet,
               avg_omzet: avg_omzet,
               qty_service: e.total_count,
@@ -176,12 +184,15 @@ exports.syncdataFristClass = async function (req, res) {
               last_service: e.last_service,
               first_service: e.first_service,
               point_reward: pointReward,
+              updated_at: new Date()
             };
             return cars.update(data).then(() => {});
           })
           .catch((err) => {
             let data = {
               no_rangka: e.norangka,
+              police_no: e.police_no,
+              model: e.model,
               total_omzet: e.total_omzet,
               avg_omzet: avg_omzet,
               qty_service: e.total_count,
@@ -193,6 +204,7 @@ exports.syncdataFristClass = async function (req, res) {
             };
             return models.kendaraan.create(data).then(() => {});
           });
+        }
       });
       res.send({
         success: true,

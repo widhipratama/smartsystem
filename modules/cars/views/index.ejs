@@ -115,7 +115,7 @@
                     <% }else{ %>
                       <div class="form-group">
                         <label><%= h.label %></label>
-                        <input type="<%= h.typeInput %>" id="<%= h.id %>" name="<%= h.id %>" class="form-control" required="">
+                        <input type="<%= h.typeInput %>" id="<%= h.id %>" name="<%= h.id %>" class="form-control" required="required">
                       </div>
                     <% } %>
                   <% }) %>
@@ -142,6 +142,7 @@
     }, 5000);
 
     function createFunction(){
+      $('#image_mobil').attr('required', 'required');
       $('#formData').attr('action', '<%= process.env.URL %>/cars/adddata');
       document.getElementById("formData").reset();
     };
@@ -170,6 +171,7 @@
         url: url,
         dataType: 'json',
         success: function (res) {
+          $('#image_mobil').removeAttr('required');
           $('#formData').attr('action', '<%= process.env.URL %>/cars/edit/save/'+idData);
           res.htitle.forEach(h => {
             document.getElementById(h.id).value = res.data[h.id];

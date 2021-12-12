@@ -8,6 +8,8 @@ module.exports = (sequelize, Sequelize) => {
       },
       id_customer: Sequelize.DataTypes.INTEGER,
       id_mobil: Sequelize.DataTypes.STRING,
+      police_no: Sequelize.DataTypes.STRING,
+      model: Sequelize.DataTypes.STRING,
       total_omzet: Sequelize.DataTypes.INTEGER,
       last_service: Sequelize.DataTypes.DATE,
       first_service: Sequelize.DataTypes.DATE,
@@ -20,13 +22,14 @@ module.exports = (sequelize, Sequelize) => {
       },
       kategori_customer: Sequelize.DataTypes.STRING,
       point_reward: Sequelize.DataTypes.INTEGER,
+      updated_at: Sequelize.DataTypes.DATE,
     },
     {
       freezeTableName: true,
       underscored: true,
       timestamps: false,
       createdAt: false,
-      updatedAt: false,
+      updatedAt: 'updated_at',
     }
   );
 

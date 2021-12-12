@@ -13,6 +13,12 @@ module.exports = {
       id_mobil: {
         type: Sequelize.INTEGER,
       },
+      model: {
+        type: Sequelize.STRING(50),
+      },
+      police_no: {
+        type: Sequelize.STRING(50),
+      },
       total_omzet: {
         type: Sequelize.INTEGER,
       },
@@ -43,6 +49,9 @@ module.exports = {
         allowNull: false,
         default: 0,
         type: Sequelize.INTEGER,
+      },
+      updated_at: {
+        type: Sequelize.DATE,
       },
     });
   },
