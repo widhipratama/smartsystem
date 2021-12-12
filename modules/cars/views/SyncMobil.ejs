@@ -12,21 +12,21 @@
         <form id="formKendaraanCust" class="row" role="form" action="#">
           <input type="hidden" id="custid" name="custid" value="">
           <input type="hidden" id="kategoricust" name="kategoricust" value="<%= menu %>">
-          <div class="form-group col-md-3">
+          <div class="form-group col-lg-3">
             <label>No Rangka</label>
             <input type="text" id="norangka" name="norangka" onchange="ceknorangka()" class="form-control" required="">
           </div>
-          <div class="form-group col-md-3">
+          <div class="form-group col-lg-3">
             <label>No Polisi</label>
             <input type="text" id="police_no" name="police_no" class="form-control" required="">
           </div>
-          <div class="form-group col-md-3">
+          <div class="form-group col-lg-3">
             <label>Model</label>
             <select name="model" id="model" class="form-control">
               <option value="" id="modelid">-- pilih model --</option>
             </select>
           </div>
-          <div class="form-group col-md-3">
+          <div class="form-group col-lg-3">
             <label>Warna Kendaraan</label>
             <select name="warna" id="warna" class="form-control">
               <option value="" id="warnaid">-- pilih warna --</option>
@@ -98,7 +98,7 @@
       }
     });
   });
-  function cekModel() {
+  function cekModel(model) {
     console.log("COBA COBA")
     let url_cek_model = '<%= process.env.URL %>/cars/cekmodel/';
 
@@ -107,7 +107,6 @@
       url: url_cek_model,
       dataType: 'json',
       success: function (res) {
-        console.log(res)
         if (res.success == 'success') {
           var html = "";
           res.data.forEach(element => {
@@ -118,6 +117,8 @@
         } else {
           console.log("anda kurang beruntung")
         }
+        
+        document.getElementById('model'+model.substring(0, 3)).selected = true;
       }
     });
   }
@@ -136,17 +137,14 @@
       type: 'POST',
       url: url_cek_norangka,
       dataType: 'json',
-      success: function (res) {
-
+      success: async function (res) {
         if (res.success == 'success') {
           document.getElementById('police_no').value = res.data.police_no
-          cekModel()
-
+          cekModel(res.data.model)
         } else {
           document.getElementById('norangka').value = '';
         }
-
-        document.getElementById("model" + res.data.model.substring(0, 3)).selected = true;
+        console.log(res)
       }
     });
   };
