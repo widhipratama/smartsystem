@@ -9,17 +9,28 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="formKendaraanCust" role="form" action="#">
+        <form id="formKendaraanCust" class="row" role="form" action="#">
           <input type="hidden" id="custid" name="custid" value="">
           <input type="hidden" id="kategoricust" name="kategoricust" value="<%= menu %>">
-          <div class="form-group">
+          <div class="form-group col-md-3">
             <label>No Rangka</label>
-            <input type="text" id="norangka" name="norangka" onchange="ceknorangka()" class="form-control col-lg-4"
+            <input type="text" id="norangka" name="norangka" onchange="ceknorangka()" class="form-control"
               required="">
           </div>
-          <div class="form-group">
+          <div class="form-group col-md-3">
+            <label>No Polisi</label>
+            <input type="text" id="norangka" name="norangka" onchange="ceknorangka()" class="form-control"
+              required="">
+          </div>
+          <div class="form-group col-md-3">
+            <label>Model</label>
+            <select name="warna" id="warna" class="form-control">
+              <option value="" id="warnaid">-- pilih warna --</option>
+            </select>
+          </div>
+          <div class="form-group col-md-3">
             <label>Warna Kendaraan</label>
-            <select name="warna" id="warna" class="form-control col-lg-4">
+            <select name="warna" id="warna" class="form-control">
               <option value="" id="warnaid">-- pilih warna --</option>
             </select>
           </div>
