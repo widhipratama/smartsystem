@@ -20,13 +20,13 @@ exports.index = async function (req, res) {
   today.setDate(today.getDate());
   var formattedDate = new Date(today);
   var d = ("0" + formattedDate.getDate()).slice(-2);
-  var m = ("0" + (formattedDate.getMonth()+1)).slice(-2);
+  var m = ("0" + (formattedDate.getMonth() + 1)).slice(-2);
   var y = formattedDate.getFullYear();
 
   if (!req.body.start) {
-    var start = y+"-"+m+"-"+d;
-    var end = y+"-"+m+"-31";
-  }else{
+    var start = y + "-" + m + "-" + d;
+    var end = y + "-" + m + "-31";
+  } else {
     var start = req.body.start;
     var end = req.body.end;
   }
@@ -48,9 +48,13 @@ exports.index = async function (req, res) {
     WHERE
       kend.first_class = 1
     AND
-      DATE_FORMAT(kend.last_service, "%Y-%m-%d") >= '`+start+`'
+      DATE_FORMAT(kend.last_service, "%Y-%m-%d") >= '` +
+      start +
+      `'
     AND
-      DATE_FORMAT(kend.last_service, "%Y-%m-%d") <= '`+end+`'`,
+      DATE_FORMAT(kend.last_service, "%Y-%m-%d") <= '` +
+      end +
+      `'`,
     {
       type: QueryTypes.SELECT,
     }

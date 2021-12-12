@@ -162,15 +162,36 @@ exports.getListKendaraan = function (req, res) {
       });
     });
 };
-exports.cekWarna = (req, res) => {
-  const model_mobil = req.params.model_mobil;
 
-  models.master_kendaraan.findAll({ where: { model_mobil: { [Op.eq]: model_mobil } } }).then((q) => {
+exports.cekWarna = async (req, res) => {
+  const model = req.params.model_mobil;
+  const q = await models.sequelize.query(
+    `SELECT 
+      MAX(id_mobil) id_mobil,
+      MAX(UPPER(SUBSTRING(model_mobil,1,3))) model_mobil,
+      UPPER(warna_mobil) warna_mobil
+    FROM 
+      master_kendaraan
+    WHERE
+      UPPER(SUBSTRING(model_mobil,1,3)) =:model
+    GROUP BY warna_mobil`,
+    {
+      replacements: { model: model },
+      type: QueryTypes.SELECT,
+    }
+  );
+  if (q) {
     res.send({
       success: "success",
       data: q,
+      tes: model,
     });
-  });
+  } else {
+    res.send({
+      success: "error",
+      data: null,
+    });
+  }
 };
 
 exports.cekModel = async (req, res) => {

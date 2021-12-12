@@ -14,6 +14,7 @@ router.get("/delete/:id", carsController.hapusData);
 router.get("/edit/:id", carsController.editData);
 router.post("/edit/save/:id", upload.single("image_mobil"), carsController.updateData);
 router.post("/ceknorangka/:norangka", carsController.cekNoRangka);
+router.post("/cekwarna/:model_mobil", carsController.cekWarna);
 router.post("/cekmodel/", carsController.cekModel);
 router.post("/savekendaraan", carsController.createKendaraan);
 router.post("/listkendraan/:id/:h", carsController.getListKendaraan);
