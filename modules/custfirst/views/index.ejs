@@ -54,6 +54,7 @@
                           <th scope="row"><%= i+1 %></th>
                           <td><%= datarow[i].progress_statuses[0].police_no %></td>
                           <td><%= datarow[i].no_rangka %></td>
+                          <td><%= datarow[i].model %></td>
                           <td><%= datarow[i].customer.nama %></td>
                           <td><%= datarow[i].qty_service %></td>
                           <td><%= Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(datarow[i].total_omzet); %></td>

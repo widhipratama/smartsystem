@@ -56,7 +56,6 @@
     $(".open-addCarsCustomer").click(function () {
       $('#custid').val($(this).data('id'));
       $('#carmodal').modal('show');
-      getDataKendaraan($(this).data('id'), $(this).data('kategori'));
     });
     $.validator.setDefaults({
       submitHandler: function () {
@@ -116,6 +115,7 @@
   function getDataKendaraan(id, ketegori) {
     let idData = id;
     let url = '<%= process.env.URL %>/cars/listkendraan/' + idData + '/' + ketegori;
+    console.log(url)
     var alertstatus = false;
     $.ajax({
       type: 'POST',
@@ -123,6 +123,7 @@
       dataType: 'json',
       success: function (res) {
         var html = "";
+        console.log(res)
         res.data.forEach(element => {
           if (element.first_class == 0) {
             var fs = '<span class="badge badge-default text-bold">None</span>';

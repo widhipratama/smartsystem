@@ -85,10 +85,10 @@
                                         <td>
                                           <button class="btn btn-primary btn-sm open-addCarsCustomer"
                                             data-id="<%= datarow[i].id_customer %>" data-kategori="customer"
-                                            data-toggle="modal" data-target="#carmodal"><i
+                                            data-toggle="modal" onclick="getDataKendaraan('<%= datarow[i].id_customer %>', 'customer')" data-target="#carmodal"><i
                                               class="fas fa-car"></i></button>
                                           <button class="btn btn-sm btn-info" data-id="<%= datarow[i].id_customer %>" data-kategori="customer"
-                                            data-toggle="modal" data-target="#copylink"><i class="fas fa-link"></i></button>
+                                            data-toggle="modal" data-target="#copylink" onclick="generatetoken('<%= datarow[i].token %>')"><i class="fas fa-link"></i></button>
                                           <button class="btn btn-warning btn-sm"
                                             onclick="editFunction('<%= datarow[i].id_customer %>')"
                                             data-id="<%= datarow[i].id %>" data-toggle="modal"

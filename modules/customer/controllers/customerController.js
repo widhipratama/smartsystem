@@ -1,9 +1,8 @@
 var exports = (module.exports = {});
 const models = require("../../../models");
-let Op = require("sequelize").Op;
 const { randomString } = require("../../../helpers/randomString");
 var bcrypt = require("bcryptjs");
-const sequelize = require('sequelize');
+const { sequelize, QueryTypes, Op } = require("sequelize");
 
 models.useraccount.hasOne(models.customer, { foreignKey: "id_customer" });
 models.customer.belongsTo(models.useraccount, { foreignKey: "id_customer" });
@@ -20,6 +19,11 @@ var htitle = [
 exports.index = function (req, res) {
   models.customer
     .findAndCountAll({
+      include: [
+        { 
+          model: models.useraccount
+        },
+      ],
       order: [["id_customer", "DESC"]],
     })
     .then((customer) => {
@@ -91,19 +95,28 @@ exports.hapusCustomer = function (req, res) {
       res.redirect("/customer");
     });
 };
-exports.editCustomer = function (req, res) {
+exports.editCustomer = async function (req, res) {
   const alertMessage = req.flash("alertMessage");
   const alertStatus = req.flash("alertStatus");
   const alert = { message: alertMessage, status: alertStatus };
 
   const id = req.params.id;
-  db.sequelize
-    .query('SELECT * FROM customer JOIN useraccount ON customer.id_customer = useraccount.id_customer WHERE customer.id_customer = {{ id }}').success(function(rows){
-      res.send({
-        success: true,
-        message: "Berhasil ambil data!",
-        data: customer,
-      });
+  const customer = await models.sequelize
+    .query(
+      `SELECT * 
+      FROM 
+        customer 
+      LEFT JOIN 
+        useraccount ON customer.id_customer = useraccount.id_user 
+      WHERE customer.id_customer = `+id+``,
+      {
+        type: QueryTypes.SELECT,
+      }
+    );
+    res.send({
+      success: true,
+      message: "Berhasil ambil data!",
+      data: customer,
     });
 };
 exports.updateCustomer = (req, res) => {

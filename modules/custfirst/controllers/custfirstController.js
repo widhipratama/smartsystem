@@ -5,6 +5,7 @@ const kendaraan = require("../../cars/models/kendaraan");
 var htitle = [
   { id: "police_np", label: "NoPol", width: "style='width:500px;'", typeInput: "text", onTable: "ON" },
   { id: "no_rangka", label: "No Rangka", width: "style='width:250px;'", typeInput: "text", onTable: "ON" },
+  { id: "model", label: "Model", width: "style='width:250px;'", typeInput: "text", onTable: "ON" },
   { id: "customer.nama", label: "Customer", width: "style='width:200px;'", typeInput: "text", onTable: "ON" },
   { id: "first_class", label: "Qty Service", width: "style='width:80px;'", typeInput: "text", onTable: "ON" },
   { id: "first_class", label: "Total Omzet", width: "style='width:120px;'", typeInput: "text", onTable: "ON" },

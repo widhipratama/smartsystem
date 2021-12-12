@@ -127,7 +127,10 @@ exports.getListKendaraan = function (req, res) {
   models.kendaraan
     .findAll({
       include: [
-        { model: models.master_kendaraan },
+        { 
+          model: models.master_kendaraan,
+          require: true
+        },
         {
           model: models.progressStatus,
           limit: 1,
