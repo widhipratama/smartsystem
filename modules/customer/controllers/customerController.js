@@ -5,7 +5,7 @@ var bcrypt = require("bcryptjs");
 const { sequelize, QueryTypes, Op } = require("sequelize");
 
 models.useraccount.hasOne(models.customer, { foreignKey: "id_customer" });
-models.customer.belongsTo(models.useraccount, { foreignKey: "id_customer" });
+models.customer.belongsTo(models.useraccount, { foreignKey: "id_user" });
 
 var title = "Customer Account";
 var tbtitle = "List Customer Account";
@@ -16,29 +16,31 @@ var htitle = [
   { id: "alamat", label: "Alamat", width: "" },
 ];
 
-exports.index = function (req, res) {
-  models.customer
-    .findAndCountAll({
-      include: [
-        { 
-          model: models.useraccount
-        },
-      ],
-      order: [["id_customer", "DESC"]],
-    })
-    .then((customer) => {
-      const alertMessage = req.flash("alertMessage");
-      const alertStatus = req.flash("alertStatus");
-      const alert = { message: alertMessage, status: alertStatus };
-      res.render("../modules/customer/views/index", {
-        datarow: customer.rows,
-        alert: alert,
-        title: title,
-        tbtitle: tbtitle,
-        htitle: htitle,
-        menu: menu,
-      });
-    });
+exports.index = async function (req, res) {
+  const customer = await models.sequelize
+  .query(
+    `SELECT * 
+    FROM 
+      customer 
+    LEFT JOIN 
+      useraccount ON customer.id_customer = useraccount.id_user
+    ORDER BY
+      id_customer DESC`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  const alertMessage = req.flash("alertMessage");
+  const alertStatus = req.flash("alertStatus");
+  const alert = { message: alertMessage, status: alertStatus };
+  res.render("../modules/customer/views/index", {
+    datarow: customer,
+    alert: alert,
+    title: title,
+    tbtitle: tbtitle,
+    htitle: htitle,
+    menu: menu,
+  });
 };
 exports.createCustomer = function (req, res) {
   let customerFound;
