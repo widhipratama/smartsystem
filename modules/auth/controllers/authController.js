@@ -191,7 +191,7 @@ exports.login_account = (req, res) => {
           res.json({ status: "401", message: "User tidak terdaftar" });
         } else {
           if (q.kategori_user === "USER") {
-            const userdetail = await customer.findOne({
+            const userdetail =  customer.findOne({
               where: {
                 id_customer: q.id_user,
               },
@@ -229,7 +229,7 @@ exports.login_account = (req, res) => {
 
             res.json(response);
           } else if (q.kategori_user === "FLEET") {
-            const userdetail = await fleet_customer.findOne({
+            const userdetail = fleet_customer.findOne({
               where: {
                 id: q.id_user,
               },
