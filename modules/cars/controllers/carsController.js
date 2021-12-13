@@ -249,47 +249,56 @@ exports.cekNoRangka = function (req, res) {
       });
     });
 };
-exports.cekKendaraan = function (req, res) {
+exports.cekKendaraan = async function (req, res) {
   const id = req.params.id;
   var data;
-  models.progressStatus
-    .findOne({
-      include: [{ model: models.kendaraan }],
-      where: { police_no: { [Op.eq]: id } },
-    })
-    .then((kendraanrangka) => {
-      if (kendraanrangka.kendaraan.id_customer != "" && kendraanrangka.kendaraan.id_customer != null) {
-        var id_customer = kendraanrangka.kendaraan.id_customer;
-        models.kendaraan
-          .findAll({
-            attributes: [[sequelize.fn("sum", sequelize.col("first_class")), "first_class"]],
-            group: ["id_customer"],
-            where: { id_customer: id_customer },
-          })
-          .then((kendaraan) => {
-            res.send({
-              success: "success",
-              titlemessage: "Data kendraan tersedia!",
-              message: "Silahkan mengubungi Admin.",
-              data: kendaraan,
-            });
-          })
-          .catch((err) => {});
-      } else {
-        if (kendraanrangka.kendaraan.first_class != "" && kendraanrangka.kendaraan.first_class != null) {
-          data = { first_class: kendraanrangka.kendaraan.first_class };
-        } else {
-          data = { first_class: 0 };
+  const q = await models.sequelize.query(
+    `SELECT 
+      *
+    FROM 
+      kendaraan
+    WHERE
+      police_no = '`+id+`'
+    LIMIT 1`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  if (q!='') {
+    if (q[0].id_customer != '') {
+      const fs = await models.sequelize.query(
+        `SELECT 
+          COUNT(first_class) as fs
+        FROM 
+          kendaraan
+        WHERE
+          id_customer = '`+q[0].id_customer+`'
+        LIMIT 1`,
+        {
+          type: QueryTypes.SELECT,
         }
-        res.send({
-          success: "success",
-          titlemessage: "Data kendraan tersedia!",
-          message: "Silahkan mengubungi Admin.",
-          data: data,
-        });
-      }
-    })
-    .catch((err) => {});
+      );
+      res.send({
+        success: "success",
+        data: true,
+      });
+    }else if (q[0].first_class > 0){
+      res.send({
+        success: "success",
+        data: true,
+      });
+    }else{
+      res.send({
+        success: "error",
+        data: false,
+      });
+    }
+  }else{
+    res.send({
+      success: "error",
+      data: false,
+    });
+  }
 };
 exports.createKendaraan = function (req, res) {
   let dataFound;

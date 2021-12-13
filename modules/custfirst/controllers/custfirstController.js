@@ -14,104 +14,116 @@ var htitle = [
   { id: "first_class", label: "Account", width: "style='width:120px;'", typeInput: "text", onTable: "OFF" },
 ];
 
-exports.index = function (req, res) {
+exports.index = async function (req, res) {
   const kategori = req.params.kat;
   var title = "Customer First Class";
   var tbtitle = "List Customer First Class";
-  models.kendaraan
-    .findAndCountAll({
-      include: [
-        { model: models.customer,
-          required: true  
-        },
-        {
-          model: models.progressStatus,
-          limit: 1,
-          order: [["service_order", "DESC"]],
-        },
-      ],
-      where: [{ first_class: "1" }, { kategori_customer: "customer" }],
-    })
-    .then((kendaraan) => {
-      res.render("../modules/custfirst/views/index", {
-        datarow: kendaraan.rows,
-        title: title,
-        tbtitle: tbtitle,
-        htitle: htitle,
-      });
-    });
+  const kendaraan = await models.sequelize.query(
+    `SELECT
+      (SELECT job.norangka from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as no_rangka,
+      (SELECT job.police_no from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as police_no,
+      (SELECT job.model from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as model,
+      cust.nama as nama,
+      kend.kategori_customer as kategori_customer,
+      kend.avg_omzet as avg_omzet,
+      kend.last_service as last_service,
+      kend.point_reward as point_reward,
+      kend.qty_service as qty_service,
+      kend.total_omzet as total_omzet
+    FROM 
+      kendaraan AS kend
+    LEFT JOIN
+      customer AS cust ON cust.id_customer = kend.id_customer
+    WHERE
+      kend.first_class = 1
+    AND
+      kend.kategori_customer = 'customer'`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  res.render("../modules/custfirst/views/index", {
+    datarow: kendaraan,
+    title: title,
+    tbtitle: tbtitle,
+    htitle: htitle,
+  });
 };
 
-exports.indexfleet = function (req, res) {
+exports.indexfleet = async function (req, res) {
   const kategori = req.params.kat;
   var title = "Fleet First Class";
   var tbtitle = "List Fleet First Class";
-  models.kendaraan
-    .findAndCountAll({
-      include: [
-        { 
-          model: models.fleet_customer,
-          required: true 
-        },
-        {
-          model: models.progressStatus,
-          limit: 1,
-          order: [["service_order", "DESC"]],
-        },
-      ],
-      where: [{ first_class: "1" }, { kategori_customer: "fleet" }],
-    })
-    .then((kendaraan) => {
-      res.render("../modules/custfirst/views/indexfleet", {
-        datarow: kendaraan.rows,
-        title: title,
-        tbtitle: tbtitle,
-        htitle: htitle,
-      });
-    });
+  const kendaraan = await models.sequelize.query(
+    `SELECT
+      (SELECT job.norangka from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as no_rangka,
+      (SELECT job.police_no from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as police_no,
+      (SELECT job.model from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as model,
+      cust.nama_fleet as nama,
+      kend.kategori_customer as kategori_customer,
+      kend.avg_omzet as avg_omzet,
+      kend.last_service as last_service,
+      kend.point_reward as point_reward,
+      kend.qty_service as qty_service,
+      kend.total_omzet as total_omzet
+    FROM 
+      kendaraan AS kend
+    LEFT JOIN
+      fleet_customer AS cust ON cust.id = kend.id_customer
+    WHERE
+      kend.first_class = 1
+    AND
+      kend.kategori_customer = 'fleet'`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  res.render("../modules/custfirst/views/indexfleet", {
+    datarow: kendaraan,
+    title: title,
+    tbtitle: tbtitle,
+    htitle: htitle,
+  });
 };
 
 // DATABASE FIRST CLASS
-exports.firstclass = function (req, res) {
+exports.firstclass = async function (req, res) {
   const kategori = req.params.kat;
   var title = "Database First Class";
   var tbtitle = "List Database First Class";
-  let page = req.query.page || 1;
-  let offset = 0;
-  if (page > 1) {
-    offset = (page - 1) * 50 + 1;
-  }
-  models.kendaraan
-    .findAndCountAll({
-      include: [
-        { model: models.customer, required: false },
-        {
-          model: models.progressStatus,
-          limit: 1,
-          order: [["service_order", "DESC"]],
-        },
-      ],
-      where: [{ first_class: "1" }],
-      limit: 50,
-      offset: offset,
-      order: [["last_service", "DESC"]],
-    })
-    .then((kendaraan) => {
-      const totalPage = Math.ceil(kendaraan.count / 50);
-      const pagination = { totalPage: totalPage, currentPage: page };
-      res.render("../modules/custfirst/views/indexfs", {
-        datarow: kendaraan.rows,
-        title: title,
-        tbtitle: tbtitle,
-        htitle: htitle,
-        pagination: pagination,
-      });
-    })
-    .catch((err) => {
-      req.flash("alertMessage", err.message);
-      req.flash("alertStatus", "danger");
-      res.redirect("/custfirst/fs");
-    });
+
+  const kendaraan = await models.sequelize.query(
+    `SELECT
+      (SELECT job.norangka from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as no_rangka,
+      (SELECT job.police_no from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as police_no,
+      (SELECT job.model from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as model,
+      (SELECT job.customer from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as nama,
+      kend.kategori_customer as kategori_customer,
+      kend.avg_omzet as avg_omzet,
+      kend.last_service as last_service,
+      kend.point_reward as point_reward,
+      kend.qty_service as qty_service,
+      kend.total_omzet as total_omzet,
+      kend.status_kendaraan as status_kendaraan,
+      kend.first_class as first_class
+    FROM 
+      kendaraan AS kend
+    LEFT JOIN
+      customer AS cust ON cust.id_customer = kend.id_customer
+    WHERE
+      kend.first_class = 1
+    AND
+      kend.kategori_customer = 'customer'`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  res.render("../modules/custfirst/views/indexfs", {
+    datarow: kendaraan,
+    title: title,
+    tbtitle: tbtitle,
+    htitle: htitle,
+  });
 };
 exports.syncdataFristClass = async function (req, res) {
   const job = await models.sequelize.query(

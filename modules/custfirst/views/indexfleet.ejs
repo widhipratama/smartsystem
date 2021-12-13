@@ -52,14 +52,14 @@
                         <% for (var i = 0; i < datarow.length; i++) { %>
                         <tr>
                           <th scope="row"><%= i+1 %></th>
-                          <td><%= datarow[i].progress_statuses[0].police_no %></td>
+                          <td><%= datarow[i].police_no %></td>
                           <td><%= datarow[i].no_rangka %></td>
                           <td><%= datarow[i].model %></td>
-                          <td><%= datarow[i].fleet_customer.nama_fleet %></td>
+                          <td><%= datarow[i].nama %></td>
                           <td><%= datarow[i].qty_service %></td>
-                          <td><%= Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(datarow[i].total_omzet); %></td>
-                          <td><%= Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(datarow[i].avg_omzet); %></td>
-                          <td><%= datarow[i].point_reward %></td>
+                          <td class="text-right"><%= datarow[i].total_omzet.toLocaleString() %></td>
+                          <td class="text-right"><%= datarow[i].avg_omzet.toLocaleString() %></td>
+                          <td class="text-right"><%= datarow[i].point_reward.toLocaleString() %></td>
                         </tr>
                         <% } %>
                       </tbody>
