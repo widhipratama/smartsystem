@@ -1,9 +1,10 @@
 // var exports = (module.exports = {});
 const models = require("../../../models");
-let Op = require("sequelize").Op;
+const { sequelize, QueryTypes, Op } = require("sequelize");
 const useraccount = models.useraccount;
 const fleet_customer = models.fleet_customer;
 var bcrypt = require("bcryptjs");
+const { randomString } = require("../../../helpers/randomString");
 
 var title = "Customer Fleet";
 var tbtitle = "List Customer Fleet";
@@ -12,40 +13,61 @@ var htitle = [
   { id: 'nama_fleet', label: 'Nama Fleet', width: "", typeInput: "text", onTable: "ON" },
   { id: 'contact_person', label: 'PIC', width: "", typeInput: "text", onTable: "ON" },
   { id: 'no_telp_cust', label: 'Telepon', width: "", typeInput: "text", onTable: "ON" },
-  { id: 'alamat', label: 'Alamat', width: "", typeInput: "textarea", onTable: "ON" },
+  { id: 'until_end', label: 'Berlaku Sampai', width: "", typeInput: "tanggal", onTable: "ON" },
+  { id: 'alamat', label: 'Alamat', width: "", typeInput: "textarea", onTable: "OFF" },
   { id: 'alamat_dati2', label: 'Alamat Dati2', width: "", typeInput: "textarea", onTable: "OFF" },
   { id: 'alamat_dati3', label: 'Alamat Dati3', width: "", typeInput: "textarea", onTable: "OFF" },
   { id: 'username', label: 'Username', width: "", typeInput: "text", onTable: "OFF" },
-  { id: 'password', label: 'Password', width: "", typeInput: "password", onTable: "OFF" },
+  { id: 'password', label: 'New Password', width: "", typeInput: "password", onTable: "OFF" },
 ];
 
-exports.index = function (req, res) {
-  models.fleet_customer
-    .findAndCountAll({
-      order: [["id", "DESC"]],
-    })
-    .then((fleet_customer) => {
-      const alertMessage = req.flash("alertMessage");
-      const alertStatus = req.flash("alertStatus");
-      const alert = { message: alertMessage, status: alertStatus };
-      res.render("../modules/custfleet/views/index", {
-        datarow: fleet_customer.rows,
-        alert: alert,
-        title: title,
-        tbtitle: tbtitle,
-        htitle: htitle,
-        menu: menu,
-      });
-    });
+exports.index = async function (req, res) {
+  const fleet_customer = await models.sequelize
+  .query(
+    `SELECT 
+      fleet_customer.id,
+      fleet_customer.nama_fleet,
+      fleet_customer.contact_person,
+      fleet_customer.alamat,
+      fleet_customer.alamat_dati2,
+      fleet_customer.alamat_dati3,
+      fleet_customer.no_telp_cust,
+      fleet_customer.total_omzet_14bln,
+      fleet_customer.until_end,
+      fleet_customer.point_reward,
+      fleet_customer.last_blasting,
+      useraccount.token
+    FROM 
+      fleet_customer 
+    LEFT JOIN 
+      useraccount ON fleet_customer.id = useraccount.id_user
+    ORDER BY
+      fleet_customer.id DESC`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  const alertMessage = req.flash("alertMessage");
+  const alertStatus = req.flash("alertStatus");
+  const alert = { message: alertMessage, status: alertStatus };
+  res.render("../modules/custfleet/views/index", {
+    datarow: fleet_customer,
+    alert: alert,
+    title: title,
+    tbtitle: tbtitle,
+    htitle: htitle,
+    menu: menu,
+  });
 };
-exports.createCustomer = function (req, res) {
+exports.createCustomer = async function (req, res) {
     const { username, nama_fleet, contact_person, no_telp_cust, total_omzet_14bln, alamat, alamat_dati2, alamat_dati3 } = req.body;
 
-    fleet_customer
+    await fleet_customer
     .create({
         nama_fleet: nama_fleet,
         contact_person: contact_person,
         no_telp_cust: no_telp_cust,
+        until_end: until_end,
         total_omzet_14bln: total_omzet_14bln || null,
         alamat: alamat || null,
         alamat_dati2: alamat_dati2 || null,
@@ -58,6 +80,7 @@ exports.createCustomer = function (req, res) {
             password: bcrypt.hashSync(req.body.password, 8),
             id_user: q.id,
             kategori_user: "FLEET",
+            token: randomString(60),
             status: 1,
         })
         .then(() => {
@@ -105,32 +128,55 @@ exports.hapusCustomer = function (req, res) {
         res.redirect("/custfleet");
     });
 };
-exports.editCustomer = function (req, res) {
+exports.editCustomer = async function (req, res) {
   const alertMessage = req.flash("alertMessage");
   const alertStatus = req.flash("alertStatus");
   const alert = { message: alertMessage, status: alertStatus };
 
   const id = req.params.id;
-  models.fleet_customer.findOne({ where: { id: { [Op.eq]: id } } }).then((custfleet) => {
-    res.send({
-      success: true,
-      message: "Berhasil ambil data!",
-      htitle: htitle,
-      data: custfleet,
-    });
+  const q = await models.sequelize.query(
+    `SELECT 
+      *
+    FROM 
+      fleet_customer as fleet
+    LEFT JOIN
+      useraccount ON fleet.id = useraccount.id_user
+    WHERE
+      fleet.id = `+id+`
+    LIMIT 1`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  res.send({
+    success: true,
+    message: "Berhasil ambil data!",
+    htitle: htitle,
+    data: q,
   });
 };
-exports.updateCustomer = function (req, res) {
+exports.updateCustomer = async function (req, res) {
   const id = req.params.id;
   let customerFound;
-  models.fleet_customer
+  await models.fleet_customer
     .findOne({ where: { id: { [Op.eq]: id } } })
     .then((custfleet) => {
       customerFound = custfleet;
-      return custfleet.update(req.body).then(() => {
-        req.flash("alertMessage", `Sukses Mengubah Data ${title} dengan nama : ${customerFound.nama_fleet}`);
-        req.flash("alertStatus", "success");
-        res.redirect("/custfleet");
+      custfleet.update(req.body).then(() => {
+        useraccount
+          .findOne({ where: { id: { [Op.eq]: id } } })
+          .then((useraccount) => {
+            useraccount.update(req.body).then(() => {
+              req.flash("alertMessage", `Sukses Mengubah Data ${title} dengan nama : ${customerFound.nama_fleet}`);
+              req.flash("alertStatus", "success");
+              res.redirect("/custfleet");
+            });
+          })
+          .catch((err) => {
+              req.flash('alertMessage', err.message);
+              req.flash('alertStatus', 'error');
+              res.redirect('/custfleet');
+          });
       });
     })
     .catch((err) => {

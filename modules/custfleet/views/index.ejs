@@ -78,7 +78,7 @@
                                             onclick="getDataKendaraan('<%= datarow[i].id %>', 'fleet')"
                                             data-kategori="fleet" data-toggle="modal" data-target="#carmodal"><i
                                               class="fas fa-car"></i></button>
-                                          <button class="btn btn-sm btn-info"><i class="fas fa-link"></i></button>
+                                          <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#copylink" onclick="generatetoken('<%= datarow[i].token %>')"><i class="fas fa-link"></i></button>
                                           <button class="btn btn-warning btn-sm"
                                             onclick="editFunction('<%= datarow[i].id %>')"
                                             data-id="<%= datarow[i].id %>" data-toggle="modal"
@@ -118,6 +118,14 @@
                             </label>
                             <textarea name="<%= h.id %>" id="<%= h.id %>" class="form-control" required=""></textarea>
                           </div>
+                          <% }else if (h.typeInput=="tanggal" ){ %>
+                            <div class="form-group">
+                              <label>
+                                <%= h.label %>
+                              </label>
+                              <input type="text" id="<%= h.id %>" name="<%= h.id %>" class="form-control datepicker"
+                                required="">
+                            </div>
                           <% }else{ %>
                             <div class="form-group">
                               <label>
@@ -126,8 +134,8 @@
                               <input type="<%= h.typeInput %>" id="<%= h.id %>" name="<%= h.id %>" class="form-control"
                                 required="">
                             </div>
-                            <% } %>
-                              <% }) %>
+                          <% } %>
+                        <% }) %>
                     </div>
                     <div class="modal-footer bg-whitesmoke br">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -142,6 +150,7 @@
           <%- include ../../../views/templates/footer.ejs %>
     </div>
   </div>
+  <%- include ../../../modules/customer/views/generatetoken.ejs %>
   <%- include ../../../views/templates/script.ejs %>
     <%- include ../../../modules/cars/views/SyncMobil.ejs %>
       <script type="text/javascript">
@@ -191,6 +200,7 @@
         function createFunction() {
           $('#formData').attr('action', '<%= process.env.URL %>/custfleet/addcustomer');
           document.getElementById("formData").reset();
+          document.getElementById('password').setAttribute("required", "required");
         };
 
         function delFunction(id) {
@@ -219,7 +229,12 @@
             success: function (res) {
               $('#formData').attr('action', '<%= process.env.URL %>/custfleet/edit/save/' + idData);
               res.htitle.forEach(h => {
-                document.getElementById(h.id).value = res.data[h.id];
+                if (h.id != 'password') {
+                  document.getElementById(h.id).value = res.data[0][h.id];
+                }else{
+                  document.getElementById(h.id).value = '';
+                  document.getElementById(h.id).removeAttribute("required");
+                }
               });
             }
           });

@@ -12,6 +12,7 @@ module.exports = (sequelize, Sequelize) => {
       no_telp_cust: Sequelize.DataTypes.STRING,
       total_omzet_14bln: Sequelize.DataTypes.INTEGER,
       point_reward: Sequelize.DataTypes.INTEGER,
+      until_end: Sequelize.DataTypes.DATE,
       alamat: Sequelize.DataTypes.STRING,
       alamat_dati2: Sequelize.DataTypes.STRING,
       alamat_dati3: Sequelize.DataTypes.STRING,

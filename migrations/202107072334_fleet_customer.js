@@ -14,6 +14,9 @@ module.exports = {
       contact_person: {
         type: Sequelize.STRING(50),
       },
+      until_end: {
+        type: Sequelize.DATE,
+      },
       alamat: {
         type: Sequelize.STRING(100),
       },

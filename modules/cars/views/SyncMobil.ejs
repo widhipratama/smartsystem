@@ -111,7 +111,7 @@
         if (res.success == 'success') {
           var html = "";
           res.data.forEach(element => {
-            html += "<option class=\"data-warna\" id=\"warna" + element.warna_mobil + "\" value =\"" + element.warna_mobil + "\" >" + element.warna_mobil + "</option>";
+            html += "<option class=\"data-warna\" id=\"warna" + element.warna_mobil + "\" value =\"" + element.id_mobil + "\" >" + element.warna_mobil + "</option>";
           });
           $('.data-warna').remove();
           $("#warnaid").after(html);
@@ -175,6 +175,7 @@
   };
   function getDataKendaraan(id, ketegori) {
     document.getElementById("formKendaraanCust").reset();
+    cekModel()
     let idData = id;
     let url = '<%= process.env.URL %>/cars/listkendraan/' + idData + '/' + ketegori;
     var alertstatus = false;
@@ -193,7 +194,7 @@
           html += '<tr>';
           html += '<td><img src="<%= process.env.URL %>/assets/img/cars/' + element.master_kendaraan.image_mobil + '%>" alt="" class="img-responsive img-circle" height="50px"></td>';
           html += '<td>' + element.master_kendaraan.model_mobil + '</td>';
-          html += '<td>' + element.progress_statuses[0].police_no + '</td>';
+          html += '<td>' + element.police_no + '</td>';
           html += '<td>' + element.no_rangka + '</td>';
           html += '<td>' + fs + '</td>';
           html += '<td><button type="button" onclick="delKendraan(\'' + element.no_rangka + '\')" class="btn btn-danger btn-sm m-1"><i class="fas fa-minus"></i></button></td>';
