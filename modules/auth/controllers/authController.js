@@ -140,7 +140,7 @@ exports.login_account_customer_token = (req, res) => {
           res.redirect(process.env.URL + "/auth/login");
         }
 
-        const userdetail = await customer.findOne({
+        const userdetail = customer.findOne({
           where: {
             id_customer: q.id_user,
           },
