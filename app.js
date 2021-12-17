@@ -251,6 +251,7 @@ const customerRoute = require("./routes/customer");
 const jobHistoryRoute = require("./routes/jobHistory");
 const progressStatusRoute = require("./routes/progressStatus");
 const userRoute = require("./routes/user");
+const employeeRoute = require("./modules/employee/routes/employeeRoute");
 
 // routes
 app.use("/", router);
@@ -267,6 +268,7 @@ app.use("/customer", customerRoute);
 app.use("/job-history", jobHistoryRoute);
 app.use("/progress-status", progressStatusRoute);
 app.use("/user", userRoute);
+app.use("/employee", employeeRoute);
 
 app.post("/send-message", (req, res) => {
   const sender = "smartsystem";
