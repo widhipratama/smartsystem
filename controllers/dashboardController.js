@@ -11,5 +11,7 @@ exports.admin = function (req, res) {
 
   res.render("dashboard/admin", {
     session: session,
+    start: '2021-09-01',
+    end: '2021-09-30'
   });
 };

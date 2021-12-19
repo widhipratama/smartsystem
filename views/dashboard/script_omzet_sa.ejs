@@ -1,0 +1,60 @@
+<script type="text/javascript">
+    function omzet_sa() {
+        let start = document.getElementById('start_omzet_sa').value;
+        let end = document.getElementById('end_omzet_sa').value;
+        let url = '<%= process.env.URL %>/custfirst/dashboard/omzet_sa/'+start+'/'+end;
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'json',
+                success: function (res) {
+                    const categori = [];
+                    const omzet = [];
+                    for (let i = 0; i < res.repair.length; i++) {
+                        categori[i] = res.repair[i].name;
+                        omzet[i] = parseInt(res.repair[i].omzet);
+                    }
+
+                    Highcharts.chart('omzet_sa', {
+                        chart: {
+                            type: 'column'
+                        },
+                        title: {
+                            text: 'Omzet & Sales per Unit SA'
+                        },
+                        xAxis: {
+                            categories: categori,
+                            crosshair: true
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: 'Rupiah'
+                            }
+                        },
+                        tooltip: {
+                            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                            footerFormat: '</table>',
+                            shared: true,
+                            useHTML: true
+                        },
+                        plotOptions: {
+                            column: {
+                                pointPadding: 0.2,
+                                borderWidth: 0
+                            }
+                        },
+                        series: [
+                            {
+                                name: "Omzet",
+                                data: omzet
+                            }
+                        ]
+                    });
+                    document.getElementById("pie").focus();
+                }
+            });
+    }
+</script>

@@ -37,6 +37,7 @@ exports.index = async function (req, res) {
       (SELECT job.police_no from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as police_no,
       (SELECT job.model from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as model,
       cust.nama as nama,
+      custfleet.nama_fleet as nama_fleet,
       kend.kategori_customer as kategori_customer,
       kend.avg_omzet as avg_omzet,
       kend.last_service as last_service,
@@ -45,6 +46,8 @@ exports.index = async function (req, res) {
       kendaraan AS kend
     LEFT JOIN
       customer AS cust ON cust.id_customer = kend.id_customer
+    LEFT JOIN
+      fleet_customer AS custfleet ON custfleet.id = kend.id_customer
     WHERE
       kend.first_class = 1
     AND

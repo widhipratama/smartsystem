@@ -80,7 +80,7 @@
                                   <%= datarow[i].model %>
                                 </td>
                                 <td>
-                                  <%= datarow[i].nama %>
+                                  <%= (datarow[i].kategori_customer=='fleet' ? datarow[i].nama_fleet : datarow[i].nama) %>
                                 </td>
                                 <td>
                                   <%= datarow[i].kategori_customer %>

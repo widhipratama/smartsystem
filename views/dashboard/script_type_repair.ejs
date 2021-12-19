@@ -1,0 +1,50 @@
+<script type="text/javascript">
+    function pie_repair_type() {
+        let start = document.getElementById('start_repair_type').value;
+        let end = document.getElementById('end_repair_type').value;
+        let url = '<%= process.env.URL %>/custfirst/dashboard/type_repair/'+start+'/'+end;
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'json',
+                success: function (res) {
+                    Highcharts.chart('pie', {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'Type Repair'
+                        },
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        },
+                        accessibility: {
+                            point: {
+                                valueSuffix: '%'
+                            }
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                showInLegend: true,
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.y:.0f} ( {point.percentage:.0f} % )'
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Total',
+                            colorByPoint: true,
+                            data: res.repair
+                        }]
+                    });
+                    document.getElementById("pie").focus();
+                }
+            });
+    }
+</script>

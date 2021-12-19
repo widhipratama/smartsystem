@@ -229,89 +229,109 @@ exports.syncdataFristClass = async function (req, res) {
 
 // CONTROLLER DASHBOARD
 exports.data_dashboard = async function (req, res) {
-  const tfirst = await models.kendaraan
-    .findAndCountAll({
-      where: [{ first_class: "1" }],
-    });
-  const tregisterd = await models.kendaraan
-    .findAndCountAll({
-      where: [{ status_kendaraan: "registred" }],
-    });
-  const tenews = await models.artikel_enews
-    .findAndCountAll({});
-  const thow = await models.toyota_how
-    .findAndCountAll({});
-  const alphard = await models.sequelize.query(
-    `SELECT 
-        model,
-				COUNT(job_history.norangka) total_count
-        FROM kendaraan
-        JOIN job_history
-        ON job_history.norangka = kendaraan.no_rangka
-        WHERE kendaraan.first_class = '1' 
-				AND model = 'ALPHARD'
-        GROUP BY job_history.model
-        AND job_history.norangka`,
+  const count = await models.sequelize.query(
+    `SELECT
+      COUNT(no_rangka) as total,
+      (SELECT COUNT(model) FROM kendaraan WHERE first_class = '1') as first_class,
+      (SELECT COUNT(model) FROM kendaraan WHERE status_kendaraan = 'registred') as registred,
+      (SELECT COUNT(model) FROM kendaraan WHERE kategori_customer = 'fleet') as fleet,
+      (SELECT COUNT(model) FROM kendaraan WHERE kategori_customer = 'customer') as customer
+    FROM 
+      kendaraan AS kend`,
     {
       type: QueryTypes.SELECT,
     }
   );
-  const avanza = await models.sequelize.query(
-    `SELECT 
-        model,
-				COUNT(job_history.norangka) total_count
-        FROM kendaraan
-        JOIN job_history
-        ON job_history.norangka = kendaraan.no_rangka
-        WHERE kendaraan.first_class = '1' 
-				AND model = 'AVANZA'
-        GROUP BY job_history.model
-        AND job_history.norangka`,
-    {
-      type: QueryTypes.SELECT,
-    }
-  );
-  const innova = await models.sequelize.query(
-    `SELECT 
-        model,
-				COUNT(job_history.norangka) total_count
-        FROM kendaraan
-        JOIN job_history
-        ON job_history.norangka = kendaraan.no_rangka
-        WHERE kendaraan.first_class = '1' 
-				AND model = 'INNOVA'
-        GROUP BY job_history.model
-        AND job_history.norangka`,
-    {
-      type: QueryTypes.SELECT,
-    }
-  );
-  const fortuner = await models.sequelize.query(
-    `SELECT 
-        model,
-				COUNT(job_history.norangka) total_count
-        FROM kendaraan
-        JOIN job_history
-        ON job_history.norangka = kendaraan.no_rangka
-        WHERE kendaraan.first_class = '1' 
-				AND model = 'FORTUNER'
-        GROUP BY job_history.model
-        AND job_history.norangka`,
+  const repair = await models.sequelize.query(
+    `SELECT
+			(SELECT job.repair_type from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) AS repair_type,
+      COUNT(kend.model) as total
+    FROM 
+      kendaraan AS kend
+		WHERE
+      kend.first_class = 1
+    AND
+      DATE_FORMAT(kend.last_service, "%Y-%m-%d") >= '2021-09-01'
+    AND
+      DATE_FORMAT(kend.last_service, "%Y-%m-%d") <= '2021-09-01'
+		GROUP BY
+			repair_type`,
     {
       type: QueryTypes.SELECT,
     }
   );
   
   res.send({
-    tfirst: tfirst.count,
-    tregisterd: tregisterd.count,
-    tenews: tenews.count,
-    thow: thow.count,
-    fortuner: fortuner[0].total_count,
-    avanza: avanza[0].total_count,
-    innova: innova[0].total_count,
-    alphard: alphard[0].total_count,
-    tcars: alphard[0].total_count + innova[0].total_count + avanza[0].total_count + fortuner[0].total_count
+    count: count,
+    repair: repair,
+  });
+};
+
+exports.type_repair = async function (req, res) {
+  let start = req.params.start;
+  let end = req.params.end;
+  const repair = await models.sequelize.query(
+    `SELECT
+			(SELECT job.repair_type from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) AS name,
+      COUNT(kend.model) as y
+    FROM 
+      kendaraan AS kend
+		WHERE
+      kend.first_class = 1
+    AND
+      DATE_FORMAT(kend.last_service, "%Y-%m-%d") >= '`+start+`'
+    AND
+      DATE_FORMAT(kend.last_service, "%Y-%m-%d") <= '`+end+`'
+		GROUP BY
+			name`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  
+  res.json({repair});
+};
+
+exports.omzet_sa = async function (req, res) {
+  let start = req.params.start;
+  let end = req.params.end;
+  const repair = await models.sequelize.query(
+    `SELECT
+			(
+				SELECT 
+					job.sa 
+				FROM 
+					job_history AS job 
+				WHERE job.norangka = kend.no_rangka 
+				ORDER BY 
+					job.id DESC LIMIT 1
+			) AS name,
+      SUM((
+				SELECT 
+					job.total
+				FROM 
+					job_history AS job 
+				WHERE job.norangka = kend.no_rangka 
+				ORDER BY 
+					job.id DESC LIMIT 1
+			)) AS omzet
+    FROM 
+      kendaraan AS kend
+		WHERE
+      kend.first_class = 1
+    AND
+      DATE_FORMAT(kend.last_service, "%Y-%m-%d") >= '`+start+`'
+    AND
+      DATE_FORMAT(kend.last_service, "%Y-%m-%d") <= '`+end+`'
+		GROUP BY
+			name`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  
+  res.send({
+    repair
   });
 };
 

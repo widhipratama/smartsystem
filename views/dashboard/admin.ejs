@@ -2,6 +2,10 @@
 <html lang="en">
   <head>
     <%- include ../templates/header.ejs %>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
   </head>
   <body>
     <div id="app">
@@ -26,7 +30,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                   <div class="card card-statistic-1">
                     <div class="card-icon bg-danger">
-                      <i class="far fa-user"></i>
+                      <i class="fas fa-users"></i>
                     </div>
                     <div class="card-wrap">
                       <div class="card-header">
@@ -52,26 +56,26 @@
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                   <div class="card card-statistic-1">
                     <div class="card-icon bg-success">
-                      <i class="far fa-newspaper"></i>
+                      <i class="fas fa-user-tie"></i>
                     </div>
                     <div class="card-wrap">
                       <div class="card-header">
-                        <h4>Toyota How</h4>
+                        <h4>Fleet</h4>
                       </div>
-                      <div class="card-body" id="thow"></div>
+                      <div class="card-body" id="tfleet"></div>
                     </div>
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                   <div class="card card-statistic-1">
                     <div class="card-icon bg-primary">
-                      <i class="fas fa-book-open"></i>
+                      <i class="fas fa-user-alt"></i>
                     </div>
                     <div class="card-wrap">
                       <div class="card-header">
-                        <h4>Enews</h4>
+                        <h4>Customers</h4>
                       </div>
-                      <div class="card-body" id="tenews"></div>
+                      <div class="card-body" id="tcustomer"></div>
                     </div>
                   </div>
                 </div>
@@ -79,76 +83,49 @@
             </div>
             <!-- GRAFIKK -->
             <div class="row">
-            <!-- <div class="col-lg-8 col-md-12 col-12 col-sm-12">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
               <div class="card">
-                <div class="card-header">
-                  <h4>Last Week's Booking</h4>
-                </div>
                 <div class="card-body">
-                  <canvas id="myChart"></canvas>
-                  <div class="statistic-details mt-sm-4">
-                    <div class="statistic-details-item">
-                      <span class="text-muted"><span class="text-primary"><i class="fas fa-caret-up"></i></span> 7%</span>
-                      <div class="detail-value">$243</div>
-                      <div class="detail-name">Today's Sales</div>
+                  <form id="formData" method="POST" action="" class="needs-validation row" novalidate="">
+                    <div class="form-group col-md-4">
+                      <input type="text" class="form-control required datepicker" name="start" id="start_repair_type"
+                        value="<%= start %>">
                     </div>
-                    <div class="statistic-details-item">
-                      <span class="text-muted"><span class="text-danger"><i class="fas fa-caret-down"></i></span> 23%</span>
-                      <div class="detail-value">$2,902</div>
-                      <div class="detail-name">This Week's Sales</div>
+                    <div class="form-group col-md-4">
+                      <input type="text" class="form-control required datepicker" name="end" id="end_repair_type"
+                        value="<%= end %>">
                     </div>
-                    <div class="statistic-details-item">
-                      <span class="text-muted"><span class="text-primary"><i class="fas fa-caret-up"></i></span>9%</span>
-                      <div class="detail-value">$12,821</div>
-                      <div class="detail-name">This Month's Sales</div>
+                    <div class="form-group col-md-4">
+                      <button type="button" onclick="pie_repair_type()" class="btn btn-primary btn-xs"><i class="fa fa-search"></i>
+                        Search</button>
                     </div>
-                    <div class="statistic-details-item">
-                      <span class="text-muted"><span class="text-primary"><i class="fas fa-caret-up"></i></span> 19%</span>
-                      <div class="detail-value">$92,142</div>
-                      <div class="detail-name">This Year's Sales</div>
-                    </div>
-                  </div>
+                  </form>
+                  <figure class="highcharts-figure">
+                      <div id="pie"></div>
+                  </figure>
                 </div>
               </div>
-            </div> -->
-            <div class="col-lg-8 col-md-12 col-12 col-sm-12">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
               <div class="card">
-                <div class="card-header">
-                  <h4>Registered Car</h4>
-                </div>
-                <div class="card-body">
-                  <div class="mb-4">
-                    <div class="text-small float-right font-weight-bold text-muted" id="talphrad"></div>
-                    <div class="font-weight-bold mb-1">Alphard</div>
-                    <div class="progress" data-height="3">
-                      <div class="progress-bar" role="progressbar" id="alphrad" data-width="" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="card-body ">
+                  <form id="formData" method="POST" action="" class="needs-validation row" novalidate="">
+                    <div class="form-group col-md-4">
+                      <input type="text" class="form-control required datepicker" name="start" id="start_omzet_sa"
+                        value="<%= start %>">
                     </div>
-                  </div>
-
-                  <div class="mb-4">
-                    <div class="text-small float-right font-weight-bold text-muted" id="tfortuner"></div>
-                    <div class="font-weight-bold mb-1">Fortuner</div>
-                    <div class="progress" data-height="3">
-                      <div class="progress-bar" role="progressbar" id="fortuner" data-width="" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="form-group col-md-4">
+                      <input type="text" class="form-control required datepicker" name="end" id="end_omzet_sa"
+                        value="<%= end %>">
                     </div>
-                  </div>
-
-                  <div class="mb-4">
-                    <div class="text-small float-right font-weight-bold text-muted" id="tinnova"></div>
-                    <div class="font-weight-bold mb-1">INNOVA</div>
-                    <div class="progress" data-height="3">
-                      <div class="progress-bar" role="progressbar" id="innova" data-width="" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="form-group col-md-4">
+                      <button type="button" onclick="omzet_sa()" class="btn btn-primary btn-xs"><i class="fa fa-search"></i>
+                        Search</button>
                     </div>
-                  </div>
-
-                  <div class="mb-4">
-                    <div class="text-small float-right font-weight-bold text-muted" id="tavanza"></div>
-                    <div class="font-weight-bold mb-1">Avanza</div>
-                    <div class="progress" data-height="3">
-                      <div class="progress-bar" role="progressbar" id="avanza" data-width="" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-
+                  </form>
+                  <figure class="highcharts-figure table-responsive">
+                      <div id="omzet_sa"></div>
+                  </figure>
                 </div>
               </div>
             </div>
@@ -160,34 +137,26 @@
       </div>
     </div>
     <%- include ../templates/script.ejs %>
+    <%- include ../dashboard/script_type_repair.ejs %>
+    <%- include ../dashboard/script_omzet_sa.ejs %>
     <script src="<%= process.env.URL %>/script-stisla/assets/js/page/modules-chartjs.js"></script>
     <script>
       $(document).ready(function () {
         getDatadashboard();
+        pie_repair_type();
+        omzet_sa();
       });
       function getDatadashboard() {
         let url = '<%= process.env.URL %>/custfirst/dashboard';
-        console.log('sasa')
         $.ajax({
           type: 'GET',
           url: url,
           dataType: 'json',
           success: function (res) {
-            console.log(res)
-            $('#tfirst').html(res.tfirst.toLocaleString());
-            $('#tregistred').html(res.tregisterd.toLocaleString());
-            $('#tenews').html(res.tenews.toLocaleString());
-            $('#thow').html(res.thow.toLocaleString());
-            $('#talphrad').html(res.alphard.toLocaleString());
-            $('#tfortuner').html(res.fortuner.toLocaleString());
-            $('#tinnova').html(res.innova.toLocaleString());
-            $('#tavanza').html(res.avanza.toLocaleString());
-
-            console.log((res.alphard/res.tcars)*100);
-            $('#alphrad').attr("data-width",((res.alphard/res.tcars)*100).toFixed()+"%");
-            $('#fortuner').attr("data-width",((res.fortuner/res.tcars)*100).toFixed()+"%");
-            $('#innova').attr("data-width",((res.innova/res.tcars)*100).toFixed()+"%");
-            $('#avanza').attr("data-width",((res.avanza/res.tcars)*100).toFixed()+"%");
+            $('#tfirst').html(res.count[0].first_class.toLocaleString());
+            $('#tregistred').html(res.count[0].registred.toLocaleString());
+            $('#tfleet').html(res.count[0].fleet.toLocaleString());
+            $('#tcustomer').html(res.count[0].customer.toLocaleString());
           }
         });
       }
