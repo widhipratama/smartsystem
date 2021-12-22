@@ -20,9 +20,9 @@ exports.index = async function (req, res) {
   var tbtitle = "List Customer First Class";
   const kendaraan = await models.sequelize.query(
     `SELECT
-      (SELECT job.norangka from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as no_rangka,
-      (SELECT job.police_no from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as police_no,
-      (SELECT job.model from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as model,
+      kend.no_rangka,
+      kend.police_no,
+      kend.model,
       cust.nama as nama,
       kend.kategori_customer as kategori_customer,
       kend.avg_omzet as avg_omzet,
