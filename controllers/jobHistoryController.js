@@ -2,14 +2,20 @@ const db = require("../models");
 const jobHistory = db.jobHistory;
 const xlsxFile = require("read-excel-file/node");
 const fs = require("fs");
+const { sequelize, QueryTypes, Op } = require("sequelize");
 
-exports.import = (req, res) => {
+exports.import = async (req, res) => {
   const importMessage = req.flash("import_message");
   const importStatus = req.flash("import_status");
   const alert = { message: importMessage, status: importStatus };
+  const last = await db.sequelize.query(
+    'SELECT invoice_date FROM job_history ORDER BY invoice_date DESC LIMIT 1', {
+      type: QueryTypes.SELECT,
+    });
 
   res.render("jobHistory/import", {
     alert: alert,
+    last: last[0].invoice_date
   });
 };
 

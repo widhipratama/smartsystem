@@ -2,14 +2,20 @@ const db = require("../models");
 const progressStatus = db.progressStatus;
 const xlsxFile = require("read-excel-file/node");
 const fs = require("fs");
+const { sequelize, QueryTypes, Op } = require("sequelize");
 
-exports.import = (req, res) => {
+exports.import = async (req, res) => {
   const importMessage = req.flash("import_message");
   const importStatus = req.flash("import_status");
   const alert = { message: importMessage, status: importStatus };
+  const last = await db.sequelize.query(
+    'SELECT tgl_masuk FROM progress_status ORDER BY tgl_masuk DESC LIMIT 1', {
+      type: QueryTypes.SELECT,
+    });
 
   res.render("progressStatus/import", {
     alert: alert,
+    last: last[0].tgl_masuk
   });
 };
 

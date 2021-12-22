@@ -50,6 +50,7 @@
                                 <%= alert.message %>
                               </div>
                               <% } %>
+                                <h5>Last Update : <%= last %></h5>
                                 <form enctype="multipart/form-data" method="POST"
                                   action="<%= process.env.URL %>/progress-status/upload">
                                   <div class="form-group row">

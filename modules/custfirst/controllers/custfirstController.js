@@ -311,7 +311,14 @@ exports.omzet_sa = async function (req, res) {
 					job.total
 				FROM 
 					job_history AS job 
-				WHERE job.norangka = kend.no_rangka 
+				WHERE 
+          job.norangka = kend.no_rangka
+        AND
+          repair_type = 'SBE'
+        AND
+          repair_type = 'GRP'
+        AND
+          repair_type = 'PRT'
 				ORDER BY 
 					job.id DESC LIMIT 1
 			)) AS omzet
