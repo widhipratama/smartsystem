@@ -297,31 +297,16 @@ exports.omzet_sa = async function (req, res) {
   let end = req.params.end;
   const repair = await models.sequelize.query(
     `SELECT
-			(
-				SELECT 
-					job.sa 
-				FROM 
-					job_history AS job 
-				WHERE job.norangka = kend.no_rangka 
-				ORDER BY 
-					job.id DESC LIMIT 1
-			) AS name,
-      SUM((
-				SELECT 
-					job.total
-				FROM 
-					job_history AS job 
-				WHERE 
-          job.norangka = kend.no_rangka
-        AND
-          repair_type = 'SBE'
-        AND
-          repair_type = 'GRP'
-        AND
-          repair_type = 'PRT'
-				ORDER BY 
-					job.id DESC LIMIT 1
-			)) AS omzet
+      SUM((SELECT job.total from job_history AS job 
+        where job.norangka = kend.no_rangka 
+        OR
+          job.repair_type = 'SBE'
+        OR
+          job.repair_type = 'GRP'
+        OR
+          job.repair_type = 'PRT'
+        ORDER BY job.id DESC LIMIT 1)) AS omzet,
+      COUNT(kend.model) as y
     FROM 
       kendaraan AS kend
 		WHERE
@@ -329,9 +314,7 @@ exports.omzet_sa = async function (req, res) {
     AND
       DATE_FORMAT(kend.last_service, "%Y-%m-%d") >= '`+start+`'
     AND
-      DATE_FORMAT(kend.last_service, "%Y-%m-%d") <= '`+end+`'
-		GROUP BY
-			name`,
+      DATE_FORMAT(kend.last_service, "%Y-%m-%d") <= '`+end+`'`,
     {
       type: QueryTypes.SELECT,
     }

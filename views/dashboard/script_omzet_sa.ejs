@@ -8,10 +8,9 @@
                 url: url,
                 dataType: 'json',
                 success: function (res) {
-                    const categori = [];
+                    console.log(res)
                     const omzet = [];
                     for (let i = 0; i < res.repair.length; i++) {
-                        categori[i] = res.repair[i].name;
                         omzet[i] = parseInt(res.repair[i].omzet);
                     }
 
@@ -20,10 +19,10 @@
                             type: 'column'
                         },
                         title: {
-                            text: 'Omzet & Sales per Unit SA'
+                            text: 'Omzet First Class'
                         },
                         xAxis: {
-                            categories: categori,
+                            categories: 'First Class',
                             crosshair: true
                         },
                         yAxis: {
@@ -33,8 +32,8 @@
                             }
                         },
                         tooltip: {
-                            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                            headerFormat: '<span style="font-size:10px">First Class</span><table>',
+                            pointFormat: '<tr><td style="color:{series.color};padding:0">Omzet: </td>' +
                                 '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
                             footerFormat: '</table>',
                             shared: true,
