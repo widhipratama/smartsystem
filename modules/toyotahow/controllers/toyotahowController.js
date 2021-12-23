@@ -58,36 +58,37 @@ exports.input = function (req, res) {
 }
 exports.createData = async function (req, res) {
     let dataFound;
+    let datasub;  
+    let subhow = req.body; 
     let data = {
         judul_how: req.body.judul_how,
         status: req.body.status,
         sampul_how: req.files.sampul_how[0].filename,
         date_upload: datenow,
-    };
-    let subhow = req.body;
+    }; 
     await models.toyota_how.create(data).then((how) => {
-        let row = [];
-        for (let i = 0; i < req.body.judul_how_sub.length; i++) {
-            models.sequelize.query(
-                `INSERT INTO
-                    toyota_how_sub (id_how, judul_how_sub, desc_how_sub, date_upload)
-                VALUES
-                    (`+how.id_how+`, `+subhow.judul_how_sub[i]+`, `+subhow.desc_how_sub[i]+`, `+new Date()+`)`,
-                {
-                    type: QueryTypes.SELECT,
-                }
-            );
-            row[i] = subhow.judul_how_sub[i];
-        }        
         dataFound = how;
-        res.send(row);
-        // req.flash('alertMessage', `Sukses Menambahkan Data ${title} dengan nama : ${dataFound.judul_how}`);
-        // req.flash('alertStatus', 'success');
-        // res.redirect('/toyotahow/input');
+        for (let i = 0; i < req.body.judul_how_sub.length; i++) {
+            datasub[i] = {
+                id_how_sub: how.id_how,
+                judul_how_sub: subhow.judul_how_sub[i],
+                desc_how_sub: subhow.desc_how_sub[i],
+                date_upload: datenow,
+            };
+        } 
+        models.toyota_how_sub.create(datasub).then((howsub) => {
+            req.flash('alertMessage', `Sukses Menambahkan Data ${title} dengan nama : ${dataFound.judul_how}`);
+            req.flash('alertStatus', 'success');
+            res.redirect('/toyotahow/input');
+        }).catch((err) => {
+            req.flash('alertMessage', `Sub How Error: ${err.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect('/toyotahow/input');
+        });   
     }).catch((err) => {
-        // req.flash('alertMessage', err.message);
-        // req.flash('alertStatus', 'danger');
-        // res.redirect('/toyotahow/input');
+        req.flash('alertMessage', `How Error: ${err.message}`);
+        req.flash('alertStatus', 'danger');
+        res.redirect('/toyotahow/input');
     });
 }
 
