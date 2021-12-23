@@ -13,8 +13,6 @@ router.get("/detail/:id", toyotahowController.indexdetail);
 router.get("/input", [authMiddleware.verifyToken], toyotahowController.input);
 router.post("/adddata", upload.fields([{
                 name: 'sampul_how', maxCount: 1
-            }, {
-                name: 'location_how', maxCount: 1
             }]), toyotahowController.createData);
 router.post("/updatedatasampul", upload.single('sampul_how'), toyotahowController.updateDataSampul);
 router.get("/delete/:id", toyotahowController.hapusData);
