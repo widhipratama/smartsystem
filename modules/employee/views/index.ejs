@@ -83,17 +83,12 @@
                                           </span>
                                         </td>
                                         <td>
-                                          <button class="btn btn-primary btn-sm open-addCarsCustomer"
-                                            data-id="<%= datarow[i].id_customer %>" data-kategori="customer"
-                                            data-toggle="modal" onclick="getDataKendaraan('<%= datarow[i].id_customer %>', 'customer')" data-target="#carmodal"><i
-                                              class="fas fa-car"></i></button>
-                                          <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#copylink" onclick="generatetoken('<%= datarow[i].token %>')"><i class="fas fa-link"></i></button>
                                           <button class="btn btn-warning btn-sm"
-                                            onclick="editFunction('<%= datarow[i].id_customer %>')"
+                                            onclick="editFunction('<%= datarow[i].id_karyawan %>')"
                                             data-id="<%= datarow[i].id %>" data-toggle="modal"
                                             data-target="#exampleModal"><i class="fas fa-pen"></i></button>
                                           <button class="btn btn-danger btn-sm"
-                                            onclick="delFunction('<%= datarow[i].id_customer %>')"
+                                            onclick="delFunction('<%= datarow[i].id_karyawan %>')"
                                             data-id="<%= datarow[i].id %>"><i class="fas fa-trash"></i></button>
                                         </td>
                                   </tr>
@@ -122,66 +117,8 @@
                     </div>
                     <div class="modal-body">
                       <div class="form-group">
-                        <label>Nama Customer</label>
+                        <label>Nama</label>
                         <input type="text" id="nama" name="nama" class="form-control" pattern=".{5,}" required="">
-                      </div>
-                      <div class="form-group">
-                        <label>No Telp.</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <div class="input-group-text">
-                              <i class="fas fa-phone"></i>
-                            </div>
-                          </div>
-                          <input type="text" id="no_telp" name="no_telp" class="form-control phone-number input-phone"
-                            maxlength="15" minlength="11" pattern=".{11,15}" required="">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label>Whatsapp</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <div class="input-group-text">
-                              <i class="fab fa-whatsapp"></i>
-                            </div>
-                          </div>
-                          <input type="text" id="wa" name="wa" class="form-control phone-number input-phone"
-                            maxlength="15" minlength="11" pattern=".{11,15}" required="">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label>Instagram</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <div class="input-group-text">
-                              <i class="fab fa-instagram"></i>
-                            </div>
-                          </div>
-                          <input type="text" id="ig" name="ig" class="form-control" pattern=".{1,}">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label>Facebook</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <div class="input-group-text">
-                              <i class="fab fa-facebook"></i>
-                            </div>
-                          </div>
-                          <input type="text" id="facebook" name="facebook" class="form-control" pattern=".{1,}">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label>Alamat</label>
-                        <textarea name="alamat" id="alamat" class="form-control" required=""></textarea>
-                      </div>
-                      <div class="form-group">
-                        <label>Alamat Dati 2</label>
-                        <textarea name="alamat_dati2" id="alamat_dati2" class="form-control"></textarea>
-                      </div>
-                      <div class="form-group">
-                        <label>Alamat Dari 3</label>
-                        <textarea name="alamat_dati3" id="alamat_dati3" class="form-control"></textarea>
                       </div>
                       <div class="form-group">
                         <label>Username</label>
@@ -208,7 +145,6 @@
               </div>
             </div>
             <!-- END MODAL -->
-            <%- include ../../../modules/customer/views/generatetoken.ejs %>
           </div>
           <%- include ../../../views/templates/footer.ejs %>
     </div>
@@ -233,13 +169,6 @@
               url: url,
               data: {
                 nama: $("#nama").val(),
-                no_telp: $("#no_telp").val(),
-                whatsapp: $("#wa").val(),
-                ig: $("#ig").val(),
-                facebook: $("#facebook").val(),
-                alamat: $("#alamat").val(),
-                alamat_dati2: $("#alamat_dati2").val(),
-                alamat_dati3: $("#alamat_dati3").val(),
                 username: $("#username").val(),
                 password: $("#password").val(),
               },
@@ -252,7 +181,7 @@
                   message: message,
                   position: 'topCenter',
                   onClosing: function () {
-                    location.href = '/customer';
+                    location.href = '/employee';
                   },
                   close: false,
                   timeout: 1000,
@@ -267,11 +196,7 @@
               }
             });
           });
-          var cleave = new Cleave('.input-phone', {
-            phone: true,
-            phoneRegionCode: 'id',
-            delimiter: ''
-          });
+
           window.setTimeout(function () {
             $(".alert-autoclose").fadeTo(500, 0).slideUp(500, function () {
               $(this).remove();
@@ -283,7 +208,7 @@
         function delFunction(id) {
           let idData = id;
           swal({
-            title: "Yakin Ingin Menghapus Data Customer ini?",
+            title: "Yakin Ingin Menghapus Data User ini?",
             text: "Data yang dihapus, tidak bisa kembali lagi.",
             icon: "warning",
             buttons: true,
@@ -291,14 +216,14 @@
           })
             .then((willDelete) => {
               if (willDelete) {
-                window.location.assign(`/customer/delete/${idData}`);
+                window.location.assign(`/employee/delete/${idData}`);
               }
             });
         };
 
         function editFunction(id) {
           let idData = id;
-          let url = '<%= process.env.URL %>/customer/edit/' + idData;
+          let url = '<%= process.env.URL %>/employee/edit/' + idData;
           console.log(url)
           $.ajax({
             type: 'GET',
@@ -306,17 +231,9 @@
             dataType: 'json',
             success: function (res) {
               console.log(res)
-              document.getElementById("urlsubmit").value = '<%= process.env.URL %>/customer/edit/save/' + idData;
-              document.getElementById("nama").value = res.data[0].nama;
-              document.getElementById("no_telp").value = res.data[0].no_telp;
-              document.getElementById("wa").value = res.data[0].wa;
-              document.getElementById("facebook").value = res.data[0].facebook;
-              document.getElementById("ig").value = res.data[0].ig;
-              document.getElementById("alamat").value = res.data[0].alamat;
-              document.getElementById("alamat_dati2").value = res.data[0].alamat_dati2;
-              document.getElementById("alamat_dati3").value = res.data[0].alamat_dati3;
+              document.getElementById("urlsubmit").value = '<%= process.env.URL %>/employee/edit/save/' + idData;
+              document.getElementById("nama").value = res.data[0].nama_karyawan;
               document.getElementById("username").value = (res.data[0].username ? res.data[0].username : '');
-              document.getElementById("password").value = '';
               document.getElementById("option" + res.data[0].status).selected = true;
               $('#password').removeAttr('required', 'required');
             }
@@ -325,13 +242,7 @@
         function createFunction() {
           document.getElementById("urlsubmit").value = '<%= process.env.URL %>/auth/daftar';
           document.getElementById("nama").value = '';
-          document.getElementById("no_telp").value = '';
-          document.getElementById("wa").value = '';
-          document.getElementById("facebook").value = '';
-          document.getElementById("ig").value = '';
-          document.getElementById("alamat").value = '';
-          document.getElementById("alamat_dati2").value = '';
-          document.getElementById("alamat_dati3").value = '';
+          document.getElementById("username").value = '';
           document.getElementById("option1").selected = true;
           $('#password').attr('required', 'required');
         };

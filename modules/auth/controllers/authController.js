@@ -5,7 +5,7 @@ const { randomString } = require("../../../helpers/randomString");
 
 const useraccount = db.useraccount;
 const customer = db.customer;
-const karyawan = db.karyawan;
+const karyawan = db.employee;
 const fleet_customer = db.fleet_customer;
 
 var jwt = require("jsonwebtoken");
@@ -191,7 +191,7 @@ exports.login_account = (req, res) => {
           res.json({ status: "401", message: "User tidak terdaftar" });
         } else {
           if (q.kategori_user === "USER") {
-            const userdetail =  customer.findOne({
+            const userdetail = customer.findOne({
               where: {
                 id_customer: q.id_user,
               },

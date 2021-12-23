@@ -4,36 +4,37 @@ const { randomString } = require("../../../helpers/randomString");
 var bcrypt = require("bcryptjs");
 const { sequelize, QueryTypes, Op } = require("sequelize");
 
-models.useraccount.hasOne(models.customer, { foreignKey: "id_customer" });
-models.customer.belongsTo(models.useraccount, { foreignKey: "id_user" });
+models.useraccount.hasOne(models.employee, { foreignKey: "id_karyawan" });
+models.employee.belongsTo(models.useraccount, { foreignKey: "id_user" });
 
-var title = "Customer Account";
-var tbtitle = "List Customer Account";
-var menu = "customer";
+var title = "Employee Account";
+var tbtitle = "List Employee Account";
+var menu = "employee";
 var htitle = [
-  { id: "nama", label: "Nama Customer", width: "" },
-  { id: "no_telp", label: "Telepon", width: "" },
-  { id: "alamat", label: "Alamat", width: "" },
+  { id: "nama_karyawan", label: "Nama Karyawan", width: "" },
+  { id: "level_karyawan", label: "Level", width: "" },
+  { id: "useraccount.status", label: "Status", width: "" },
 ];
 
 exports.index = async function (req, res) {
-  const customer = await models.sequelize.query(
+  const employee = await models.sequelize.query(
     `SELECT * 
     FROM 
-      customer 
+      karyawan 
     LEFT JOIN 
-      useraccount ON customer.id_customer = useraccount.id_user
+      useraccount ON karyawan.id_karyawan = useraccount.id_user
     ORDER BY
-      id_customer DESC`,
+      id_karyawan DESC`,
     {
       type: QueryTypes.SELECT,
     }
   );
+
   const alertMessage = req.flash("alertMessage");
   const alertStatus = req.flash("alertStatus");
   const alert = { message: alertMessage, status: alertStatus };
-  res.render("../modules/customer/views/index", {
-    datarow: customer,
+  res.render("../modules/employee/views/index", {
+    datarow: employee,
     alert: alert,
     title: title,
     tbtitle: tbtitle,
@@ -42,12 +43,12 @@ exports.index = async function (req, res) {
   });
 };
 exports.createEmployee = function (req, res) {
-  let customerFound;
+  let employeeFound;
   models.customer
     .create(req.body)
     .then((customer) => {
-      customerFound = customer;
-      req.flash("alertMessage", `Sukses Menambahkan Data customer dengan nama : ${customerFound.nama}`);
+      employeeFound = customer;
+      req.flash("alertMessage", `Sukses Menambahkan Data customer dengan nama : ${employeeFound.nama}`);
       req.flash("alertStatus", "success");
       res.redirect("/customer");
     })
@@ -68,25 +69,25 @@ exports.createEmployee = function (req, res) {
 };
 exports.hapusEmployee = function (req, res) {
   let id = req.params.id;
-  let customerFound;
+  let employeeFound;
   models.useraccount
     .findOne({ where: { id_user: { [Op.eq]: id } } })
     .then((account) => {
       return account.destroy().then(() => {
-        models.customer
-          .findOne({ where: { id_customer: { [Op.eq]: id } } })
-          .then((customer) => {
-            customerFound = customer;
-            return customer.destroy().then(() => {
-              req.flash("alertMessage", `Sukses Menghapus Data Customer dengan nama : ${customerFound.nama}`);
+        models.employee
+          .findOne({ where: { id_karyawan: { [Op.eq]: id } } })
+          .then((karyawan) => {
+            employeeFound = karyawan;
+            return karyawan.destroy().then(() => {
+              req.flash("alertMessage", `Sukses Menghapus Data Customer dengan nama : ${employeeFound.nama_karyawan}`);
               req.flash("alertStatus", "success");
-              res.redirect("/customer");
+              res.redirect("/employee");
             });
           })
           .catch((err) => {
             req.flash("alertMessage", err.message);
             req.flash("alertStatus", "danger");
-            res.redirect("/customer");
+            res.redirect("/employee");
           });
       });
     })
@@ -102,13 +103,13 @@ exports.editEmployee = async function (req, res) {
   const alert = { message: alertMessage, status: alertStatus };
 
   const id = req.params.id;
-  const customer = await models.sequelize.query(
+  const employee = await models.sequelize.query(
     `SELECT * 
       FROM 
-        customer 
+        karyawan 
       LEFT JOIN 
-        useraccount ON customer.id_customer = useraccount.id_user 
-      WHERE customer.id_customer = ` +
+        useraccount ON karyawan.id_karyawan = useraccount.id_user 
+      WHERE karyawan.id_karyawan = ` +
       id +
       ``,
     {
@@ -118,30 +119,23 @@ exports.editEmployee = async function (req, res) {
   res.send({
     success: true,
     message: "Berhasil ambil data!",
-    data: customer,
+    data: employee,
   });
 };
 exports.updateEmployee = (req, res) => {
   const id = req.params.id;
   let dataFound;
   let data;
-  const { nama, no_telp, ig, facebook, wa, alamat, alamat_dati2, alamat_dati3 } = req.body;
-  models.customer
-    .findOne({ where: { id_customer: { [Op.eq]: id } } })
-    .then((customer) => {
-      dataFound = customer;
+  const { nama } = req.body;
+  models.employee
+    .findOne({ where: { id_employee: { [Op.eq]: id } } })
+    .then((employee) => {
+      dataFound = employee;
       data = {
         nama: nama,
-        no_telp: no_telp,
-        ig: ig || null,
-        facebook: facebook || null,
-        wa: wa || null,
-        alamat: alamat || null,
-        alamat_dati2: alamat_dati2 || null,
-        alamat_dati3: alamat_dati3 || null,
         status: 1,
       };
-      return customer.update(data).then(() => {
+      return employee.update(data).then(() => {
         models.useraccount
           .findOne({ where: { id_user: { [Op.eq]: id } } })
           .then((user) => {
@@ -158,7 +152,7 @@ exports.updateEmployee = (req, res) => {
               };
             }
             return user.update(data).then(() => {
-              res.json({ status: "200", message: "Customer berhasil terupdate" });
+              res.json({ status: "200", message: "Data Karyawan berhasil terupdate" });
             });
           })
           .catch((err) => {

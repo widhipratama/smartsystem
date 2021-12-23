@@ -1,21 +1,14 @@
 module.exports = (sequelize, Sequelize) => {
-  const customer = sequelize.define(
-    "customer",
+  const employee = sequelize.define(
+    "karyawan",
     {
-      id_customer: {
+      id_karyawan: {
         type: Sequelize.DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      nama: Sequelize.DataTypes.STRING,
-      no_telp: Sequelize.DataTypes.STRING,
-      ig: Sequelize.DataTypes.STRING,
-      facebook: Sequelize.DataTypes.STRING,
-      wa: Sequelize.DataTypes.STRING,
-      alamat: Sequelize.DataTypes.STRING,
-      alamat_dati2: Sequelize.DataTypes.STRING,
-      alamat_dati3: Sequelize.DataTypes.STRING,
-      status: Sequelize.DataTypes.INTEGER,
+      nama_aryawan: Sequelize.DataTypes.STRING,
+      level_karyawam: Sequelize.DataTypes.STRING,
     },
     {
       freezeTableName: true,
@@ -26,5 +19,5 @@ module.exports = (sequelize, Sequelize) => {
     }
   );
 
-  return customer;
+  return employee;
 };

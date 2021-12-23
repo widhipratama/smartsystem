@@ -16,11 +16,11 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.customer = require("../modules/customer/models/customer")(sequelize, Sequelize);
+db.employee = require("../modules/employee/models/employee")(sequelize, Sequelize);
 db.artikel_enews = require("../modules/enews/models/enews")(sequelize, Sequelize);
 db.toyota_how = require("../modules/toyotahow/models/toyotahow")(sequelize, Sequelize);
 db.toyota_how_sub = require("../modules/toyotahow/models/toyotahowsub")(sequelize, Sequelize);
 db.useraccount = require("../modules/useraccount/models/useraccount")(sequelize, Sequelize);
-db.karyawan = require("../modules/karyawan/models/karyawan")(sequelize, Sequelize);
 db.jobHistory = require("./jobHistory")(sequelize, Sequelize);
 db.progressStatus = require("./progressStatus")(sequelize, Sequelize);
 db.fleet_customer = require("../modules/custfleet/models/custfleet")(sequelize, Sequelize);
@@ -29,11 +29,10 @@ db.whatsapp_blast = require("./whatsapp_blast")(sequelize, Sequelize);
 db.promotion = require("../modules/promotion/models/promotion")(sequelize, Sequelize);
 db.kendaraan = require("../modules/cars/models/kendaraan")(sequelize, Sequelize);
 
-
 db.useraccount.hasOne(db.customer, { foreignKey: "id_customer" });
 db.customer.belongsTo(db.useraccount, { foreignKey: "id_customer" });
-db.useraccount.hasOne(db.karyawan, { foreignKey: "id_user" });
-db.karyawan.belongsTo(db.useraccount, { foreignKey: "id_user" });
+db.useraccount.hasOne(db.employee, { foreignKey: "id_user" });
+db.employee.belongsTo(db.useraccount, { foreignKey: "id_user" });
 
 db.kendaraan.hasOne(db.master_kendaraan, { foreignKey: "id_mobil" });
 db.kendaraan.belongsTo(db.master_kendaraan, { foreignKey: "id_mobil" });

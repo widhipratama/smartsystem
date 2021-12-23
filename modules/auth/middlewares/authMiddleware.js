@@ -4,7 +4,7 @@ const config = require("../../../config/auth");
 
 const useraccount = db.useraccount;
 const customer = db.customer;
-const karyawan = db.karyawan;
+const karyawan = db.employee;
 
 verifyToken = async (req, res, next) => {
   try {
