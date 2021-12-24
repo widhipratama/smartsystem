@@ -1,10 +1,11 @@
 module.exports = (sequelize, Sequelize) => {
-  const how = sequelize.define(
+  const toyotahow = sequelize.define(
     "toyota_how",
     {
       id_how: {
         type: Sequelize.DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
       },
       judul_how: Sequelize.DataTypes.STRING,
       sampul_how: Sequelize.DataTypes.STRING,
@@ -20,5 +21,5 @@ module.exports = (sequelize, Sequelize) => {
     }
   );
 
-  return how;
+  return toyotahow;
 };
