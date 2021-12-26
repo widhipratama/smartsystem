@@ -225,6 +225,7 @@ exports.login_account = (req, res) => {
               username: q.username,
               accessToken: accessToken,
               level: q.kategori_user,
+              nama_user: userdetail.nama 
             };
 
             res.json(response);
@@ -263,6 +264,7 @@ exports.login_account = (req, res) => {
               username: q.username,
               accessToken: accessToken,
               level: q.kategori_user,
+              nama_user: userdetail.nama_fleet 
             };
 
             res.json(response);
@@ -301,6 +303,7 @@ exports.login_account = (req, res) => {
               username: q.username,
               accessToken: accessToken,
               level: q.kategori_user,
+              nama_user: userdetail.nama_karyawan 
             };
 
             res.json(response);
