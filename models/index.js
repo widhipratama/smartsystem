@@ -28,6 +28,7 @@ db.master_kendaraan = require("../modules/cars/models/cars")(sequelize, Sequeliz
 db.whatsapp_blast = require("./whatsapp_blast")(sequelize, Sequelize);
 db.promotion = require("../modules/promotion/models/promotion")(sequelize, Sequelize);
 db.kendaraan = require("../modules/cars/models/kendaraan")(sequelize, Sequelize);
+db.followup = require("./followup")(sequelize, Sequelize);
 
 db.useraccount.hasOne(db.customer, { foreignKey: "id_customer" });
 db.customer.belongsTo(db.useraccount, { foreignKey: "id_customer" });
