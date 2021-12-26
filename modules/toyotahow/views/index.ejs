@@ -10,11 +10,13 @@
       }
     </style>
   </head>
-  <body class="">
+  <body class="<%= (auth.id_user>0 ? '' : 'layout-3') %>">
     <div id="app">
-      <div class="main-wrapper">
-        <%- include ../../../views/templates/navtop.ejs %> 
+      <div class="main-wrapper <%= (auth.id_user>0 ? '' : 'container') %>">
+        <%- include ../../../views/templates/navtop.ejs %>
+        <% if(auth.id_user>0){ %>
         <%- include ../../../views/templates/navleft.ejs %>
+        <% } %>
         <div class="main-content" style="padding-top: 90px">
           <section class="section">
             <div class="section-header">

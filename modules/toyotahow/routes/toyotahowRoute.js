@@ -8,7 +8,7 @@ router.use(function (req, res, next) {
   next();
 });
 
-router.get("/", [authMiddleware.verifyToken], toyotahowController.index);
+router.get("/", toyotahowController.index);
 router.get("/detail/:id", toyotahowController.indexdetail);
 router.get("/input", [authMiddleware.verifyToken], toyotahowController.input);
 router.post(
