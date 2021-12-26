@@ -64,6 +64,8 @@ exports.input = function (req, res) {
 
 exports.createData = async function (req, res) {
   const body = req.body;
+  const files = req.files;
+
   const datasub = req.body.judul_how_sub;
   let data = {
     judul_how: req.body.judul_how,
@@ -82,6 +84,7 @@ exports.createData = async function (req, res) {
       id_how: toyota_how.id_how,
       judul_how_sub: body.judul_how_sub[i],
       desc_how_sub: body.desc_how_sub[i],
+      sampul_how_sub: req.files.sampul_how_sub[i].filename,
       date_upload: datenow,
     });
   });
@@ -98,10 +101,6 @@ exports.createData = async function (req, res) {
     req.flash("alertStatus", "danger");
     res.redirect("/toyotahow/input");
   }
-
-  //   req.flash("alertMessage", `How Error: ${err.message}`);
-  //   req.flash("alertStatus", "danger");
-  //   res.redirect("/toyotahow/input");
 };
 
 exports.updateDataSampul = function (req, res) {
@@ -128,24 +127,39 @@ exports.updateDataSampul = function (req, res) {
     });
 };
 
-exports.hapusData = function (req, res) {
+exports.hapusData = async (req, res) => {
   let id = req.params.id;
   let dataFound;
-  models.toyota_how
-    .findOne({ where: { id_how: { [Op.eq]: id } } })
-    .then((how) => {
-      dataFound = how;
-      return how.destroy().then(() => {
-        req.flash("alertMessage", `Sukses Menghapus Data ${title} dengan nama : ${dataFound.judul}`);
-        req.flash("alertStatus", "success");
-        res.redirect("/toyotahow/input");
+
+  dataFound = await models.toyota_how.findOne({ where: { id_how: { [Op.eq]: id } } });
+
+  if (dataFound) {
+    let dataFoundSub;
+
+    dataFoundSub = await models.toyota_how_sub.findAll({ where: { id_how: { [Op.eq]: id } } });
+
+    console.log(dataFoundSub);
+
+    if (dataFoundSub) {
+      dataFoundSub.forEach((q) => {
+        fs.unlink(__basedir + "/views/assets/how/" + q.sampul_how_sub, function (err) {});
+
+        q.destroy();
       });
-    })
-    .catch((err) => {
-      req.flash("alertMessage", err.message);
-      req.flash("alertStatus", "danger");
-      res.redirect("/toyotahow/input");
-    });
+    }
+
+    fs.unlink(__basedir + "/views/assets/how/" + dataFound.sampul_how, function (err) {});
+
+    dataFound.destroy();
+
+    req.flash("alertMessage", `Sukses Menghapus Data ${title} dengan nama : ${dataFound.judul}`);
+    req.flash("alertStatus", "success");
+    res.redirect("/toyotahow/input");
+  } else {
+    req.flash("alertMessage", err.message);
+    req.flash("alertStatus", "danger");
+    res.redirect("/toyotahow/input");
+  }
 };
 exports.editData = function (req, res) {
   const alertMessage = req.flash("alertMessage");
