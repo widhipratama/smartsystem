@@ -49,7 +49,7 @@
                       </div>
                       <div class="article-title">
                         <h2>
-                          <a id="m" data-id="/assets/how/<%= datarow[i].location_how %>" data-toggle="modal" data-target="#exampleModal" href="#"><b><%= datarow[i].judul_how %></b></a>
+                          <a id="m" href="<%= process.env.URL+'/toyotahow/detail/'+datarow[i].id_how %>"><b><%= datarow[i].judul_how %></b></a>
                         </h2>
                       </div>
                     </div>

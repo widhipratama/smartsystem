@@ -35,10 +35,13 @@ exports.index = function (req, res) {
 exports.indexdetail = function (req, res) {
   const id = req.params.id;
   models.toyota_how.findOne({ where: { id_how: { [Op.eq]: id } } }).then((how) => {
-    res.render("../modules/toyotahow/views/detail", {
-      datarow: how,
-      tbtitle: tbtitle,
-      htitle: htitle,
+    models.toyota_how_sub.findAll({ where: { id_how: { [Op.eq]: id } }, order:[['id_how_sub', 'ASC']] }).then((howsub) => {
+      res.render("../modules/toyotahow/views/detail", {
+        datarow: how,
+        datasub: howsub,
+        tbtitle: tbtitle,
+        htitle: htitle,
+      });
     });
   });
 };
@@ -71,6 +74,7 @@ exports.createData = async function (req, res) {
     judul_how: req.body.judul_how,
     status: req.body.status,
     sampul_how: req.files.sampul_how[0].filename,
+    location_how: req.body.location_how,
     date_upload: datenow,
   };
 

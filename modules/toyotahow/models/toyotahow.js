@@ -9,6 +9,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       judul_how: Sequelize.DataTypes.STRING,
       sampul_how: Sequelize.DataTypes.STRING,
+      location_how: Sequelize.DataTypes.STRING,
       status: Sequelize.DataTypes.BOOLEAN,
       date_upload: Sequelize.DataTypes.DATE,
     },
