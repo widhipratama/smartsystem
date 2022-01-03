@@ -3,11 +3,13 @@
   <head>
     <%- include ../../../views/templates/header.ejs %>
   </head>
-  <body class="">
+  <body class="<%= (auth.id_user>0 ? '' : 'layout-3') %>">
     <div id="app">
-      <div class="main-wrapper">
+      <div class="main-wrapper <%= (auth.id_user>0 ? '' : 'container') %>">
         <%- include ../../../views/templates/navtop.ejs %> 
+        <% if(auth.id_user>0){ %>
         <%- include ../../../views/templates/navleft.ejs %>
+        <% } %>
         <div class="main-content" style="padding-top: 90px">
           <section class="section">
             <div class="section-header">
@@ -23,6 +25,13 @@
             <div class="section-body">
               <h2 class="section-title"><%= datarow.judul_how %></h2>
               <small><i><%= datarow.date_upload.toGMTString().slice(0,26).replace(/-/g,"")%></i></small>
+              <p class="pull-right">
+                Share : 
+                <a href="http://www.facebook.com/sharer.php?u=<%= process.env.URL+'/toyotahow/detail/'+datarow.id_how %>" target="_blank" class="btn btn-icon btn-sm btn-primary icon-left"><i class="fab fa-facebook"></i> Facebook</a>
+                <a href="http://twitter.com/share?url=<%= process.env.URL+'/toyotahow/detail/'+datarow.id_how %>" target="_blank" class="btn btn-icon btn-sm btn-info icon-left"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="https://web.whatsapp.com/send?text=<%= datarow.judul_how %> | <%= process.env.URL+'/toyotahow/detail/'+datarow.id_how %>" target="_blank" class="btn btn-icon btn-sm btn-success icon-left"><i class="fab fa-whatsapp"></i> Whatsapp</a>
+                <a href="mailto:?Subject=<%= datarow.judul_how %> <%= process.env.URL+'/toyotahow/detail/'+datarow.id_how %>" target="_blank" class="btn btn-icon btn-sm btn-danger icon-left"><i class="fas fa-envelope"></i> Email</a>
+              </p>
               <p><%= datarow.location_how %></p>
               <div class="row">
                 <div class="col-12">
