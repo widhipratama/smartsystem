@@ -158,6 +158,7 @@ exports.editCustomer = async function (req, res) {
 exports.updateCustomer = async function (req, res) {
   const id = req.params.id;
   let customerFound;
+  let data_user;
   await models.fleet_customer
     .findOne({ where: { id: { [Op.eq]: id } } })
     .then((custfleet) => {
@@ -166,7 +167,17 @@ exports.updateCustomer = async function (req, res) {
         useraccount
           .findOne({ where: { id: { [Op.eq]: id } } })
           .then((useraccount) => {
-            useraccount.update(req.body).then(() => {
+            if (req.body.password==''){
+              data_user = {
+                username: req.body.username,
+              };
+            }else{
+              data_user = {
+                username: req.body.username,
+                password: bcrypt.hashSync(req.body.password, 8)
+              };
+            }
+            useraccount.update(data_user).then(() => {
               req.flash("alertMessage", `Sukses Mengubah Data ${title} dengan nama : ${customerFound.nama_fleet}`);
               req.flash("alertStatus", "success");
               res.redirect("/custfleet");
