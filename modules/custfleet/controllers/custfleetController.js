@@ -184,9 +184,29 @@ exports.updateCustomer = async function (req, res) {
             });
           })
           .catch((err) => {
-              req.flash('alertMessage', err.message);
-              req.flash('alertStatus', 'error');
-              res.redirect('/custfleet');
+              if (req.body.password==''){
+                data_user = {
+                  username: req.body.username,
+                  id_user: req.params.id,
+                  kategori_user: "FLEET",
+                  token: randomString(60),
+                  status: 1,
+                };
+              }else{
+                data_user = {
+                  username: req.body.username,
+                  password: bcrypt.hashSync(req.body.password, 8),
+                  id_user: req.params.id,
+                  kategori_user: "FLEET",
+                  token: randomString(60),
+                  status: 1,
+                };
+              }
+              useraccount.create(data_user).then(() => {
+                req.flash("alertMessage", `Sukses Mengubah Data ${title} dengan nama : ${customerFound.nama_fleet}`);
+                req.flash("alertStatus", "success");
+                res.redirect("/custfleet");
+              });
           });
       });
     })
