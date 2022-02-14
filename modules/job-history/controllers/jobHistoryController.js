@@ -28,7 +28,7 @@ exports.import = async (req, res) => {
   });
 
   if (!req.body.date) {
-    var date = last;
+    var date = dayjs(last[0].invoice_date,'YYYY-MM-DD');
   } else {
     var date = req.body.date;
   }
@@ -49,8 +49,7 @@ exports.import = async (req, res) => {
     last: last[0].invoice_date,
     datarow: dataJobHistory,
     tbtitle: tbtitle,
-    htitle: htitle,
-    date,
+    htitle: htitle
   });
 };
 
