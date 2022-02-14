@@ -2,6 +2,8 @@ var exports = (module.exports = {});
 const models = require("../../../models");
 const { sequelize, QueryTypes, Op } = require("sequelize");
 const kendaraan = require("../../cars/models/kendaraan");
+const excel = require("exceljs");
+
 var htitle = [
   { id: "police_np", label: "NoPol", width: "style='width:500px;'", typeInput: "text", onTable: "ON" },
   { id: "no_rangka", label: "No Rangka", width: "style='width:250px;'", typeInput: "text", onTable: "ON" },
@@ -324,6 +326,64 @@ exports.omzet_sa = async function (req, res) {
     repair
   });
 };
+
+exports.exportExcel = async (req,res)=>{
+  let workbook = new excel.Workbook();
+  let worksheet = workbook.addWorksheet("Data First Class");
+
+  worksheet.columns = [
+    { header: "no_rangka", key: "no_rangka", width: 10 },
+    { header: "police_no", key: "police_no", width: 10 },
+    { header: "model", key: "model", width: 10 },
+    { header: "nama", key: "nama", width: 10 },
+    { header: "kategori_customer", key: "kategori_customer", width: 10 },
+    { header: "avg_omzet", key: "avg_omzet", width: 10 },
+    { header: "last_service", key: "last_service", width: 10 },
+    { header: "point_reward", key: "point_reward", width: 10 },
+    { header: "qty_service", key: "qty_service", width: 10 },
+    { header: "total_omzet", key: "total_omzet", width: 10 }
+  ];
+
+  const q = await models.sequelize.query(
+    `SELECT
+      kend.no_rangka,
+      kend.police_no,
+      kend.model,
+      cust.nama as nama,
+      kend.kategori_customer as kategori_customer,
+      kend.avg_omzet as avg_omzet,
+      kend.last_service as last_service,
+      kend.point_reward as point_reward,
+      kend.qty_service as qty_service,
+      kend.total_omzet as total_omzet
+    FROM 
+      kendaraan AS kend
+    LEFT JOIN
+      customer AS cust ON cust.id_customer = kend.id_customer
+    WHERE
+      kend.first_class = 1`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+
+  worksheet.addRows(q);
+
+  // res is a Stream object
+  res.setHeader(
+    "Content-Type",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  );
+  res.setHeader(
+    "Content-Disposition",
+    "attachment; filename=" + "Data First Class.xlsx"
+  );
+
+  return workbook.xlsx.write(res).then(function () {
+    res.status(200).end();
+  });
+
+}
 
 exports.notFound = function (req, res) {
   res.render("page/notfound");

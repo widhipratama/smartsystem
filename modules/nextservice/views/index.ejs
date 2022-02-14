@@ -62,7 +62,7 @@
                                   <%= h.label %>
                                 </th>
                                 <% } }) %>
-                                <th>Action</th>
+                                  <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -78,7 +78,8 @@
                                   <%= datarow[i].model %>
                                 </td>
                                 <td>
-                                  <%= (datarow[i].kategori_customer=='fleet' ? datarow[i].nama_fleet : datarow[i].nama) %>
+                                  <%= (datarow[i].kategori_customer=='fleet' ? datarow[i].nama_fleet : datarow[i].nama)
+                                    %>
                                 </td>
                                 <td class="text-right">
                                   <%= datarow[i].avg_omzet.toLocaleString(); %>
@@ -90,10 +91,15 @@
                                   <%= datarow[i].first_class.toLocaleString(); %>
                                 </td>
                                 <td class="text-right">
-                                  <%= (datarow[i].followup_date!=null ? (new Date(datarow[i].followup_date).toISOString().replace(/T/, ' ').replace(/\..+/, '')) : 'none') %>
+                                  <%= (datarow[i].followup_date!=null ? (new
+                                    Date(datarow[i].followup_date).toISOString().replace(/T/, ' ' ).replace(/\..+/, ''
+                                    )) : 'none' ) %>
                                 </td>
                                 <td>
-                                  <button class="btn btn-sm btn-info" onclick="createFunction('<%= datarow[i].no_rangka; %>', '<%= datarow[i].last_service; %>')" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-headset"></i></button>
+                                  <button class="btn btn-sm btn-info"
+                                    onclick="createFunction('<%= datarow[i].no_rangka; %>', '<%= datarow[i].last_service; %>')"
+                                    data-toggle="modal" data-target="#exampleModal"><i
+                                      class="fas fa-headset"></i></button>
                                 </td>
                               </tr>
                               <% } %>
@@ -112,7 +118,8 @@
                   <div class="modal-header">
                     <h5 class="modal-title">Followup <%= title %>
                     </h5>
-                    <button type="button" onclick="location.reload();" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" onclick="location.reload();" class="close" data-dismiss="modal"
+                      aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
@@ -129,7 +136,8 @@
                       </div>
                       <div class="form-group col-lg-2">
                         <label>&nbsp;</label>
-                        <button type="button" class="btn btn-success form-control" onclick="addFollowup()"><i class="fas fa-comment-medical"></i> Save</button>
+                        <button type="button" class="btn btn-success form-control" onclick="addFollowup()"><i
+                            class="fas fa-comment-medical"></i> Save</button>
                       </div>
                     </form>
 
@@ -147,7 +155,8 @@
                     </table>
                   </div>
                   <div class="modal-footer bg-whitesmoke br">
-                    <button type="button" onclick="location.reload();" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="location.reload();" class="btn btn-secondary"
+                      data-dismiss="modal">Close</button>
                   </div>
                 </div>
               </div>
@@ -251,7 +260,6 @@
       };
 
       function delFunction(id) {
-                  console.log('asdasd')
         swal({
           title: "Yakin Ingin Menghapus Data ini?",
           text: "Data yang dihapus, tidak bisa kembali lagi.",
@@ -263,7 +271,7 @@
             if (willDelete) {
               let url = '<%= process.env.URL %>/nextservice/followup/del/' + id;
               var alertstatus = false;
-                  console.log(url)
+              console.log(url)
               $.ajax({
                 type: 'POST',
                 url: url,

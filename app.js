@@ -248,8 +248,8 @@ const toyotahowRoute = require("./modules/toyotahow/routes/toyotahowRoute");
 const carsRoute = require("./routes/cars");
 const promotionRoute = require("./routes/promotion");
 const customerRoute = require("./routes/customer");
-const jobHistoryRoute = require("./routes/jobHistory");
-const progressStatusRoute = require("./routes/progressStatus");
+const jobHistoryRoute = require("./modules/job-history/routes/jobHistoryRoute");
+const progressStatusRoute = require("./modules/progress-status/routes/progressStatusRoute");
 const userRoute = require("./routes/user");
 const employeeRoute = require("./modules/employee/routes/employeeRoute");
 

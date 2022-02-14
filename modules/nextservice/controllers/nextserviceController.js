@@ -20,13 +20,10 @@ exports.index = async function (req, res) {
   var today = new Date();
   today.setDate(today.getDate());
   var formattedDate = new Date(today);
-  var d = ("0" + formattedDate.getDate()).slice(-2);
-  var m = ("0" + (formattedDate.getMonth() + 1)).slice(-2);
-  var y = formattedDate.getFullYear();
 
   if (!req.body.start) {
-    var start = y + "-" + m + "-" + d;
-    var end = y + "-" + m + "-31";
+    var start = new Date(formattedDate.getFullYear(), formattedDate.getMonth(), 1);
+    var end = new Date(formattedDate.getFullYear(), formattedDate.getMonth() + 1, 0);
   } else {
     var start = req.body.start;
     var end = req.body.end;

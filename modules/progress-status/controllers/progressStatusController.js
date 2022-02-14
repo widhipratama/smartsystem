@@ -1,26 +1,60 @@
-const db = require("../models");
-const progressStatus = db.progressStatus;
+const dayjs = require('dayjs')
+const models = require("../../../models");
 const xlsxFile = require("read-excel-file/node");
 const fs = require("fs");
 const { sequelize, QueryTypes, Op } = require("sequelize");
 
 exports.import = async (req, res) => {
+  var htitle = [
+    { id: "id", label: "ID", width: "", onTable: "OFF" },
+    { id: "rangka", label: "Norangka", width: "", onTable: "ON" },
+    { id: "police_no", label: "NoPol", width: "", onTable: "ON" },
+    { id: "customer", label: "Customer", width: "", onTable: "ON" },
+    { id: "model", label: "Model", width: "", onTable: "ON" },
+    { id: "status", label: "status", width: "", onTable: "ON" },
+    { id: "service_order", label: "Service Order", width: "", onTable: "ON" },
+    { id: "invoice_no", label: "Invoice No", width: "", onTable: "ON" },
+    { id: "type_repair", label: "Type Repair", width: "", onTable: "ON" },
+    { id: "service_advisor", label: "SA", width: "", onTable: "ON" }
+  ];
+
+  var tbtitle = "List Progress Status";
+
+  if (!req.body.start) {
+    var start = dayjs().startOf('month').format('YYYY-MM-DD');
+    var end = dayjs().endOf('month').format('YYYY-MM-DD');
+  } else {
+    var start = req.body.start;
+    var end = req.body.end;
+  }
+
+  const dataProgressStatus = await models.sequelize.query(
+  'SELECT * FROM progress_status WHERE DATE_FORMAT(tgl_masuk, "%Y-%m-%d") BETWEEN :start AND :end ORDER BY tgl_masuk DESC', {
+    replacements: { start,end },
+    type: QueryTypes.SELECT,
+  });
+
   const importMessage = req.flash("import_message");
   const importStatus = req.flash("import_status");
   const alert = { message: importMessage, status: importStatus };
-  const last = await db.sequelize.query(
+  const last = await models.sequelize.query(
     'SELECT tgl_masuk FROM progress_status ORDER BY tgl_masuk DESC LIMIT 1', {
       type: QueryTypes.SELECT,
     });
 
-  res.render("progressStatus/import", {
+  res.render("../modules/progress-status/views/import", {
     alert: alert,
-    last: last[0].tgl_masuk
+    last: last[0].tgl_masuk,
+    datarow: dataProgressStatus,
+    tbtitle: tbtitle,
+    htitle: htitle,
+    start: start,
+    end: end,
   });
 };
 
 exports.upload = async (req, res) => {
-  try {
+  try{
     if (req.file == undefined) {
       req.flash("import_message", "File tidak ditemukan");
       req.flash("import_status", "400");
@@ -30,10 +64,11 @@ exports.upload = async (req, res) => {
     let dataExcel = [];
 
     let path = __basedir + "/uploads/" + req.file.filename;
-    xlsxFile(path).then((rows) => {
+
+    await xlsxFile(path).then(async (rows) => {
       rows.shift();
 
-      rows.forEach((row) => {
+      rows.forEach(async (row) => {
         let data = {
           police_no: row[1],
           customer: row[2],
@@ -115,10 +150,11 @@ exports.upload = async (req, res) => {
           tgl_ss: row[78],
           sa_notification: row[79],
         };
-        dataExcel.push(data);
-        progressStatus.count({ where: { service_order: row[5] } }).then((count) => {
+
+        await dataExcel.push(data);
+        await models.progressStatus.count({ where: { service_order: row[5] } }).then((count) => {
           if (count < 1) {
-            progressStatus.create(data);
+            models.progressStatus.create(data);
           }
         });
       });
@@ -126,15 +162,35 @@ exports.upload = async (req, res) => {
 
     req.flash("import_message", "Data berhasil diimport");
     req.flash("import_status", "200");
-    fs.unlink(path, () => {});
     res.redirect(process.env.URL + "/progress-status/import");
-  } catch (error) {
+  } catch (err) {
     req.flash("import_message", error);
     req.flash("import_status", "500");
     res.redirect(process.env.URL + "/progress-status/import");
   }
+
+  fs.unlink(path, () => {});
 };
 
-exports.notFound = function (req, res) {
-  res.render("page/notfound");
+exports.delete = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let dataFound;
+
+    dataFound = await models.progressStatus.findOne({ where: { id } })
+  
+    if(dataFound){
+      dataFound.destroy()
+
+      res.send({
+        success: 'success',
+        titlemessage: "Success",
+        message: "Berhasil menghapus data!",
+      });
+    }
+  } catch (err) {
+    req.flash("import_message", error);
+    req.flash("import_status", "500");
+    res.redirect(process.env.URL + "/progress-status/import");
+  }
 };
