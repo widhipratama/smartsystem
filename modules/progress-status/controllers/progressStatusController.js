@@ -21,27 +21,26 @@ exports.import = async (req, res) => {
 
   var tbtitle = "List Progress Status";
 
+  const last = await models.sequelize.query(
+  'SELECT tgl_masuk FROM progress_status ORDER BY tgl_masuk DESC LIMIT 1', {
+    type: QueryTypes.SELECT,
+  });
+
   if (!req.body.start) {
-    var start = dayjs().startOf('month').format('YYYY-MM-DD');
-    var end = dayjs().endOf('month').format('YYYY-MM-DD');
+    var date = last;
   } else {
-    var start = req.body.start;
-    var end = req.body.end;
+    var date = req.body.date;
   }
 
   const dataProgressStatus = await models.sequelize.query(
-  'SELECT * FROM progress_status WHERE DATE_FORMAT(tgl_masuk, "%Y-%m-%d") BETWEEN :start AND :end ORDER BY tgl_masuk DESC', {
-    replacements: { start,end },
+  'SELECT * FROM progress_status WHERE DATE_FORMAT(tgl_masuk, "%Y-%m-%d") = :date ORDER BY tgl_masuk DESC', {
+    replacements: { date },
     type: QueryTypes.SELECT,
   });
 
   const importMessage = req.flash("import_message");
   const importStatus = req.flash("import_status");
   const alert = { message: importMessage, status: importStatus };
-  const last = await models.sequelize.query(
-    'SELECT tgl_masuk FROM progress_status ORDER BY tgl_masuk DESC LIMIT 1', {
-      type: QueryTypes.SELECT,
-    });
 
   res.render("../modules/progress-status/views/import", {
     alert: alert,
@@ -49,8 +48,7 @@ exports.import = async (req, res) => {
     datarow: dataProgressStatus,
     tbtitle: tbtitle,
     htitle: htitle,
-    start: start,
-    end: end,
+    date
   });
 };
 
