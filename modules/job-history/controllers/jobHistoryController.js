@@ -28,7 +28,7 @@ exports.import = async (req, res) => {
   });
 
   if (!req.body.date) {
-    var date = dayjs(last[0].invoice_date,'YYYY-MM-DD');
+    var date = last[0].invoice_date
   } else {
     var date = req.body.date;
   }

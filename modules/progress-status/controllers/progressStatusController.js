@@ -27,7 +27,7 @@ exports.import = async (req, res) => {
   });
 
   if (!req.body.date) {
-    var date = dayjs(last[0].tgl_masuk,'YYYY-MM-DD');
+    var date = last[0].tgl_masuk;
   } else {
     var date = req.body.date;
   }
