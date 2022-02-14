@@ -7,6 +7,7 @@ const { sequelize, QueryTypes, Op } = require("sequelize");
 exports.import = async (req, res) => {
   var htitle = [
     { id: "id", label: "ID", width: "", onTable: "OFF" },
+     { id: "tgl_masuk", label: "Arrival Date", width: "", onTable: "ON" },
     { id: "rangka", label: "Norangka", width: "", onTable: "ON" },
     { id: "police_no", label: "NoPol", width: "", onTable: "ON" },
     { id: "customer", label: "Customer", width: "", onTable: "ON" },
