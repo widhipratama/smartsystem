@@ -27,7 +27,7 @@ exports.import = async (req, res) => {
       type: QueryTypes.SELECT,
   });
 
-  if (!req.body.start) {
+  if (!req.body.date) {
     var date = last;
   } else {
     var date = req.body.date;
@@ -35,7 +35,7 @@ exports.import = async (req, res) => {
 
   const dataJobHistory = await models.sequelize.query(
   'SELECT * FROM job_history WHERE DATE_FORMAT(invoice_date, "%Y-%m-%d") = :date ORDER BY invoice_date DESC', {
-    replacements: { date },
+    replacements: { date:date },
     type: QueryTypes.SELECT,
   });
 

@@ -26,7 +26,7 @@ exports.import = async (req, res) => {
     type: QueryTypes.SELECT,
   });
 
-  if (!req.body.start) {
+  if (!req.body.date) {
     var date = last;
   } else {
     var date = req.body.date;
@@ -34,7 +34,7 @@ exports.import = async (req, res) => {
 
   const dataProgressStatus = await models.sequelize.query(
   'SELECT * FROM progress_status WHERE DATE_FORMAT(tgl_masuk, "%Y-%m-%d") = :date ORDER BY tgl_masuk DESC', {
-    replacements: { date },
+    replacements: { date:date },
     type: QueryTypes.SELECT,
   });
 
