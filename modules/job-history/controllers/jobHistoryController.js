@@ -27,22 +27,24 @@ exports.import = async (req, res) => {
       type: QueryTypes.SELECT,
   });
 
-  if (!req.body.date) {
-    var date = last[0].invoice_date
+  if (!req.body.start) {
+    var start = last[0].invoice_date;
+    var end = last[0].invoice_date;
   } else {
-    var date = req.body.date;
+    var start = req.body.start;
+    var end = req.body.end;
   }
 
   const dataJobHistory = await models.sequelize.query(
-  'SELECT * FROM job_history WHERE DATE_FORMAT(invoice_date, "%Y-%m-%d") = :date ORDER BY invoice_date DESC', {
-    replacements: { date:date },
+  'SELECT * FROM job_history WHERE DATE_FORMAT(invoice_date, "%Y-%m-%d") BETWEEN :start AND :end ORDER BY invoice_date DESC', {
+    replacements: { start,end },
     type: QueryTypes.SELECT,
   });
 
   const importMessage = req.flash("import_message");
   const importStatus = req.flash("import_status");
   const alert = { message: importMessage, status: importStatus };
-  
+
 
   res.render("../modules/job-history/views/import", {
     alert: alert,
@@ -50,7 +52,8 @@ exports.import = async (req, res) => {
     datarow: dataJobHistory,
     tbtitle: tbtitle,
     htitle: htitle,
-    date
+    start: start,
+    end: end,
   });
 };
 

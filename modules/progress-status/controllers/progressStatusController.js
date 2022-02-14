@@ -26,15 +26,17 @@ exports.import = async (req, res) => {
     type: QueryTypes.SELECT,
   });
 
-  if (!req.body.date) {
-    var date = last[0].tgl_masuk;
+  if (!req.body.start) {
+    var start = last[0].tgl_masuk;
+    var end = last[0].tgl_masuk;
   } else {
-    var date = req.body.date;
+    var start = req.body.start;
+    var end = req.body.end;
   }
 
   const dataProgressStatus = await models.sequelize.query(
-  'SELECT * FROM progress_status WHERE DATE_FORMAT(tgl_masuk, "%Y-%m-%d") = :date ORDER BY tgl_masuk DESC', {
-    replacements: { date:date },
+  'SELECT * FROM progress_status WHERE DATE_FORMAT(tgl_masuk, "%Y-%m-%d") BETWEEN :start AND :end ORDER BY tgl_masuk DESC', {
+    replacements: { start,end },
     type: QueryTypes.SELECT,
   });
 
@@ -48,7 +50,8 @@ exports.import = async (req, res) => {
     datarow: dataProgressStatus,
     tbtitle: tbtitle,
     htitle: htitle,
-    date
+    start: start,
+    end: end,
   });
 };
 
