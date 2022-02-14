@@ -49,7 +49,8 @@ exports.import = async (req, res) => {
     last: last[0].invoice_date,
     datarow: dataJobHistory,
     tbtitle: tbtitle,
-    htitle: htitle
+    htitle: htitle,
+    date
   });
 };
 
