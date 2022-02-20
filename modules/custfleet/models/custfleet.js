@@ -9,6 +9,8 @@ module.exports = (sequelize, Sequelize) => {
       },
       nama_fleet: Sequelize.DataTypes.STRING,
       contact_person: Sequelize.DataTypes.STRING,
+      jabatan_cp: Sequelize.DataTypes.STRING,
+      tgllahir_cp: Sequelize.DataTypes.DATE,
       no_telp_cust: Sequelize.DataTypes.STRING,
       total_omzet_14bln: Sequelize.DataTypes.INTEGER,
       point_reward: Sequelize.DataTypes.INTEGER,

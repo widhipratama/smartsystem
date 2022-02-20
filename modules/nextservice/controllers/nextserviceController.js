@@ -83,10 +83,10 @@ exports.nextfleet = async function (req, res) {
   var y = formattedDate.getFullYear();
 
   if (!req.body.start) {
-    var start = y + "-" + m + "-01";
+    var start = y + "-" + m + "-" + d;
     var end = y + "-" + m + "-" + d;
     
-    var fstart = y + "-" + fm + "-01";
+    var fstart = y + "-" + fm + "-" + d;
     var fend = y + "-" + fm + "-" + d;
   } else {
     var fstart = new Date(req.body.start);

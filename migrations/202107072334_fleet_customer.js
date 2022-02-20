@@ -14,6 +14,12 @@ module.exports = {
       contact_person: {
         type: Sequelize.STRING(50),
       },
+      tgllahir_cp: {
+        type: Sequelize.DATE,
+      },
+      jabatan_cp: {
+        type: Sequelize.STRING(25),
+      },
       until_end: {
         type: Sequelize.DATE,
       },

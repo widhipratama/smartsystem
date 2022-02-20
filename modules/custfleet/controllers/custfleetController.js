@@ -13,6 +13,8 @@ var htitle = [
   { id: 'nama_fleet', label: 'Nama Fleet', width: "", typeInput: "text", onTable: "ON" },
   { id: 'contact_person', label: 'PIC', width: "", typeInput: "text", onTable: "ON" },
   { id: 'no_telp_cust', label: 'Telepon', width: "", typeInput: "text", onTable: "ON" },
+  { id: 'tgllahir_cp', label: 'Tanggal Lahir', width: "", typeInput: "tanggal", onTable: "ON" },
+  { id: 'jabatan_cp', label: 'Jabatan', width: "", typeInput: "text", onTable: "ON" },
   { id: 'until_end', label: 'Berlaku Sampai', width: "", typeInput: "tanggal", onTable: "ON" },
   { id: 'alamat', label: 'Alamat', width: "", typeInput: "textarea", onTable: "OFF" },
   { id: 'alamat_dati2', label: 'Alamat Dati2', width: "", typeInput: "textarea", onTable: "OFF" },
@@ -28,6 +30,8 @@ exports.index = async function (req, res) {
       fleet_customer.id,
       fleet_customer.nama_fleet,
       fleet_customer.contact_person,
+      fleet_customer.tgllahir_cp,
+      fleet_customer.jabatan_cp,
       fleet_customer.alamat,
       fleet_customer.alamat_dati2,
       fleet_customer.alamat_dati3,
@@ -60,13 +64,15 @@ exports.index = async function (req, res) {
   });
 };
 exports.createCustomer = async function (req, res) {
-    const { username, nama_fleet, contact_person, no_telp_cust, total_omzet_14bln, alamat, alamat_dati2, alamat_dati3 } = req.body;
+    const { username, nama_fleet, contact_person, no_telp_cust, tgllahir_cp, jabatan_cp, until_end, total_omzet_14bln, alamat, alamat_dati2, alamat_dati3 } = req.body;
 
     await fleet_customer
     .create({
         nama_fleet: nama_fleet,
         contact_person: contact_person,
         no_telp_cust: no_telp_cust,
+        tgllahir_cp: tgllahir_cp,
+        jabatan_cp: jabatan_cp,
         until_end: until_end,
         total_omzet_14bln: total_omzet_14bln || null,
         alamat: alamat || null,
