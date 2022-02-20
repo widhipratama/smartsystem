@@ -14,6 +14,9 @@ module.exports = {
       no_telp: {
         type: Sequelize.STRING(20),
       },
+      tanggal_lahir: {
+        type: Sequelize.DATE,
+      },
       ig: {
         type: Sequelize.STRING(50),
       },

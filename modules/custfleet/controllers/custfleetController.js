@@ -171,7 +171,7 @@ exports.updateCustomer = async function (req, res) {
       customerFound = custfleet;
       custfleet.update(req.body).then(() => {
         useraccount
-          .findOne({ where: { id: { [Op.eq]: id } } })
+          .findOne({ where: { id_user: { [Op.eq]: id } } })
           .then((useraccount) => {
             if (req.body.password==''){
               data_user = {

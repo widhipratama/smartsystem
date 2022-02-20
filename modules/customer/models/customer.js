@@ -9,6 +9,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       nama: Sequelize.DataTypes.STRING,
       no_telp: Sequelize.DataTypes.STRING,
+      tanggal_lahir: Sequelize.DataTypes.DATE,
       ig: Sequelize.DataTypes.STRING,
       facebook: Sequelize.DataTypes.STRING,
       wa: Sequelize.DataTypes.STRING,

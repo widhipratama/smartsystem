@@ -13,6 +13,7 @@ var menu = "customer";
 var htitle = [
   { id: "nama", label: "Nama Customer", width: "" },
   { id: "no_telp", label: "Telepon", width: "" },
+  { id: "tanggal_lahir", label: "Tanggal Lahir", width: "" },
   { id: "alamat", label: "Alamat", width: "" },
 ];
 
@@ -46,11 +47,27 @@ exports.createCustomer = function (req, res) {
   let customerFound;
   models.customer
     .create(req.body)
-    .then((customer) => {
-      customerFound = customer;
-      req.flash("alertMessage", `Sukses Menambahkan Data customer dengan nama : ${customerFound.nama}`);
-      req.flash("alertStatus", "success");
-      res.redirect("/customer");
+    .then((q) => {
+        useraccount
+        .create({
+            username: req.body.username,
+            password: bcrypt.hashSync(req.body.password, 8),
+            id_user: q.id,
+            kategori_user: "FLEET",
+            token: randomString(60),
+            status: 1,
+        })
+        .then(() => {
+            customerFound = q;
+            req.flash("alertMessage", `Sukses Menambahkan Data customer dengan nama : ${customerFound.nama}`);
+            req.flash("alertStatus", "success");
+            res.redirect("/customer");
+        })
+        .catch((err) => {
+            req.flash('alertMessage', err.message);
+            req.flash('alertStatus', 'error');
+            res.redirect('/customer');
+        });
     })
     .catch((err) => {
       req.flash("alertMessage", err.message);
@@ -121,53 +138,65 @@ exports.editCustomer = async function (req, res) {
       data: customer,
     });
 };
-exports.updateCustomer = (req, res) => {
+exports.updateCustomer = async function (req, res) {
   const id = req.params.id;
-  let dataFound;
-  let data;
-  const { nama, no_telp, ig, facebook, wa, alamat, alamat_dati2, alamat_dati3 } = req.body;
-  models.customer
+  let customerFound;
+  let data_user;
+  await models.customer
     .findOne({ where: { id_customer: { [Op.eq]: id } } })
-    .then((customer) => {
-      dataFound = customer;
-      data = {
-        nama: nama,
-        no_telp: no_telp,
-        ig: ig || null,
-        facebook: facebook || null,
-        wa: wa || null,
-        alamat: alamat || null,
-        alamat_dati2: alamat_dati2 || null,
-        alamat_dati3: alamat_dati3 || null,
-        status: 1,
-      };
-      return customer.update(data).then(() => {
-        models.useraccount
+    .then((cust) => {
+      customerFound = cust;
+      cust.update(req.body).then(() => {
+        useraccount
           .findOne({ where: { id_user: { [Op.eq]: id } } })
-          .then((user) => {
-            dataFound = user;
-            data = {};
-            if (req.body.password != "" && req.body.password != null) {
-              data = {
+          .then((useraccount) => {
+            if (req.body.password==''){
+              data_user = {
                 username: req.body.username,
-                password: bcrypt.hashSync(req.body.password, 8),
               };
-            } else {
-              data = {
+            }else{
+              data_user = {
                 username: req.body.username,
+                password: bcrypt.hashSync(req.body.password, 8)
               };
             }
-            return user.update(data).then(() => {
-              res.json({ status: "200", message: "Customer berhasil terupdate" });
+            useraccount.update(data_user).then(() => {
+              req.flash("alertMessage", `Sukses Mengubah Data ${title} dengan nama : ${customerFound.nama}`);
+              req.flash("alertStatus", "success");
+              res.redirect("/customer");
             });
           })
           .catch((err) => {
-            res.json({ status: "500", message: err.message });
+              if (req.body.password==''){
+                data_user = {
+                  username: req.body.username,
+                  id_user: req.params.id,
+                  kategori_user: "USER",
+                  token: randomString(60),
+                  status: 1,
+                };
+              }else{
+                data_user = {
+                  username: req.body.username,
+                  password: bcrypt.hashSync(req.body.password, 8),
+                  id_user: req.params.id,
+                  kategori_user: "USER",
+                  token: randomString(60),
+                  status: 1,
+                };
+              }
+              useraccount.create(data_user).then(() => {
+                req.flash("alertMessage", `Sukses Mengubah Data ${title} dengan nama : ${customerFound.nama}`);
+                req.flash("alertStatus", "success");
+                res.redirect("/customer");
+              });
           });
       });
     })
     .catch((err) => {
-      res.json({ status: "500", message: err.message });
+      req.flash("alertMessage", err.message);
+      req.flash("alertStatus", "danger");
+      res.redirect("/customer");
     });
 };
 exports.notFound = function (req, res) {

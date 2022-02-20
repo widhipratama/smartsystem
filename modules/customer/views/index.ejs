@@ -110,7 +110,7 @@
             <!-- modal -->
             <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
               <div class="modal-dialog" role="document">
-                <form id="formRegister" method="POST" action="" class="needs-validation" novalidate="">
+                <form id="formData" method="POST" action="" class="needs-validation" novalidate="">
                   <input type="hidden" name="urlsubmit" id="urlsubmit">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -222,51 +222,6 @@
               $(this).remove();
             });
           }, 5000);
-
-          $("form#formRegister").on('submit', function (e) {
-            e.preventDefault();
-
-            const url = document.getElementById('urlsubmit').value;
-            const date = new Date();
-            $.ajax({
-              type: 'post',
-              url: url,
-              data: {
-                nama: $("#nama").val(),
-                no_telp: $("#no_telp").val(),
-                whatsapp: $("#wa").val(),
-                ig: $("#ig").val(),
-                facebook: $("#facebook").val(),
-                alamat: $("#alamat").val(),
-                alamat_dati2: $("#alamat_dati2").val(),
-                alamat_dati3: $("#alamat_dati3").val(),
-                username: $("#username").val(),
-                password: $("#password").val(),
-              },
-              dataType: 'json',
-            }).done(function (data) {
-              const { status, message } = data
-              if (status === "200") {
-                iziToast.show({
-                  title: 'Pengolahan Data berhasil!',
-                  message: message,
-                  position: 'topCenter',
-                  onClosing: function () {
-                    location.href = '/customer';
-                  },
-                  close: false,
-                  timeout: 1000,
-                });
-              } else {
-                swal({
-                  title: "Gagal daftar",
-                  text: message,
-                  icon: 'error',
-                  showConfirmButton: false,
-                })
-              }
-            });
-          });
           var cleave = new Cleave('.input-phone', {
             phone: true,
             phoneRegionCode: 'id',
@@ -306,7 +261,7 @@
             dataType: 'json',
             success: function (res) {
               console.log(res)
-              document.getElementById("urlsubmit").value = '<%= process.env.URL %>/customer/edit/save/' + idData;
+              $('#formData').attr('action', '<%= process.env.URL %>/customer/edit/save/' + idData);
               document.getElementById("nama").value = res.data[0].nama;
               document.getElementById("no_telp").value = res.data[0].no_telp;
               document.getElementById("wa").value = res.data[0].wa;
@@ -323,7 +278,7 @@
           });
         };
         function createFunction() {
-          document.getElementById("urlsubmit").value = '<%= process.env.URL %>/auth/daftar';
+          $('#formData').attr('action', '<%= process.env.URL %>/auth/daftar');
           document.getElementById("nama").value = '';
           document.getElementById("no_telp").value = '';
           document.getElementById("wa").value = '';
