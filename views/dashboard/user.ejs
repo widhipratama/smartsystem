@@ -36,7 +36,7 @@
                 </div>
               </div>
               <div class="section-body">
-                <h2 class="section-title">Hi, <%= auth.username %> !</h2>
+                <h2 class="section-title">Hi, <%= auth.level %> !</h2>
                 <p class="section-lead">
                   Change information about yourself on this page.
                 </p>
@@ -170,8 +170,5 @@
   </div>
   <%- include ../templates/script.ejs %>
     <%- include ../templates/script_d_user.ejs %>
-      <script>
-        console.log((`<%= auth.loginId %>`))
-      </script>
 </body>
 </html>

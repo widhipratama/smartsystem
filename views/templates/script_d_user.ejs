@@ -73,7 +73,7 @@
           html += `</div>`;
           html += `<div class="mt-1">`;
           html += `<div class="text-success text-small font-600-bold">`;
-          html += `<a href="https://wa.me/6287855925696" target="_blank"  class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i> Booking Now</a>`;
+          html += `<a href="https://api.whatsapp.com/send/?phone=6287855925696&text=Hallo Renata, saya Agung dengan kendaraan ${element.master_kendaraan.model_mobil} plat nomor ${element.police_no} ingin melakukan Booking Service." target="_blank"  class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i> Booking Now</a>`;
           html += `&ensp;<button class="btn btn-sm btn-primary open-jobhistory" onclick="get_job_history('${element.no_rangka}', '${element.master_kendaraan.image_mobil}')" data-toggle="modal" data-target="#carmodal"><i class="fas fa-history"></i> Histori</button>`;
           html += `</div>`;
           html += `</div>`;
@@ -83,7 +83,7 @@
         });
         $("#listcars").html(html);
         $("#jmlcars").html(res.data.length);
-        $("#pointcars").html(point.toLocaleString());
+        $("#pointcars").html("0");
       }
     });
   }

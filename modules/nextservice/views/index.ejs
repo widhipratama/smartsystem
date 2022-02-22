@@ -81,6 +81,10 @@
                                   <%= (datarow[i].kategori_customer=='fleet' ? datarow[i].nama_fleet : datarow[i].nama)
                                     %>
                                 </td>
+                                <td>
+                                  <%= (datarow[i].kategori_customer==null ? 'NONE' : datarow[i].kategori_customer.toUpperCase())
+                                    %>
+                                </td>
                                 <td class="text-right">
                                   <%= datarow[i].avg_omzet.toLocaleString(); %>
                                 </td>

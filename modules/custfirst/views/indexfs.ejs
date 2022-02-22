@@ -36,8 +36,8 @@
                           class="fas fa-sync-alt"></i> Update Data</button>
                     </div>
                   </div>
-                  <div class="card-body table-responsive">
-                    <table class="table table-striped" id="tabledata" style="width: 1600px;">
+                  <div class="card-body">
+                    <table class="table table-striped" id="tabledata">
                       <thead>
                         <tr>
                           <th scope="col">No.</th>
@@ -51,21 +51,21 @@
                             }) 
                           %>
                           <th>Account</th>
-                          <th>First Class</th>
+                          <th style='width:80px;'>First Class</th>
                         </tr>
                       </thead>
                       <tbody>
                         <% for (var i = 0; i < datarow.length; i++) { %>
                         <tr>
-                          <th scope="row"><%= i %></th>
+                          <th scope="row"><%= i+1 %></th>
                           <td><%= datarow[i].police_no %></td>
                           <td><%= datarow[i].no_rangka %></td>
                           <td><%= datarow[i].model %></td>
                           <td><%= datarow[i].nama %></td>
                           <td><%= datarow[i].qty_service %></td>
+                          <td><%= datarow[i].last_service %></td>
                           <td><%= datarow[i].total_omzet.toLocaleString(); %></td>
                           <td><%= datarow[i].avg_omzet.toLocaleString() %></td>
-                          <td><%= (((datarow[i].total_omzet*1)/100000).toFixed(0)).toLocaleString() %></td>
                           <td><%= datarow[i].status_kendaraan %></td>
                           <td><%= (datarow[i].first_class==1 ? "Frist Class" : "None") %></td>
                         </tr>
@@ -94,8 +94,11 @@
 
       $('#tabledata').DataTable({
         dom: 'Bfrtip',
-        searching: false,
-        paging: false,
+        searching: true,
+        pageLength: 100,
+        scrollX:        true,
+        scrollCollapse: true,
+        scrollCollapse: true,
         buttons: [
           'copy',
           {

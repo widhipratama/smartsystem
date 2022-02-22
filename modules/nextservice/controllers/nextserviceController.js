@@ -6,7 +6,7 @@ var htitle = [
   { id: "no_rangka", label: "No Rangka", width: "", typeInput: "text", onTable: "OFF" },
   { id: "model", label: "Model", width: "", typeInput: "text", onTable: "ON" },
   { id: "nama", label: "Customer", width: "", typeInput: "text", onTable: "ON" },
-  { id: "kategori_customer", label: "Kat. Cust", width: "", typeInput: "text", onTable: "OFF" },
+  { id: "kategori_customer", label: "Kat. Cust", width: "", typeInput: "text", onTable: "ON" },
   { id: "avg_omzet", label: "Avg. Omzet", width: "", typeInput: "text", onTable: "ON" },
   { id: "last_service", label: "Last Service", width: "", typeInput: "text", onTable: "ON" },
   { id: "first_class", label: "Point", width: "", typeInput: "text", onTable: "ON" },
@@ -14,32 +14,46 @@ var htitle = [
 ];
 
 exports.index = async function (req, res) {
-  var title = "Next Service";
-  var tbtitle = "List Next Service";
-
-  var today = new Date();
-  today.setDate(today.getDate());
-  var formattedDate = new Date(today);
+  var title = "Service Car";
+  var tbtitle = "List Service Car";
 
   if (!req.body.start) {
-    var start = new Date(formattedDate.getFullYear(), formattedDate.getMonth(), 1);
-    var end = new Date(formattedDate.getFullYear(), formattedDate.getMonth() + 1, 0);
+    var fstart = new Date();
+    var fend = new Date(new Date().getTime()+(7*24*60*60*1000));
   } else {
-    var start = req.body.start;
-    var end = req.body.end;
+    var fstart = new Date(req.body.start);
+    var fend = new Date(req.body.end);
   }
+
+  //mencari start date
+  var formattedDate = new Date(fstart.getTime()-(6*30*24*60*60*1000));
+  var d = ("0" + fstart.getDate()).slice(-2);
+  var m = ("0" + (formattedDate.getMonth())).slice(-2);
+  var y = formattedDate.getFullYear();
+  var start = y + "-" + m + "-" + d;
+  var fstart = fstart.getFullYear() + "-" + ("0" + (fstart.getMonth()+1)).slice(-2) + "-" + d;
+
+  //mencari end date
+  var formattedDateend = new Date(fend.getTime()-(6*30*24*60*60*1000));
+  var ed = ("0" + fend.getDate()).slice(-2);
+  var em = ("0" + (formattedDateend.getMonth())).slice(-2);
+  var ey = formattedDateend.getFullYear();
+  var end = ey + "-" + em + "-" + ed;
+  var fend = fend.getFullYear() + "-" + ("0" + (fend.getMonth()+1)).slice(-2) + "-" + ed;
 
   const kendaraan = await models.sequelize.query(
     `SELECT
-      (SELECT job.norangka from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as no_rangka,
-      (SELECT job.police_no from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as police_no,
-      (SELECT job.model from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as model,
-      cust.nama as nama,
-      custfleet.nama_fleet as nama_fleet,
       kend.kategori_customer as kategori_customer,
       kend.avg_omzet as avg_omzet,
       kend.last_service as last_service,
-      kend.point_reward as first_class
+      kend.point_reward as first_class,
+      kend.model,
+      kend.police_no,
+      kend.no_rangka,
+      kend.id_customer,
+      custfleet.nama_fleet as nama_fleet,
+      cust.nama as nama,
+      (SELECT fol.followup_date from followup AS fol where fol.no_rangka = kend.no_rangka ORDER BY fol.followup_date DESC LIMIT 1) as followup_date
     FROM 
       kendaraan AS kend
     LEFT JOIN
@@ -47,8 +61,6 @@ exports.index = async function (req, res) {
     LEFT JOIN
       fleet_customer AS custfleet ON custfleet.id = kend.id_customer
     WHERE
-      kend.first_class = 1
-    AND
       DATE_FORMAT(kend.last_service, "%Y-%m-%d") >= '` +
       start +
       `'
@@ -65,8 +77,8 @@ exports.index = async function (req, res) {
     title: title,
     tbtitle: tbtitle,
     htitle: htitle,
-    start: start,
-    end: end,
+    start: fstart,
+    end: fend,
   });
 };
 
@@ -74,36 +86,29 @@ exports.nextfleet = async function (req, res) {
   var title = "Next Service Fleet";
   var tbtitle = "List Next Service Fleet";
 
-  var today = new Date();
-  today.setDate(today.getDate());
-  var formattedDate = new Date(today);
-  var d = ("0" + formattedDate.getDate()).slice(-2);
-  var m = ("0" + (formattedDate.getMonth() - 5)).slice(-2);
-  var fm = ("0" + (formattedDate.getMonth() + 1)).slice(-2);
-  var y = formattedDate.getFullYear();
-
   if (!req.body.start) {
-    var start = y + "-" + m + "-" + d;
-    var end = y + "-" + m + "-" + d;
-    
-    var fstart = y + "-" + fm + "-" + d;
-    var fend = y + "-" + fm + "-" + d;
+    var fstart = new Date();
+    var fend = new Date(new Date().getTime()+(7*24*60*60*1000));
   } else {
     var fstart = new Date(req.body.start);
     var fend = new Date(req.body.end);
-    
-    var sd = ("0" + fstart.getDate()).slice(-2);
-    var sm = ("0" + (fstart.getMonth() - 5)).slice(-2);
-    var sy = fstart.getFullYear();
-    var ed = ("0" + fend.getDate()).slice(-2);
-    var em = ("0" + (fend.getMonth() - 5)).slice(-2);
-    var ey = fend.getFullYear();
-    
-    var start = sy + "-" + sm + "-" + sd;
-    var end = ey + "-" + em + "-" + ed;
-    var fstart = (req.body.start);
-    var fend = (req.body.end);
   }
+
+  //mencari start date
+  var formattedDate = new Date(fstart.getTime()-(6*30*24*60*60*1000));
+  var d = ("0" + fstart.getDate()).slice(-2);
+  var m = ("0" + (formattedDate.getMonth())).slice(-2);
+  var y = formattedDate.getFullYear();
+  var start = y + "-" + m + "-" + d;
+  var fstart = fstart.getFullYear() + "-" + ("0" + (fstart.getMonth()+1)).slice(-2) + "-" + d;
+
+  //mencari end date
+  var formattedDateend = new Date(fend.getTime()-(6*30*24*60*60*1000));
+  var ed = ("0" + fend.getDate()).slice(-2);
+  var em = ("0" + (formattedDateend.getMonth())).slice(-2);
+  var ey = formattedDateend.getFullYear();
+  var end = ey + "-" + em + "-" + ed;
+  var fend = fend.getFullYear() + "-" + ("0" + (fend.getMonth()+1)).slice(-2) + "-" + ed;
 
   const kendaraan = await models.sequelize.query(
     `SELECT
@@ -150,36 +155,29 @@ exports.nextcust = async function (req, res) {
   var title = "Next Service Customer";
   var tbtitle = "List Next Service Customer";
 
-  var today = new Date();
-  today.setDate(today.getDate());
-  var formattedDate = new Date(today);
-  var d = ("0" + formattedDate.getDate()).slice(-2);
-  var m = ("0" + (formattedDate.getMonth() - 5)).slice(-2);
-  var fm = ("0" + (formattedDate.getMonth() + 1)).slice(-2);
-  var y = formattedDate.getFullYear();
-
   if (!req.body.start) {
-    var start = y + "-" + m + "-01";
-    var end = y + "-" + m + "-" + d;
-    
-    var fstart = y + "-" + fm + "-01";
-    var fend = y + "-" + fm + "-" + d;
+    var fstart = new Date();
+    var fend = new Date(new Date().getTime()+(7*24*60*60*1000));
   } else {
     var fstart = new Date(req.body.start);
     var fend = new Date(req.body.end);
-    
-    var sd = ("0" + fstart.getDate()).slice(-2);
-    var sm = ("0" + (fstart.getMonth() - 5)).slice(-2);
-    var sy = fstart.getFullYear();
-    var ed = ("0" + fend.getDate()).slice(-2);
-    var em = ("0" + (fend.getMonth() - 5)).slice(-2);
-    var ey = fend.getFullYear();
-    
-    var start = sy + "-" + sm + "-" + sd;
-    var end = ey + "-" + em + "-" + ed;
-    var fstart = (req.body.start);
-    var fend = (req.body.end);
   }
+
+  //mencari start date
+  var formattedDate = new Date(fstart.getTime()-(6*30*24*60*60*1000));
+  var d = ("0" + fstart.getDate()).slice(-2);
+  var m = ("0" + (formattedDate.getMonth())).slice(-2);
+  var y = formattedDate.getFullYear();
+  var start = y + "-" + m + "-" + d;
+  var fstart = fstart.getFullYear() + "-" + ("0" + (fstart.getMonth()+1)).slice(-2) + "-" + d;
+
+  //mencari end date
+  var formattedDateend = new Date(fend.getTime()-(6*30*24*60*60*1000));
+  var ed = ("0" + fend.getDate()).slice(-2);
+  var em = ("0" + (formattedDateend.getMonth())).slice(-2);
+  var ey = formattedDateend.getFullYear();
+  var end = ey + "-" + em + "-" + ed;
+  var fend = fend.getFullYear() + "-" + ("0" + (fend.getMonth()+1)).slice(-2) + "-" + ed;
 
   const kendaraan = await models.sequelize.query(
     `SELECT

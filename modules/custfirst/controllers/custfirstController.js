@@ -5,14 +5,14 @@ const kendaraan = require("../../cars/models/kendaraan");
 const excel = require("exceljs");
 
 var htitle = [
-  { id: "police_np", label: "NoPol", width: "style='width:500px;'", typeInput: "text", onTable: "ON" },
-  { id: "no_rangka", label: "No Rangka", width: "style='width:250px;'", typeInput: "text", onTable: "ON" },
-  { id: "model", label: "Model", width: "style='width:250px;'", typeInput: "text", onTable: "ON" },
-  { id: "customer.nama", label: "Customer", width: "style='width:200px;'", typeInput: "text", onTable: "ON" },
+  { id: "police_np", label: "NoPol", width: "style='width:80px;'", typeInput: "text", onTable: "ON" },
+  { id: "no_rangka", label: "No Rangka", width: "style='width:120px;'", typeInput: "text", onTable: "ON" },
+  { id: "model", label: "Model", width: "style='width:120px;'", typeInput: "text", onTable: "ON" },
+  { id: "customer.nama", label: "Customer", width: "style='width:250px;'", typeInput: "text", onTable: "ON" },
   { id: "first_class", label: "Qty Service", width: "style='width:80px;'", typeInput: "text", onTable: "ON" },
+  { id: "first_class", label: "Last Service", width: "style='width:120px;'", typeInput: "text", onTable: "ON" },
   { id: "first_class", label: "Total Omzet", width: "style='width:120px;'", typeInput: "text", onTable: "ON" },
   { id: "first_class", label: "Avg. Omzet", width: "style='width:120px;'", typeInput: "text", onTable: "ON" },
-  { id: "first_class", label: "Point", width: "style='width:120px;'", typeInput: "text", onTable: "ON" },
   { id: "first_class", label: "Account", width: "style='width:120px;'", typeInput: "text", onTable: "OFF" },
 ];
 
@@ -96,9 +96,9 @@ exports.firstclass = async function (req, res) {
 
   const kendaraan = await models.sequelize.query(
     `SELECT
-      (SELECT job.norangka from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as no_rangka,
-      (SELECT job.police_no from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as police_no,
-      (SELECT job.model from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as model,
+      kend.no_rangka,
+      kend.police_no,
+      kend.model,
       (SELECT job.customer from job_history AS job where job.norangka = kend.no_rangka ORDER BY job.id DESC LIMIT 1) as nama,
       kend.kategori_customer as kategori_customer,
       kend.avg_omzet as avg_omzet,
@@ -112,10 +112,10 @@ exports.firstclass = async function (req, res) {
       kendaraan AS kend
     LEFT JOIN
       customer AS cust ON cust.id_customer = kend.id_customer
+    LEFT JOIN
+      fleet_customer AS custfleet ON custfleet.id = kend.id_customer
     WHERE
-      kend.first_class = 1
-    AND
-      kend.kategori_customer = 'customer'`,
+      kend.first_class = 1`,
     {
       type: QueryTypes.SELECT,
     }
