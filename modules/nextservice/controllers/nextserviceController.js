@@ -191,6 +191,17 @@ exports.nextcust = async function (req, res) {
   var end = ey + "-" + em + "-" + ed;
   var fend = fend.getFullYear() + "-" + ("0" + (fend.getMonth()+1)).slice(-2) + "-" + ed;
 
+  const reason = await models.sequelize.query(
+    `SELECT
+      *
+    FROM 
+      reason
+    ORDER BY
+      kategorireason ASC`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
   const kendaraan = await models.sequelize.query(
     `SELECT
       cust.nama as nama,
@@ -224,6 +235,7 @@ exports.nextcust = async function (req, res) {
   );
   res.render("../modules/nextservice/views/index", {
     datarow: kendaraan,
+    datareason: reason,
     title: title,
     tbtitle: tbtitle,
     htitle: htitle,

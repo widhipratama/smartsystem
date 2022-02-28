@@ -16,6 +16,9 @@ module.exports = {
       model: {
         type: Sequelize.STRING(50),
       },
+      tgl_samsat: {
+        type: Sequelize.DATE,
+      },
       police_no: {
         type: Sequelize.STRING(50),
       },

@@ -10,6 +10,7 @@ module.exports = (sequelize, Sequelize) => {
       id_mobil: Sequelize.DataTypes.STRING,
       police_no: Sequelize.DataTypes.STRING,
       model: Sequelize.DataTypes.STRING,
+      tgl_samsat: Sequelize.DataTypes.DATE,
       total_omzet: Sequelize.DataTypes.INTEGER,
       last_service: Sequelize.DataTypes.DATE,
       first_service: Sequelize.DataTypes.DATE,
