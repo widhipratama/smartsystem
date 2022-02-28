@@ -11,6 +11,7 @@ var htitle = [
   { id: "last_service", label: "Last Service", width: "", typeInput: "text", onTable: "ON" },
   { id: "first_class", label: "Point", width: "", typeInput: "text", onTable: "ON" },
   { id: "followup_date", label: "Last Followup", width: "", typeInput: "text", onTable: "ON" },
+  { id: "jarak_bulan", label: "Status", width: "", typeInput: "text", onTable: "ON" },
 ];
 
 exports.index = async function (req, res) {
@@ -131,7 +132,8 @@ exports.nextfleet = async function (req, res) {
       kend.model,
       kend.police_no,
       kend.no_rangka,
-      (SELECT fol.followup_date from followup AS fol where fol.no_rangka = kend.no_rangka ORDER BY fol.followup_date DESC LIMIT 1) as followup_date
+      (SELECT fol.followup_date from followup AS fol where fol.no_rangka = kend.no_rangka ORDER BY fol.followup_date DESC LIMIT 1) as followup_date,
+      (12 * (YEAR(CURDATE()) - YEAR(kend.last_service)) + (MONTH(CURDATE()) - MONTH(kend.last_service))) AS jarak_bulan
     FROM 
       kendaraan AS kend
     JOIN
@@ -212,7 +214,8 @@ exports.nextcust = async function (req, res) {
       kend.model,
       kend.police_no,
       kend.no_rangka,
-      (SELECT fol.followup_date from followup AS fol where fol.no_rangka = kend.no_rangka ORDER BY fol.followup_date DESC LIMIT 1) as followup_date
+      (SELECT fol.followup_date from followup AS fol where fol.no_rangka = kend.no_rangka ORDER BY fol.followup_date DESC LIMIT 1) as followup_date,
+      (12 * (YEAR(CURDATE()) - YEAR(kend.last_service)) + (MONTH(CURDATE()) - MONTH(kend.last_service))) AS jarak_bulan
     FROM 
       kendaraan AS kend
     JOIN
