@@ -110,6 +110,17 @@ exports.nextfleet = async function (req, res) {
   var end = ey + "-" + em + "-" + ed;
   var fend = fend.getFullYear() + "-" + ("0" + (fend.getMonth()+1)).slice(-2) + "-" + ed;
 
+  const reason = await models.sequelize.query(
+    `SELECT
+      *
+    FROM 
+      reason
+    ORDER BY
+      kategorireason ASC`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
   const kendaraan = await models.sequelize.query(
     `SELECT
       custfleet.nama_fleet as nama_fleet,
@@ -143,6 +154,7 @@ exports.nextfleet = async function (req, res) {
   );
   res.render("../modules/nextservice/views/index", {
     datarow: kendaraan,
+    datareason: reason,
     title: title,
     tbtitle: tbtitle,
     htitle: htitle,
@@ -250,6 +262,7 @@ exports.createFollowup = function (req, res) {
   let data = {
       no_rangka: req.body.follownorangka,
       last_service: req.body.followdate,
+      kategorireason: req.body.kategorireason,
       reason: req.body.reason,
       followup_date: new Date()
   };

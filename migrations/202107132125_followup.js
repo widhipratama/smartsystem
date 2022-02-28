@@ -11,6 +11,10 @@ module.exports = {
       no_rangka: {
         type: Sequelize.STRING(20),
       },
+      kategorireason: {
+        allowNull: true,
+        type: Sequelize.STRING(50),
+      },
       reason: {
         allowNull: true,
         type: Sequelize.TEXT,
