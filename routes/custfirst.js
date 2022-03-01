@@ -15,6 +15,7 @@ router.get("/dashboard", custfirstController.data_dashboard);
 router.get("/dashboard/type_repair/:start/:end", custfirstController.type_repair);
 router.get("/dashboard/omzet_sa/:start/:end", custfirstController.omzet_sa);
 router.get("/export", custfirstController.exportExcel);
+router.get("/calendar/:month/:year", custfirstController.calendarCust);
 
 router.get("*", custfirstController.notFound);
 

@@ -8,7 +8,6 @@
                 url: url,
                 dataType: 'json',
                 success: function (res) {
-                    console.log(res)
                     const omzet = [];
                     for (let i = 0; i < res.repair.length; i++) {
                         omzet[i] = parseInt(res.repair[i].omzet);

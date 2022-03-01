@@ -1,0 +1,80 @@
+<script>
+    function getCalendar() {
+        let month = document.getElementById('fbulancalender').value;
+        let year = document.getElementById('ftahuncalender').value;
+        let url = '<%= process.env.URL %>/custfirst/calendar/'+month+'/'+year;
+        $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: 'json',
+            success: function (res) {
+                var row = [];
+                var data; 
+                for (let i = 0; i < res.last_service_cust.length; i++) {
+                    data = {
+                        title: res.last_service_cust[i].police_no+" \n "+res.last_service_cust[i].nama,
+                        start: res.last_service_cust[i].last_service,
+                        backgroundColor: "#2fb814",
+                        borderColor: "#2fb814",
+                        textColor: '#fff'
+                    };
+                    row.push(data)
+                }
+                for (let i = 0; i < res.last_service_fleet.length; i++) {
+                    data = {
+                        title: res.last_service_fleet[i].police_no+" \n "+res.last_service_fleet[i].nama,
+                        start: res.last_service_fleet[i].last_service,
+                        backgroundColor: "#2fb814",
+                        borderColor: "#2fb814",
+                        textColor: '#fff'
+                    };
+                    row.push(data)
+                }
+                for (let i = 0; i < res.samsat_cust.length; i++) {
+                    data = {
+                        title: res.samsat_cust[i].police_no+" \n "+res.samsat_cust[i].nama,
+                        start: res.samsat_cust[i].tgl_samsat,
+                        backgroundColor: "#d60b0b",
+                        borderColor: "#d60b0b",
+                        textColor: '#fff'
+                    };
+                    row.push(data)
+                }
+                for (let i = 0; i < res.samsat_fleet.length; i++) {
+                    data = {
+                        title: res.samsat_fleet[i].police_no+" \n "+res.samsat_fleet[i].nama,
+                        start: res.samsat_fleet[i].tgl_samsat,
+                        backgroundColor: "#efff12",
+                        borderColor: "#efff12",
+                        textColor: '#000'
+                    };
+                    row.push(data)
+                }
+                for (let i = 0; i < res.kontrak.length; i++) {
+                    data = {
+                        title: res.kontrak[i].nama,
+                        start: res.kontrak[i].until_end,
+                        backgroundColor: "#d60b0b",
+                        borderColor: "#d60b0b",
+                        textColor: '#fff'
+                    };
+                    row.push(data)
+                }
+
+                "use strict";
+                $("#myEvent").fullCalendar({
+                    height: 'auto',
+                    header: {
+                        left: false,
+                        center: 'title',
+                        right: false
+                    },
+                    defaultDate: year+'-'+month+'-01',
+                    editable: true,
+                    events: row
+                });
+            }
+        });
+    }
+
+</script>

@@ -129,6 +129,41 @@
                 </div>
               </div>
             </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <div class="card">
+                <div class="card-body ">
+                  <form id="formData" method="GET" action="" class="needs-validation row" novalidate="">
+                    <div class="form-group col-md-2">
+                      <select name="fbulancalender" id="fbulancalender" class="form-control">
+                        <option value="01" <%= (fbulancalender=='01' ? 'selected' : '') %>>January</option>
+                        <option value="02" <%= (fbulancalender=='02' ? 'selected' : '') %>>February</option>
+                        <option value="03" <%= (fbulancalender=='03' ? 'selected' : '') %>>March</option>
+                        <option value="04" <%= (fbulancalender=='04' ? 'selected' : '') %>>April</option>
+                        <option value="05" <%= (fbulancalender=='05' ? 'selected' : '') %>>May</option>
+                        <option value="06" <%= (fbulancalender=='06' ? 'selected' : '') %>>June</option>
+                        <option value="07" <%= (fbulancalender=='07' ? 'selected' : '') %>>July</option>
+                        <option value="08" <%= (fbulancalender=='08' ? 'selected' : '') %>>August</option>
+                        <option value="09" <%= (fbulancalender=='09' ? 'selected' : '') %>>September</option>
+                        <option value="10" <%= (fbulancalender=='10' ? 'selected' : '') %>>October</option>
+                        <option value="11" <%= (fbulancalender=='11' ? 'selected' : '') %>>November</option>
+                        <option value="12" <%= (fbulancalender=='12' ? 'selected' : '') %>>December</option>
+                      </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <input type="number" max="9999" class="form-control required" name="ftahuncalender" id="ftahuncalender"
+                        value="<%= ftahuncalender %>">
+                    </div>
+                    <div class="form-group col-md-3">
+                      <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-search"></i>
+                        Search</button>
+                    </div>
+                  </form>
+                  <div class="fc-overflow">
+                    <div id="myEvent"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- END GRAFIK -->
           </section>
@@ -145,6 +180,7 @@
         getDatadashboard();
         pie_repair_type();
         omzet_sa();
+        getCalendar();
       });
       function getDatadashboard() {
         let url = '<%= process.env.URL %>/custfirst/dashboard';
@@ -161,5 +197,6 @@
         });
       }
     </script>
+    <%- include ../dashboard/script_calendar.ejs %>
   </body>
 </html>

@@ -388,3 +388,120 @@ exports.exportExcel = async (req,res)=>{
 exports.notFound = function (req, res) {
   res.render("page/notfound");
 };
+
+exports.calendarCust = async function (req, res) {
+  var month = req.params.month;
+  var year = req.params.year;
+  const last_service_cust = await models.sequelize.query(
+    `SELECT
+      kend.police_no,
+      cust.nama as nama,
+      DATE_ADD(kend.last_service, INTERVAL 6 MONTH) as last_service
+    FROM 
+      kendaraan AS kend
+    LEFT JOIN
+      customer AS cust ON cust.id_customer = kend.id_customer
+    WHERE
+      kend.first_class = 1
+    AND
+      kend.kategori_customer = 'customer'
+    AND
+      DATE_FORMAT(DATE_ADD(kend.last_service, INTERVAL 6 MONTH), "%m") ='`+month+`'
+    AND
+      DATE_FORMAT(DATE_ADD(kend.last_service, INTERVAL 6 MONTH), "%Y") ='`+year+`'`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+
+  const samsat_cust = await models.sequelize.query(
+    `SELECT
+      kend.police_no,
+      cust.nama as nama,
+      kend.tgl_samsat
+    FROM 
+      kendaraan AS kend
+    LEFT JOIN
+      customer AS cust ON cust.id_customer = kend.id_customer
+    WHERE
+      kend.first_class = 1
+    AND
+      kend.kategori_customer = 'customer'
+    AND
+      DATE_FORMAT(kend.tgl_samsat, "%m") ='`+month+`'
+    AND
+      DATE_FORMAT(kend.tgl_samsat, "%Y") ='`+year+`'`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+
+  const last_service_fleet = await models.sequelize.query(
+    `SELECT
+      kend.police_no,
+      custfleet.nama_fleet as nama,
+      DATE_ADD(kend.last_service, INTERVAL 6 MONTH) as last_service
+    FROM 
+      kendaraan AS kend
+    LEFT JOIN
+      fleet_customer AS custfleet ON custfleet.id = kend.id_customer
+    WHERE
+      kend.first_class = 1
+    AND
+      kend.kategori_customer = 'fleet'
+    AND
+      DATE_FORMAT(DATE_ADD(kend.last_service, INTERVAL 6 MONTH), "%m") ='`+month+`'
+    AND
+      DATE_FORMAT(DATE_ADD(kend.last_service, INTERVAL 6 MONTH), "%Y") ='`+year+`'`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+
+  const samsat_fleet = await models.sequelize.query(
+    `SELECT
+      kend.police_no,
+      custfleet.nama_fleet as nama,
+      kend.tgl_samsat
+    FROM 
+      kendaraan AS kend
+    LEFT JOIN
+      fleet_customer AS custfleet ON custfleet.id = kend.id_customer
+    WHERE
+      kend.first_class = 1
+    AND
+      kend.kategori_customer = 'fleet'
+    AND
+      DATE_FORMAT(kend.tgl_samsat, "%m") ='`+month+`'
+    AND
+      DATE_FORMAT(kend.tgl_samsat, "%Y") ='`+year+`'`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+
+  const kontrak = await models.sequelize.query(
+    `SELECT
+      custfleet.nama_fleet as nama,
+      custfleet.until_end
+    FROM 
+      fleet_customer AS custfleet
+    WHERE
+      DATE_FORMAT(custfleet.until_end, "%m") ='`+month+`'
+    AND
+      DATE_FORMAT(custfleet.until_end, "%Y") ='`+year+`'`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  
+  res.send({
+    fmonth:month,
+    fyear:year,
+    last_service_cust:last_service_cust,
+    last_service_fleet: last_service_fleet,
+    samsat_cust: samsat_cust,
+    samsat_fleet: samsat_fleet,
+    kontrak: kontrak
+  });
+};
