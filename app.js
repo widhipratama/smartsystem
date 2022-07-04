@@ -252,6 +252,7 @@ const jobHistoryRoute = require("./modules/job-history/routes/jobHistoryRoute");
 const progressStatusRoute = require("./modules/progress-status/routes/progressStatusRoute");
 const userRoute = require("./routes/user");
 const employeeRoute = require("./modules/employee/routes/employeeRoute");
+const piutangRoute = require("./routes/piutang");
 
 // routes
 app.use("/", router);
@@ -269,6 +270,7 @@ app.use("/job-history", jobHistoryRoute);
 app.use("/progress-status", progressStatusRoute);
 app.use("/user", userRoute);
 app.use("/employee", employeeRoute);
+app.use("/piutang", piutangRoute);
 
 app.post("/send-message", (req, res) => {
   const sender = "smartsystem";
